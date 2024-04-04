@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/signinbackground"
+    tools:context=".registerScreen.OtpActivity">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:outlineAmbientShadowColor="@color/white"
+        android:outlineSpotShadowColor="@color/white"
+        app:cardBackgroundColor="@color/signinbackground"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/signinbackground">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="20dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/otpimage"
+                app:layout_constraintDimensionRatio="4:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/archivo_narrow"
+                android:text="OTP Verification"
+                android:textColor="@color/textViewColor"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/otpEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/edit_text_background"
+                android:drawablePadding="20dp"
+                android:hint="Enter Your OTP"
+                android:inputType="number"
+                android:maxLength="6"
+                android:paddingVertical="15dp"
+                android:paddingStart="15dp"
+                android:textColor="#EAE8E8"
+                android:textColorHint="#A09F9F"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phoneNo" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/continueButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/edit_text_background"
+                android:backgroundTint="#4e88ef"
+                android:text="Continue"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/otpEt" />
+
+            <TextView
+                android:id="@+id/phoneNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/archivo_narrow"
+                android:gravity="center"
+                android:text="Enter the OTP sent to \n +917210******"
+                android:textColor="@color/textViewColor"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+            <!--            <com.chaos.view.PinView-->
+            <!--                android:id="@+id/firstPinView"-->
+            <!--                style="@style/PinWidget.PinView"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:cursorVisible="true"-->
+            <!--                android:hint="OTP"-->
+            <!--                android:inputType="text"-->
+            <!--                android:itemBackground="@color/signinbackground"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:state_selected="true"-->
+            <!--                android:textColor="@color/white"-->
+            <!--                android:textSize="18sp"-->
+            <!--                android:textStyle="bold"-->
+            <!--                app:cursorColor="@color/gray"-->
+            <!--                app:cursorWidth="2dp"-->
+            <!--                app:hideLineWhenFilled="true"-->
+            <!--                app:itemCount="6"-->
+            <!--                app:itemRadius="6dp"-->
+            <!--                app:itemSpacing="5dp"-->
+            <!--                app:itemWidth="48dp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:lineColor="@drawable/otp_line_color"-->
+            <!--                app:lineWidth="2dp"-->
+            <!--                app:viewType="rectangle" />-->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <!--    <androidx.appcompat.widget.AppCompatButton-->
+    <!--        android:id="@+id/resendButton"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginHorizontal="15dp"-->
+    <!--        android:background="@drawable/edit_text_background"-->
+    <!--        android:backgroundTint="#4e88ef"-->
+    <!--        android:enabled="false"-->
+    <!--        android:text="Resend"-->
+    <!--        android:textColor="@color/white"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/continueButton" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

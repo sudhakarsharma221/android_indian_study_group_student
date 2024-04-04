@@ -1,0 +1,36 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.IndianStudyGroup" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/blue</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/blue</item>
+        <!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <!--        <item name="android:windowFullscreen">true</item>-->
+    </style>
+
+    <style name="Theme.IndianStudyGroup" parent="Base.Theme.IndianStudyGroup" />
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+
+
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+
+        <item name="bottomSheetStyle">
+            @style/BottomSheetStyle
+        </item>
+
+    </style>
+
+
+</resources>

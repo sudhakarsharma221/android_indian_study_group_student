@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "838910147858",
+    "project_id": "indian-study-group-d1572",
+    "storage_bucket": "indian-study-group-d1572.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838910147858:android:3fb7844ff1926f411cc7cb",
+        "android_client_info": {
+          "package_name": "com.indianstudygroup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmlXFTyK6v24nNwo_Vywx7W9yLqLuwtgg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
