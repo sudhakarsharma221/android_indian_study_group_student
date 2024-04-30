@@ -30,11 +30,13 @@ class UserDetailsViewModel : ViewModel() {
         repository.postUserDetailsResponse(postUserDetailsPostRequestBodyModel)
     }
 
-    fun callPutUserDetails(userId: String?,putUserDetailsPostRequestBodyModel: UserDetailsPutRequestBodyModel?) {
-        repository.putUserDetailsResponse(userId,putUserDetailsPostRequestBodyModel)
+    fun callPutUserDetails(
+        userId: String?, putUserDetailsPostRequestBodyModel: UserDetailsPutRequestBodyModel?
+    ) {
+        repository.putUserDetailsResponse(userId, putUserDetailsPostRequestBodyModel)
     }
 
-    fun callUserExists(contact: String?) {
-        repository.getUserExist(contact)
+    fun callUserExists(contact: String?, userName: String?) {
+        repository.getUserExist(contact, userName)
     }
 }

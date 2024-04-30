@@ -19,6 +19,7 @@ import com.indianstudygroup.app_utils.HideKeyboard
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.ActivityOtpBinding
+import com.indianstudygroup.fillDetails.FillUserDetailsActivity
 import com.indianstudygroup.userDetailsApi.model.UserDetailsPostRequestBodyModel
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
 import java.util.concurrent.TimeUnit
@@ -37,6 +38,7 @@ class OtpActivity : AppCompatActivity() {
     private lateinit var credential: PhoneAuthCredential
     private var fromSignUp: Boolean? = true
     private lateinit var phoneNo: String
+    private lateinit var userName: String
     private lateinit var togoPhoneNo: String
 
 
@@ -57,7 +59,9 @@ class OtpActivity : AppCompatActivity() {
     }
 
     private fun initListener() {
-
+        binding.backButton.setOnClickListener {
+            finish()
+        }
         val progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please Wait..")
         progressDialog.setMessage("Wait while we are redirecting you for reCaptcha verification...")
@@ -65,6 +69,7 @@ class OtpActivity : AppCompatActivity() {
         progressDialog.show()
 
         phoneNo = "+91" + intent.getStringExtra("phoneNumber")
+        userName = intent.getStringExtra("userName").toString()
         togoPhoneNo = intent.getStringExtra("phoneNumber").toString()
         fromSignUp = intent.getBooleanExtra("fromSignUp", false)
 
@@ -96,8 +101,10 @@ class OtpActivity : AppCompatActivity() {
                         verification: String, token: PhoneAuthProvider.ForceResendingToken
                     ) {
                         super.onCodeSent(verification, token)
-                        binding.phoneNo.text = "Enter the OTP sent to \n $shortPhoneNo******"
+                        binding.phoneNo.text =
+                            "We’ve send you the verification code on \n $shortPhoneNo******"
                         progressDialog.dismiss()
+                        startCountdownTimer()
 
                         verificationId = verification
                         resendToken = token
@@ -109,13 +116,60 @@ class OtpActivity : AppCompatActivity() {
 
         auth.setLanguageCode("en")
 
+        binding.resendButton.setOnClickListener {
+
+            progressDialog.show()
+
+            binding.resendButton.visibility = View.GONE
+            if (!verificationInProgress) { // Check if verification is not already in progress
+                // Resend verification code
+                val options = PhoneAuthOptions.newBuilder(auth)
+                    .setPhoneNumber(phoneNo) // Phone number to verify
+                    .setTimeout(90L, TimeUnit.SECONDS) // Timeout and unit
+                    .setActivity(this) // Activity (for callback binding)
+                    .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                        override fun onVerificationCompleted(p0: PhoneAuthCredential) {
+                            binding.progressBar.visibility = View.GONE
+                            verificationInProgress = false
+                            cancelCountdownTimer()
+                            progressDialog.dismiss()
+
+                        }
+
+                        override fun onVerificationFailed(p0: FirebaseException) {
+                            ToastUtil.makeToast(this@OtpActivity, "Failed: ${p0.localizedMessage}")
+                            Log.d("OTPACTIVITYERROR", "Failed: ${p0.localizedMessage}")
+                            binding.progressBar.visibility = View.GONE
+                            verificationInProgress = false
+                            progressDialog.dismiss()
+
+                        }
+
+                        override fun onCodeSent(
+                            verification: String, token: PhoneAuthProvider.ForceResendingToken
+                        ) {
+                            super.onCodeSent(verification, token)
+                            verificationId = verification
+                            resendToken = token
+                            ToastUtil.makeToast(this@OtpActivity, "Verification code resent")
+                            startCountdownTimer()
+                            progressDialog.dismiss()
+
+                        }
+
+                    }) // OnVerificationStateChangedCallbacks
+                    .setForceResendingToken(resendToken).build()
+                PhoneAuthProvider.verifyPhoneNumber(options)
+            }
+        }
+
         binding.continueButton.setOnClickListener {
             HideKeyboard.hideKeyboard(this, binding.otpEt.windowToken)
             val otp = binding.otpEt.text.toString()
             if (otp.trim().isEmpty()) {
                 binding.otpEt.error = "Empty Field"
             } else if (otp.length < 6) {
-                binding.otpEt.error = "6 characters"
+                binding.otpEt.error = "Enter 6 characters"
 
             } else {
                 binding.progressBar.visibility = View.VISIBLE
@@ -126,44 +180,6 @@ class OtpActivity : AppCompatActivity() {
             }
         }
 
-
-//
-//        binding.resendButton.setOnClickListener {
-//            startCountdownTimer()
-//            if (!verificationInProgress) { // Check if verification is not already in progress
-//                // Resend verification code
-//                val options = PhoneAuthOptions.newBuilder(auth)
-//                    .setPhoneNumber(phoneNo) // Phone number to verify
-//                    .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-//                    .setActivity(this) // Activity (for callback binding)
-//                    .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//                        override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-//                            binding.progressBar.visibility = View.GONE
-//                            verificationInProgress = false
-//                            cancelCountdownTimer()
-//                        }
-//
-//                        override fun onVerificationFailed(p0: FirebaseException) {
-//                            ToastUtil.makeToast(this@OtpActivity, "Failed: ${p0.localizedMessage}")
-//                            Log.d("OTPACTIVITYERROR", "Failed: ${p0.localizedMessage}")
-//                            binding.progressBar.visibility = View.GONE
-//                            verificationInProgress = false
-//                        }
-//
-//                        override fun onCodeSent(
-//                            verification: String, token: PhoneAuthProvider.ForceResendingToken
-//                        ) {
-//                            super.onCodeSent(verification, token)
-//                            verificationId = verification
-//                            resendToken = token
-//                            ToastUtil.makeToast(this@OtpActivity, "Verification code resent")
-//                        }
-//
-//                    }) // OnVerificationStateChangedCallbacks
-//                    .setForceResendingToken(resendToken).build()
-//                PhoneAuthProvider.verifyPhoneNumber(options)
-//            }
-//        }
 
     }
 
@@ -182,9 +198,11 @@ class OtpActivity : AppCompatActivity() {
                     .isNullOrEmpty()
             ) {
                 IntentUtil.startIntent(this@OtpActivity, FillUserDetailsActivity())
+                cancelCountdownTimer()
                 finish()
             } else {
                 IntentUtil.startIntent(this@OtpActivity, MainActivity())
+                cancelCountdownTimer()
                 finish()
             }
         })
@@ -213,12 +231,12 @@ class OtpActivity : AppCompatActivity() {
                     Log.d("USERIDFROMSIGNUP", auth.currentUser!!.uid)
                     callPostUserDetailsApi(
                         UserDetailsPostRequestBodyModel(
-                            auth.currentUser!!.uid, togoPhoneNo, "student"
+                            auth.currentUser!!.uid, togoPhoneNo, "student", userName
                         )
                     )
                     IntentUtil.startIntent(this@OtpActivity, FillUserDetailsActivity())
                     finish()
-
+                    cancelCountdownTimer()
                     ToastUtil.makeToast(this, "Successful Sign Up")
 
                 } else {
@@ -237,28 +255,29 @@ class OtpActivity : AppCompatActivity() {
         }
     }
 
-//    // Function to start the countdown timer
-//    private fun startCountdownTimer() {
-//        countdownTimer = object : CountDownTimer(countdownDurationMillis, 1000) {
-//            override fun onTick(millisUntilFinished: Long) {
-//                // Update UI with remaining time, e.g., update a TextView
-//                val secondsRemaining = millisUntilFinished / 1000
-//                // Example: update a TextView with remaining seconds
-//                binding.resentTimerTv.text = "Resend in $secondsRemaining seconds"
-//            }
-//
-//            override fun onFinish() {
-//                // Countdown timer finished, enable the resend button
-//                binding.resendButton.isEnabled = true
-//                // Example: update a TextView when timer finishes
-//                binding.resentTimerTv.text = "Resend available"
-//            }
-//        }.start()
-//    }
-//
-//    // Function to cancel the countdown timer if needed
-//    private fun cancelCountdownTimer() {
-//        countdownTimer?.cancel()
-//    }
+    // Function to start the countdown timer
+    private fun startCountdownTimer() {
+        binding.tvResendTimer.visibility = View.VISIBLE
+        countdownTimer = object : CountDownTimer(countdownDurationMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                // Update UI with remaining time, e.g., update a TextView
+                val secondsRemaining = millisUntilFinished / 1000
+                // Example: update a TextView with remaining seconds
+                binding.tvResendTimer.text = "Re-send code in \n $secondsRemaining seconds"
+            }
+
+            override fun onFinish() {
+                // Countdown timer finished, enable the resend button
+                binding.resendButton.visibility = View.VISIBLE
+                // Example: update a TextView when timer finishes
+                binding.tvResendTimer.text = "Resend available"
+            }
+        }.start()
+    }
+
+    // Function to cancel the countdown timer if needed
+    private fun cancelCountdownTimer() {
+        countdownTimer?.cancel()
+    }
 
 }

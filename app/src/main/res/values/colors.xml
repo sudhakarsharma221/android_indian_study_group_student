@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black_app">#120D26</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#C0C0C0</color>
-    <color name="blue">#1E41FF</color>
-    <color name="bluedark">#0028FF</color>
-    <color name="red">#F13333</color>
+    <color name="blue1">#5669FF</color>
+    <color name="bluedark">#5B74FB</color>
+    <color name="red">#FB5C5C</color>
+    <color name="red_logout">#DF0000</color>
     <color name="green">#3EBF43</color>
 
     <color name="signinbackground">#2f3133</color>
     <color name="textViewColor">#DDDCDC</color>
+    <color name="drawable_color">#747688</color>
+    <color name="stroke_color">#86878D</color>
+    <color name="gray_text_color">#A09F9F</color>
+    <color name="black1">#000000</color>
 </resources>

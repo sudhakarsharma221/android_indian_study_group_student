@@ -1,79 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingHorizontal="25dp"
     tools:context=".bottom_nav_bar.more.MoreFragment">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:elevation="30dp"
-        android:outlineAmbientShadowColor="@color/white"
-        android:outlineSpotShadowColor="@color/white"
-        android:src="@drawable/profile"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="0.1dp"
+    <TextView
+        android:id="@+id/tvWallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/outline_account_balance_wallet_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="Wallet"
+        android:textColor="@color/black_app"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:gravity="center"
-        android:text="Name"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@+id/ivProfile"
-        app:layout_constraintTop_toTopOf="@+id/ivProfile" />
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Phone No"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="View Profile"
-        android:textColor="@color/blue"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <View
-        android:id="@+id/view2"
+        android:id="@+id/tvSeting"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/outline_settings_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="Setting"
+        android:textColor="@color/black_app"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWallet" />
+
+    <TextView
+        android:id="@+id/tvHelpDesk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/outline_headphones_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="Help Desk"
+        android:textColor="@color/black_app"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSeting" />
 
     <TextView
         android:id="@+id/tvSignOut"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:text="Sign Out"
-        android:textColor="@color/red"
-        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/baseline_logout_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/red_logout"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="Logout"
+        android:textColor="@color/red_logout"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHelpDesk" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

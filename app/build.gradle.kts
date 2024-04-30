@@ -52,6 +52,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -72,13 +73,26 @@ dependencies {
     //Circle View
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-//    //ShimmerEffect
-//    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    //ShimmerEffect
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+//    //Image Slider
+//    implementation("com.github.dangiashish:Auto-Image-Slider:1.0.4")
 
     //Refresh Layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+    implementation("com.google.android.play:integrity:1.3.0")
 
-    //otpView
+    //Scanner
+    implementation("com.google.zxing:core:3.4.1")
+    implementation("com.journeyapps:zxing-android-embedded:4.2.0")
+
+    //OTP VIEW
     implementation("io.github.chaosleung:pinview:1.4.4")
+
+    //MAP
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+
 
 }

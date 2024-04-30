@@ -58,10 +58,12 @@ class UserDetailsRepository {
     }
 
 
-    fun putUserDetailsResponse(userId: String?,putUserDetailsPostRequestBodyModel: UserDetailsPutRequestBodyModel?) {
+    fun putUserDetailsResponse(
+        userId: String?, putUserDetailsPostRequestBodyModel: UserDetailsPutRequestBodyModel?
+    ) {
         showProgress.value = true
         val client = RetrofitUtilClass.getRetrofit().create(UserDetailsService::class.java)
-        val call = client.callPutUserDetails(userId,putUserDetailsPostRequestBodyModel)
+        val call = client.callPutUserDetails(userId, putUserDetailsPostRequestBodyModel)
         call.enqueue(object : Callback<UserDetailsResponseModel?> {
             override fun onResponse(
                 call: Call<UserDetailsResponseModel?>, response: Response<UserDetailsResponseModel?>
@@ -133,10 +135,10 @@ class UserDetailsRepository {
     }
 
 
-    fun getUserExist(contact: String?) {
+    fun getUserExist(contact: String?, userName: String?) {
         showProgress.value = true
         val client = RetrofitUtilClass.getRetrofit().create(UserDetailsService::class.java)
-        val call = client.callGetUserExist(contact)
+        val call = client.callGetUserExist(contact, userName)
         call.enqueue(object : Callback<UserExistResponseModel?> {
             override fun onResponse(
                 call: Call<UserExistResponseModel?>, response: Response<UserExistResponseModel?>

@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/baseline_home_24"
-        android:title="Home"
+        android:id="@+id/navigation_library"
+        android:icon="@drawable/library_icon"
+        android:iconTint="#262626"
+        android:title="Library"
         />
     <item
-        android:id="@+id/navigation_chat"
-        android:icon="@drawable/baseline_chat_24"
-        android:title="Chats"
-
+        android:id="@+id/navigation_schedule"
+        android:icon="@drawable/schedule_icon"
+        android:title="Schedule"
         />
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/outline_person_24"
+        android:iconTint="#262626"
+        android:title="Profile" />
     <item
         android:id="@+id/navigation_more"
-        android:icon="@drawable/baseline_menu_24"
+        android:icon="@drawable/more_icon"
         android:title="More"
 
         />

@@ -3,20 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_nav"
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/navigation_library">
+
+
     <fragment
-        android:id="@+id/navigation_chat"
-        android:name="com.indianstudygroup.bottom_nav_bar.chats.ChatFragment"
-        android:label="Chats"
-        tools:layout="@layout/fragment_chat" />
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.indianstudygroup.bottom_nav_bar.home.HomeFragment"
+        android:id="@+id/navigation_library"
+        android:name="com.indianstudygroup.bottom_nav_bar.library.ui.LibraryFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
     <fragment
+        android:id="@+id/navigation_schedule"
+        android:name="com.indianstudygroup.bottom_nav_bar.schedule.ui.ScheduleFragment"
+        android:label="Schedule"
+        tools:layout="@layout/fragment_schedule" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.indianstudygroup.bottom_nav_bar.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
         android:id="@+id/navigation_more"
         android:name="com.indianstudygroup.bottom_nav_bar.more.MoreFragment"
-        android:label="Profile"
+        android:label="More"
         tools:layout="@layout/fragment_more" />
+
 </navigation>

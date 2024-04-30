@@ -6,31 +6,66 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_dialog_backgorund">
 
-    <TextView
-        android:id="@+id/chooseGallery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingVertical="30dp"
-        android:text="Gallery"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toStartOf="@+id/chooseCamera"
-        app:layout_constraintHorizontal_bias="0.5"
+    <View
+        android:id="@+id/view"
+        android:layout_width="70dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Choose an action"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/chooseGallery"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+    <TextView
+        android:id="@+id/chooseGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/edit_text_background"
+        android:backgroundTint="@color/bluedark"
+        android:drawableTop="@drawable/baseline_perm_media_24"
+        android:drawablePadding="10dp"
+        android:paddingHorizontal="30dp"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="30dp"
+        android:text="Gallery"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/chooseCamera"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text" />
+
+    <TextView
         android:id="@+id/chooseCamera"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:background="@drawable/edit_text_background"
+        android:drawableTop="@drawable/baseline_photo_camera_24"
+        android:drawablePadding="10dp"
+        android:paddingHorizontal="25dp"
+        android:backgroundTint="@color/bluedark"
         android:paddingVertical="30dp"
         android:text="Camera"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/chooseGallery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/chooseGallery"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/chooseGallery" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

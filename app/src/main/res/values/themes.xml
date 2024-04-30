@@ -3,15 +3,15 @@
     <style name="Base.Theme.IndianStudyGroup" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimary">@color/blue1</item>
         <item name="colorPrimaryVariant">@color/white</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/black_app</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/blue</item>
+        <item name="colorSecondary">@color/blue1</item>
         <item name="colorSecondaryVariant">@color/white</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@color/black_app</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/blue</item>
+        <item name="android:statusBarColor">@color/blue1</item>
         <!--        <item name="android:windowTranslucentStatus">true</item>-->
         <!--        <item name="android:windowFullscreen">true</item>-->
     </style>

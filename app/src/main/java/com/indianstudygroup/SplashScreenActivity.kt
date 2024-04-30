@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,11 +12,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.ActivitySplashScreenBinding
-import com.indianstudygroup.registerScreen.FillUserDetailsActivity
+import com.indianstudygroup.fillDetails.FillUserDetailsActivity
 import com.indianstudygroup.registerScreen.SignInActivity
-import com.indianstudygroup.userDetailsApi.model.UserDetailsPostRequestBodyModel
 import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
-import com.indianstudygroup.userDetailsApi.repository.UserDetailsRepository
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
 
 class SplashScreenActivity : AppCompatActivity() {

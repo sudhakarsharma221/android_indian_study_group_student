@@ -3,8 +3,5 @@
     <corners
         android:topLeftRadius="25dp"
         android:topRightRadius="25dp" />
-    <gradient
-        android:angle="13"
-        android:endColor="#474747"
-        android:startColor="@color/signinbackground" />
+    <solid android:color="@color/blue1" />
 </shape>

@@ -6,6 +6,8 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -25,7 +27,28 @@
         android:theme="@style/Theme.IndianStudyGroup"
         tools:targetApi="31">
         <activity
-            android:name=".registerScreen.FillUserDetailsActivity"
+            android:name=".notification.ui.NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".wishlist.ui.WishListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.more.help_desk.HelpDeskActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.more.wallet.WalletActivity"
+            android:exported="false" />
+        <activity
+            android:name=".qr_code.ScannerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.library.ui.LibraryDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".editProfile.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".fillDetails.FillUserDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".registerScreen.OtpActivity"
@@ -49,10 +72,6 @@
             android:name=".MainActivity"
             android:exported="true" />
 
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.indianstudygroup.fileProvider"
@@ -63,7 +82,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

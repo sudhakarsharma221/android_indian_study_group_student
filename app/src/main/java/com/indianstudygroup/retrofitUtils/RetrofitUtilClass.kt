@@ -13,7 +13,7 @@ class RetrofitUtilClass {
         private lateinit var retrofit: Retrofit
         private lateinit var retrofit2: Retrofit
         val API_BASE_URL = "https://indian-study-group.onrender.com/"
-        val PINCODE_BASE_URL = "http://www.postalpincode.in/api/"
+        val PINCODE_BASE_URL = "https://api.postalpincode.in/"
 
         fun getRetrofit(): Retrofit {
 
@@ -43,8 +43,6 @@ class RetrofitUtilClass {
             }
             return retrofit
         }
-
-
         fun getRetrofitPincode(): Retrofit {
 
             if (!::retrofit2.isInitialized) {

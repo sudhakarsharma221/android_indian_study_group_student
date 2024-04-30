@@ -7,12 +7,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.indianstudygroup.MainActivity
+import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.HideKeyboard
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.ActivitySignInBinding
+import com.indianstudygroup.databinding.ErrorBottomDialogLayoutBinding
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
 
 class SignInActivity : AppCompatActivity() {
@@ -62,16 +65,20 @@ class SignInActivity : AppCompatActivity() {
 
 
     private fun callGetUserExistApi(contact: String?) {
-        viewModel.callUserExists(contact)
+        viewModel.callUserExists(contact,"")
     }
 
     private fun observerUserExistsApiResponse() {
         viewModel.userExistResponse.observe(this, Observer {
-            if (it.userExist == true) {
-                val intent = Intent(this, OtpActivity::class.java)
-                intent.putExtra("phoneNumber", phoneNo)
-                startActivity(intent)
-                finish()
+            if (it.userNameExist == true) {
+                if (it.user?.authType == "student") {
+                    val intent = Intent(this, OtpActivity::class.java)
+                    intent.putExtra("phoneNumber", phoneNo)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    showErrorBottomDialog("You have an account on library owner profile. PLease login on that application.")
+                }
             } else {
                 ToastUtil.makeToast(this, "User does not exist, please sign up")
                 val intent = Intent(this, SignUpActivity::class.java)
@@ -80,6 +87,22 @@ class SignInActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun showErrorBottomDialog(message: String) {
+        val bottomDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+        val dialogBinding = ErrorBottomDialogLayoutBinding.inflate(layoutInflater)
+        bottomDialog.setContentView(dialogBinding.root)
+        bottomDialog.setCancelable(true)
+        bottomDialog.show()
+        dialogBinding.messageTv.text = message
+        dialogBinding.continueButton.setOnClickListener {
+            HideKeyboard.hideKeyboard(this, binding.phoneEt.windowToken)
+            bottomDialog.dismiss()
+        }
+    }
+
+
+
 
     private fun observeProgress() {
         viewModel.showProgress.observe(this, Observer {
