@@ -95,7 +95,7 @@ class SignUpActivity : AppCompatActivity() {
             if (it.userNameExist == true) {
                 showErrorBottomDialog("This Username already exists. Try Something different.")
             } else if (it.contactExist == true) {
-                if (it.user?.authType == "student") {
+                if (it.authType == "student") {
                     ToastUtil.makeToast(this, "User already exist, please sign in")
                     val intent = Intent(this, SignInActivity::class.java)
                     startActivity(intent)

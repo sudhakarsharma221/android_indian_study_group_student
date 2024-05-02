@@ -10,6 +10,7 @@ data class LibraryResponseItem(
     @SerializedName("contact") val contact: String? = null,
     @SerializedName("photo") val photo: String? = null,
     @SerializedName("seats") val seats: Int? = null,
+    @SerializedName("vacantSeats") val vacantSeats: Int? = null,
     @SerializedName("bio") val bio: String? = null,
     @SerializedName("ammenities") val ammenities: ArrayList<String> = arrayListOf(),
     @SerializedName("pricing") var pricing: Pricing? = Pricing(),
@@ -22,7 +23,6 @@ data class LibraryResponseItem(
 )
 
 data class Pricing(
-
     @SerializedName("daily") var daily: Int? = null,
     @SerializedName("monthly") var monthly: Int? = null,
     @SerializedName("weekly") var weekly: Int? = null
@@ -39,8 +39,7 @@ data class Address(
 )
 
 data class Timing(
-
     @SerializedName("from") var from: String? = null,
     @SerializedName("to") var to: String? = null,
-    @SerializedName("days") var days: ArrayList<String> = arrayListOf(),
+    @SerializedName("days") var days: ArrayList<String> = arrayListOf()
 )

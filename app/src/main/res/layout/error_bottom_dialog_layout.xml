@@ -17,19 +17,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/headingTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:text="Booking recieved"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+
+    <TextView
         android:id="@+id/messageTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:gravity="center"
         android:fontFamily="@font/poppins"
+        android:gravity="center"
         android:text="You have an account on library owner profile. PLease login on that application"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/headingTv" />
 
 
     <androidx.cardview.widget.CardView
@@ -51,8 +68,8 @@
             android:layout_marginHorizontal="15dp"
             android:background="@drawable/edit_text_background"
             android:backgroundTint="@color/white"
-            android:gravity="center"
             android:fontFamily="@font/poppins"
+            android:gravity="center"
             android:paddingVertical="15dp"
             android:text="Okay"
             android:textColor="@color/blue1"

@@ -9,10 +9,9 @@
     tools:context=".bottom_nav_bar.schedule.ui.ScheduleFragment">
 
     <ImageView
-        android:id="@+id/backButton"
+        android:id="@+id/historyButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:rotation="180"
         android:src="@drawable/baseline_history_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,9 +38,8 @@
         android:paddingBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:itemCount="5"
         tools:layout_editor_absoluteX="15dp"
-        tools:listitem="@layout/notification_item_layout" />
+        tools:listitem="@layout/schedule_item_layout" />
 
 
     <FrameLayout

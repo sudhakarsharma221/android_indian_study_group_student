@@ -10,10 +10,18 @@ import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.indianstudygroup.R
+import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
+import com.indianstudygroup.book_seat.SeatBookActivity
 import com.indianstudygroup.bottom_nav_bar.library.viewModel.LibraryViewModel
 import com.indianstudygroup.databinding.ActivityLibraryDetailsBinding
+import com.indianstudygroup.databinding.ErrorBottomDialogLayoutBinding
+import com.indianstudygroup.databinding.FilterLibraryBottomDialogBinding
+import com.indianstudygroup.databinding.ReviewBottomDialogBinding
+import com.indianstudygroup.databinding.ScannerBottomDialogBinding
+import com.indianstudygroup.qr_code.ScannerActivity
 
 class LibraryDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLibraryDetailsBinding
@@ -28,7 +36,9 @@ class LibraryDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLibraryDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        window.statusBarColor = Color.TRANSPARENT
+        window.statusBarColor = Color.WHITE
+//        window.statusBarColor = Color.parseColor("#2f3133")
+
         viewModel = ViewModelProvider(this@LibraryDetailsActivity)[LibraryViewModel::class.java]
         id = intent.getStringExtra("LibraryId").toString()
 
@@ -63,8 +73,14 @@ class LibraryDetailsActivity : AppCompatActivity() {
 //                binding.readMore.visibility = View.GONE
 //            }
 //        }
+
+
+        binding.writeReview.setOnClickListener {
+            showReviewDialog()
+        }
         binding.bookSeatButton.setOnClickListener {
-            ToastUtil.makeToast(this, "Soon...")
+            val intent = Intent(this, SeatBookActivity::class.java)
+            startActivityForResult(intent, 2)
         }
 
         binding.backButton.setOnClickListener {
@@ -82,6 +98,40 @@ class LibraryDetailsActivity : AppCompatActivity() {
 
     }
 
+    private fun showConfirmBookingDialog() {
+        val bottomDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+        val dialogBinding = ErrorBottomDialogLayoutBinding.inflate(layoutInflater)
+        bottomDialog.setContentView(dialogBinding.root)
+        bottomDialog.setCancelable(true)
+        bottomDialog.show()
+        dialogBinding.headingTv.visibility = View.VISIBLE
+        dialogBinding.messageTv.text =
+            "Your booking will be confirmed once library owner approves it. You can check it on your sessions "
+        dialogBinding.continueButton.setOnClickListener {
+            bottomDialog.dismiss()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+            showConfirmBookingDialog()
+        }
+    }
+
+    private fun showReviewDialog() {
+        val bottomDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+        val dialogBinding = ReviewBottomDialogBinding.inflate(layoutInflater)
+        bottomDialog.setContentView(dialogBinding.root)
+        bottomDialog.setCancelable(true)
+        bottomDialog.show()
+//        dialogBinding.messageTv.text = message
+//        dialogBinding.continueButton.setOnClickListener {
+//            HideKeyboard.hideKeyboard(requireContext(), binding.phoneEt.windowToken)
+//            bottomDialog.dismiss()
+//        }
+    }
+
     private fun callIdLibraryDetailsApi(
         id: String?
     ) {
@@ -96,32 +146,32 @@ class LibraryDetailsActivity : AppCompatActivity() {
                 .error(R.drawable.noimage).into(binding.libImage)
             binding.tvName.text = it.name
             binding.tvBio.text = it.bio
-            binding.tvContact.text = HtmlCompat.fromHtml(
-                "<b>Contact : </b>${it.contact}", HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
+//            binding.tvContact.text = HtmlCompat.fromHtml(
+//                "<b>Contact : </b>${it.contact}", HtmlCompat.FROM_HTML_MODE_LEGACY
+//            )
             binding.tvSeats.text = HtmlCompat.fromHtml(
-                "<b>Seats Available : </b>${it.seats} / ${it.seats}",
+                "Seats Available : <b>${it.vacantSeats} / ${it.seats} </b>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
             binding.tvAmmenities.text = it.ammenities.joinToString("\n")
-            binding.tvPrice.text = HtmlCompat.fromHtml(
-                "<b>Daily Charge : </b> ₹${it.pricing?.daily}<br/>",
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
+//            binding.tvPrice.text = HtmlCompat.fromHtml(
+//                "<b>Daily Charge : </b> ₹${it.pricing?.daily}<br/>",
+//                HtmlCompat.FROM_HTML_MODE_LEGACY
+//            )
 
             binding.tvAddress.text =
                 "${it.address?.street}, ${it.address?.district}, ${it.address?.state}, ${it.address?.pincode}"
 
 
             val timingStringBuilder = StringBuilder()
-            timingStringBuilder.append("<b>Time Slots : </b><br/>")
+            timingStringBuilder.append("Time Slots :<br/>")
             it.timing.forEachIndexed { index, timing ->
                 timingStringBuilder.append(
-                    "<b>${timing.from} to ${timing.to}</b><br/>(${
+                    "<b>${timing.from} to ${timing.to}<br/>(${
                         timing.days.joinToString(
                             ", "
                         )
-                    })"
+                    }) </b>"
                 )
                 if (index != it.timing.size - 1) {
                     timingStringBuilder.append("<br/>")

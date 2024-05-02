@@ -21,7 +21,7 @@ data class UserDetailsResponseModel(
     @SerializedName("libraries") val libraries: ArrayList<String> = arrayListOf(),
     @SerializedName("address") val address: Address? = Address(),
     @SerializedName("bookings") val bookings: ArrayList<String> = arrayListOf(),
-    @SerializedName("sessions") val sessions: ArrayList<String> = arrayListOf(),
+    @SerializedName("sessions") val sessions: ArrayList<Sessions> = arrayListOf(),
     @SerializedName("createdAt") val createdAt: String? = null,
     @SerializedName("updatedAt") val updatedAt: String? = null,
     @SerializedName("__v") val v: Int? = null,
@@ -45,7 +45,9 @@ data class UserDetailsResponseModel(
         parcel.createStringArrayList() ?: arrayListOf(),
         parcel.readParcelable(Address::class.java.classLoader),
         parcel.createStringArrayList() ?: arrayListOf(),
-        parcel.createStringArrayList() ?: arrayListOf(),
+        arrayListOf<Sessions>().apply {
+            parcel.readArrayList(Sessions::class.java.classLoader)
+        },
         parcel.readString(),
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
@@ -70,7 +72,7 @@ data class UserDetailsResponseModel(
         parcel.writeStringList(libraries)
         parcel.writeParcelable(address, flags)
         parcel.writeStringList(bookings)
-        parcel.writeStringList(sessions)
+        parcel.writeList(sessions)
         parcel.writeString(createdAt)
         parcel.writeString(updatedAt)
         parcel.writeValue(v)
@@ -91,6 +93,48 @@ data class UserDetailsResponseModel(
             return arrayOfNulls(size)
         }
     }
+}
+
+
+data class Sessions(
+
+    @SerializedName("libraryId") val libraryId: String? = null,
+    @SerializedName("date") val date: String? = null,
+    @SerializedName("startTime") val startTime: String? = null,
+    @SerializedName("endTime") val endTime: String? = null,
+    @SerializedName("status") val status: String? = null
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(libraryId)
+        parcel.writeString(date)
+        parcel.writeString(startTime)
+        parcel.writeString(endTime)
+        parcel.writeString(status)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Sessions> {
+        override fun createFromParcel(parcel: Parcel): Sessions {
+            return Sessions(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Sessions?> {
+            return arrayOfNulls(size)
+        }
+    }
+
 }
 
 data class Address(

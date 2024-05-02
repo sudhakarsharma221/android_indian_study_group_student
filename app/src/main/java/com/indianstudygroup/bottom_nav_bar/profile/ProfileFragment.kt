@@ -1,8 +1,10 @@
 package com.indianstudygroup.bottom_nav_bar.profile
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +24,7 @@ import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
 
 class ProfileFragment : Fragment() {
+    private lateinit var binding: FragmentProfileBinding
     private lateinit var userData: UserDetailsResponseModel
     private val EDIT_PROFILE_REQUEST_CODE = 100
     private lateinit var auth: FirebaseAuth
@@ -29,7 +32,6 @@ class ProfileFragment : Fragment() {
     private lateinit var userDetailsViewModel: UserDetailsViewModel
 
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var binding: FragmentProfileBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,25 +39,30 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         userDetailsViewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
+//        requireActivity().window.statusBarColor = Color.parseColor("#5669FF")
         auth = FirebaseAuth.getInstance()
 
         if (!ApiCallsConstant.apiCallsOnceProfile) {
             userDetailsViewModel.callGetUserDetails(auth.currentUser!!.uid)
             ApiCallsConstant.apiCallsOnceProfile = true
         }
-        intiListener()
         observeProgress()
         observerErrorMessageApiResponse()
         observerUserDetailsApiResponse()
-//         inflater.inflate(R.layout.fragment_chat, container, false)
         return binding.root
     }
 
     private fun intiListener() {
+
+        binding.swiperefresh.setOnRefreshListener {
+            userDetailsViewModel.callGetUserDetails(auth.currentUser!!.uid)
+        }
+
+
         binding.editProfile.setOnClickListener {
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
             intent.putExtra("userData", userData)
-            startActivity(intent)
+            startActivityForResult(intent, EDIT_PROFILE_REQUEST_CODE)
         }
     }
 
@@ -63,16 +70,19 @@ class ProfileFragment : Fragment() {
     private fun observerUserDetailsApiResponse() {
         userDetailsViewModel.userDetailsResponse.observe(viewLifecycleOwner, Observer {
             userData = it
-            binding.tvTopics.text = userData.topic.joinToString("\n")
-            binding.nameEt.setText(userData.name)
-            binding.usernameEt.setText(userData.username)
-            binding.pincodeEt.setText(userData.address?.pincode)
+            intiListener()
+            binding.nameEt.text = userData.name
+            binding.usernameEt.text = userData.username
+            binding.pincodeEt.text = userData.address?.pincode
             binding.tvCity.text = userData.address?.district
             binding.tvState.text = userData.address?.state
-            binding.aboutET.setText(userData.bio)
+            binding.aboutET.text = userData.bio
             binding.tvQualification.text = userData.highestQualification
+            binding.tvTopics.text = userData.topic.joinToString("\n")
             Glide.with(this).load(userData.photo).placeholder(R.drawable.profile)
                 .error(R.drawable.profile).into(binding.ivProfile)
+
+            binding.swiperefresh.isRefreshing = false
         })
     }
 

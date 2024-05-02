@@ -115,6 +115,7 @@ class LibraryFragment : Fragment() {
         viewModel.showProgress.observe(viewLifecycleOwner, Observer {
             if (it) {
                 binding.shimmerLayout.visibility = View.VISIBLE
+                binding.noLibAvailable.visibility = View.GONE
                 binding.shimmerLayout.startShimmer()
             } else {
                 binding.shimmerLayout.visibility = View.GONE

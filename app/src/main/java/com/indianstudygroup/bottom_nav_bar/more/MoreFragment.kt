@@ -14,6 +14,7 @@ import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.bottom_nav_bar.more.help_desk.HelpDeskActivity
+import com.indianstudygroup.bottom_nav_bar.more.setting.SettingActivity
 import com.indianstudygroup.bottom_nav_bar.more.wallet.WalletActivity
 import com.indianstudygroup.databinding.FragmentMoreBinding
 import com.indianstudygroup.registerScreen.SignInActivity
@@ -42,9 +43,9 @@ class MoreFragment : Fragment() {
         binding.tvWallet.setOnClickListener {
             IntentUtil.startIntent(requireContext(), WalletActivity())
         }
-//        binding.tvSeting.setOnClickListener {
-//            IntentUtil.startIntent(requireContext(), WalletActivity())
-//        }
+        binding.tvSetting.setOnClickListener {
+            IntentUtil.startIntent(requireContext(), SettingActivity())
+        }
         binding.tvHelpDesk.setOnClickListener {
             IntentUtil.startIntent(requireContext(), HelpDeskActivity())
         }

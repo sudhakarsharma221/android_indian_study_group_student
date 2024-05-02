@@ -27,6 +27,21 @@
         android:theme="@style/Theme.IndianStudyGroup"
         tools:targetApi="31">
         <activity
+            android:name=".book_seat.SeatBookActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.more.wallet.PaymentStatusActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.more.wallet.SpendAnalyticsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.more.setting.SettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.schedule.ui.ScheduleDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".notification.ui.NotificationActivity"
             android:exported="false" />
         <activity

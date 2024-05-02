@@ -68,7 +68,9 @@ class DetailsFillFragment : Fragment() {
             toggleButtonState(binding.buttonPostGraduation)
         }
 
-
+        binding.backButton.setOnClickListener {
+            requireActivity().finishAffinity()
+        }
         binding.pincodeEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Not used, but needs to be implemented
@@ -113,7 +115,8 @@ class DetailsFillFragment : Fragment() {
                     "DATAFROMSCREENS",
                     "$name $pincode $city $state $bio $selectedQualificationFromList"
                 )
-                findNavController().navigate(R.id.action_detailsFillFragment_to_photoFillFragment,
+                findNavController().navigate(
+                    R.id.action_detailsFillFragment_to_photoFillFragment,
                     Bundle().apply {
                         putString("name", name)
                         putString("pincode", pincode)

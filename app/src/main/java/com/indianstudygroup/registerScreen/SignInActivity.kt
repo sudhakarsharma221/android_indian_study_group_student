@@ -65,13 +65,13 @@ class SignInActivity : AppCompatActivity() {
 
 
     private fun callGetUserExistApi(contact: String?) {
-        viewModel.callUserExists(contact,"")
+        viewModel.callUserExists(contact, "")
     }
 
     private fun observerUserExistsApiResponse() {
         viewModel.userExistResponse.observe(this, Observer {
-            if (it.userNameExist == true) {
-                if (it.user?.authType == "student") {
+            if (it.contactExist == true) {
+                if (it.authType == "student") {
                     val intent = Intent(this, OtpActivity::class.java)
                     intent.putExtra("phoneNumber", phoneNo)
                     startActivity(intent)
@@ -100,8 +100,6 @@ class SignInActivity : AppCompatActivity() {
             bottomDialog.dismiss()
         }
     }
-
-
 
 
     private fun observeProgress() {

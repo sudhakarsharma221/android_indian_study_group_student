@@ -75,11 +75,11 @@ class EditProfileActivity : AppCompatActivity() {
                 }
             }
         }
-    lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
-    lateinit var selectedQualificationFromList: String
-    lateinit var pincodeViewModel: PincodeViewModel
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var selectedQualificationFromList: String
+    private lateinit var pincodeViewModel: PincodeViewModel
     lateinit var viewModel: UserDetailsViewModel
-    lateinit var district: String
+    private lateinit var district: String
     lateinit var state: String
     private var selectedTopics: ArrayList<String>? = arrayListOf()
 
@@ -467,10 +467,9 @@ class EditProfileActivity : AppCompatActivity() {
     private fun observerUserFillDetailsApiResponse() {
         viewModel.userDetailsResponse.observe(this, Observer {
             ToastUtil.makeToast(this, "Details Updated")
-            setResult(AppCompatActivity.RESULT_OK)
-//            ApiCallsConstant.apiCallsOnceProfile = false
-//            ApiCallsConstant.apiCallsOnceHome = false
+            setResult(RESULT_OK)
             finish()
+            ApiCallsConstant.apiCallsOnceHome = false
         })
     }
 }

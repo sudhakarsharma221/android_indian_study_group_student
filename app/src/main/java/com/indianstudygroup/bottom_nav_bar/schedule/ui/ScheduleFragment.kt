@@ -7,24 +7,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.indianstudygroup.R
+import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.bottom_nav_bar.schedule.viewModel.ScheduleViewModel
+import com.indianstudygroup.databinding.FragmentScheduleBinding
 
 class ScheduleFragment : Fragment() {
 
 
     private lateinit var viewModel: ScheduleViewModel
-
+    private lateinit var binding: FragmentScheduleBinding
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_schedule, container, false)
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        viewModel = ViewModelProvider(this)[ScheduleViewModel::class.java]
+        binding = FragmentScheduleBinding.inflate(layoutInflater)
+//         inflater.inflate(R.layout.fragment_schedule, container, false)
+        initListener()
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ScheduleViewModel::class.java)
-
+    private fun initListener() {
+        binding.historyButton.setOnClickListener {
+            ToastUtil.makeToast(requireContext(), "History Activity")
+        }
     }
-
 }

@@ -8,10 +8,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.HideStatusBarUtil
 import com.indianstudygroup.databinding.ActivityScannerBinding
+import com.indianstudygroup.databinding.FilterLibraryBottomDialogBinding
+import com.indianstudygroup.databinding.ScannerBottomDialogBinding
 
 class ScannerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScannerBinding
@@ -57,12 +61,14 @@ class ScannerActivity : AppCompatActivity() {
         integrator.setOrientationLocked(true)
         integrator.initiateScan()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result: IntentResult? =
             IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             val scannedData = result.contents
-            Toast.makeText(this, scannedData, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, scannedData, Toast.LENGTH_SHORT).show()
+            setResult(RESULT_OK)
             finish()
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -87,5 +93,6 @@ class ScannerActivity : AppCompatActivity() {
             this, permission
         ) == PackageManager.PERMISSION_GRANTED
     }
+
 
 }
