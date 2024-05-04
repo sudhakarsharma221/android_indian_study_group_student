@@ -1,8 +1,8 @@
-package com.indianstudygroup.bottom_nav_bar.library.network
+package com.indianstudygroup.libraryDetailsApi.network
 
 import com.indianstudygroup.app_utils.AppUrlsEndpoint
-import com.indianstudygroup.bottom_nav_bar.library.model.LibraryDetailsResponseModel
-import com.indianstudygroup.bottom_nav_bar.library.model.LibraryResponseItem
+import com.indianstudygroup.libraryDetailsApi.model.LibraryDetailsResponseModel
+import com.indianstudygroup.libraryDetailsApi.model.LibraryIdDetailsResponseModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -21,7 +21,7 @@ interface LibraryDetailsNetworkService {
     ): Call<LibraryDetailsResponseModel>
 
     @GET(AppUrlsEndpoint.GET_LIBRARY + "{id}")
-    fun callLibraryDetails(
+    fun callIdLibraryDetails(
         @Path("id") id: String?
-    ): Call<LibraryResponseItem>
+    ): Call<LibraryIdDetailsResponseModel>
 }

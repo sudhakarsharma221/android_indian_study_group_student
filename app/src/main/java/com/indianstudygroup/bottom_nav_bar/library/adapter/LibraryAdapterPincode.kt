@@ -1,4 +1,4 @@
-package com.indianstudygroup.bottom_nav_bar.library.ui.adapter
+package com.indianstudygroup.bottom_nav_bar.library.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.indianstudygroup.R
-import com.indianstudygroup.bottom_nav_bar.library.model.LibraryResponseItem
-import com.indianstudygroup.bottom_nav_bar.library.ui.LibraryDetailsActivity
+import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
+import com.indianstudygroup.bottom_nav_bar.library.LibraryDetailsActivity
 import com.indianstudygroup.databinding.LibraryShowItemLayoutBinding
 
 class LibraryAdapterPincode(

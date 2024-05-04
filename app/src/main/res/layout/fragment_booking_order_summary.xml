@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="15dp"
-    tools:context=".book_seat.screens.BookingOrderSummaryFragment">
+    tools:context=".book_seat.ui.screens.BookingOrderSummaryFragment">
 
 
     <ImageView
@@ -37,11 +37,11 @@
         android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="45dp"
         android:fontFamily="@font/poppins"
         android:text="Item Total"
         android:textColor="@color/black_app"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -75,7 +75,7 @@
         android:fontFamily="@font/poppins"
         android:text="GST and other charges"
         android:textColor="@color/black_app"
-        android:textSize="16sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view7" />
 
@@ -86,7 +86,7 @@
         android:fontFamily="@font/poppins"
         android:text="$200"
         android:textColor="@color/black_app"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView22" />
@@ -98,7 +98,7 @@
         android:fontFamily="@font/poppins"
         android:text="$200"
         android:textColor="@color/black_app"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView23" />
@@ -120,7 +120,7 @@
         android:fontFamily="@font/poppins"
         android:text="Grand Total"
         android:textColor="@color/black_app"
-        android:textSize="16sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view8" />
 

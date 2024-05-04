@@ -1,4 +1,4 @@
-package com.indianstudygroup.book_seat.screens
+package com.indianstudygroup.book_seat.ui.screens
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
-import com.indianstudygroup.R
 import com.indianstudygroup.databinding.FragmentBookingOrderSummaryBinding
 
 class BookingOrderSummaryFragment : Fragment() {

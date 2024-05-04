@@ -57,7 +57,7 @@
             android:name=".qr_code.ScannerActivity"
             android:exported="false" />
         <activity
-            android:name=".bottom_nav_bar.library.ui.LibraryDetailsActivity"
+            android:name=".bottom_nav_bar.library.LibraryDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".editProfile.EditProfileActivity"

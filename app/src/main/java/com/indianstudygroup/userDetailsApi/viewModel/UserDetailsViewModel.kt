@@ -8,6 +8,10 @@ import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
 import com.indianstudygroup.userDetailsApi.model.UserExistResponseModel
 import com.indianstudygroup.userDetailsApi.repository.UserDetailsRepository
 
+object UserDetailData {
+    var userDetailsResponseModel: UserDetailsResponseModel? = null
+}
+
 class UserDetailsViewModel : ViewModel() {
     var showProgress = MutableLiveData<Boolean>()
     var errorMessage = MutableLiveData<String>()
@@ -39,4 +43,13 @@ class UserDetailsViewModel : ViewModel() {
     fun callUserExists(contact: String?, userName: String?) {
         repository.getUserExist(contact, userName)
     }
+
+    fun setUserDetailsResponse(response: UserDetailsResponseModel) {
+        UserDetailData.userDetailsResponseModel = response
+    }
+
+    fun getUserDetailsResponse(): UserDetailsResponseModel? {
+        return UserDetailData.userDetailsResponseModel
+    }
+
 }

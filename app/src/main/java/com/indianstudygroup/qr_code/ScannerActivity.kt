@@ -2,23 +2,30 @@ package com.indianstudygroup.qr_code
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.HideStatusBarUtil
+import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.ActivityScannerBinding
-import com.indianstudygroup.databinding.FilterLibraryBottomDialogBinding
 import com.indianstudygroup.databinding.ScannerBottomDialogBinding
+import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
+import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
 
 class ScannerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScannerBinding
+    private lateinit var libraryDetailsViewModel: LibraryViewModel
+    private lateinit var scannedData: String
 
     private val requestForPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -38,6 +45,8 @@ class ScannerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScannerBinding.inflate(layoutInflater)
+        libraryDetailsViewModel = ViewModelProvider(this)[LibraryViewModel::class.java]
+        window.statusBarColor = Color.WHITE
         setContentView(binding.root)
         HideStatusBarUtil.hideStatusBar(this)
 
@@ -50,6 +59,9 @@ class ScannerActivity : AppCompatActivity() {
 
     private fun initListener() {
         startQRCodeScanner()
+        observeProgress()
+        observerAllLibraryApiResponse()
+        observerErrorMessageApiResponse()
     }
 
     private fun startQRCodeScanner() {
@@ -66,13 +78,16 @@ class ScannerActivity : AppCompatActivity() {
         val result: IntentResult? =
             IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
-            val scannedData = result.contents
+            scannedData = result.contents
 //            Toast.makeText(this, scannedData, Toast.LENGTH_SHORT).show()
-            setResult(RESULT_OK)
-            finish()
+            Log.d("SCANNERDATA", scannedData)
+            callAllLibraryDetailsApi()
         } else {
             super.onActivityResult(requestCode, resultCode, data)
-            Toast.makeText(this, "Error scanning the QR", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Error scanning the QR", Toast.LENGTH_SHORT).show()
+            setResult(RESULT_CANCELED, Intent().apply {
+                putExtra("NoSession", false)
+            })
             finish()
         }
     }
@@ -95,4 +110,56 @@ class ScannerActivity : AppCompatActivity() {
     }
 
 
+    private fun callAllLibraryDetailsApi(
+    ) {
+        libraryDetailsViewModel.callGetAllLibrary()
+    }
+
+    private fun observeProgress() {
+        libraryDetailsViewModel.showProgress.observe(this, Observer {
+            if (it) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun observerErrorMessageApiResponse() {
+        libraryDetailsViewModel.errorMessage.observe(this, Observer {
+            ToastUtil.makeToast(this, it)
+        })
+    }
+
+
+    private fun observerAllLibraryApiResponse() {
+        libraryDetailsViewModel.allLibraryResponse.observe(this, Observer {
+            var libraryPresent = false
+            var library: LibraryResponseItem? = null
+            for (library1 in it) {
+                if (library1.id.equals(scannedData)) {
+                    library = library1
+                    libraryPresent = true
+                    break
+                } else {
+                    libraryPresent = false
+                }
+            }
+
+            if (libraryPresent) {
+                setResult(RESULT_OK, Intent().apply {
+                    putExtra("libraryDataPhoto", library?.photo)
+                    putExtra("libraryDataName", library?.name)
+                    putExtra("libraryDataAddress", library?.address?.street)
+                })
+                Log.d("SCANNERDATA", "OK")
+                finish()
+            } else {
+                setResult(RESULT_CANCELED, Intent().apply {
+                    putExtra("NoSession", true)
+                })
+                finish()
+            }
+        })
+    }
 }

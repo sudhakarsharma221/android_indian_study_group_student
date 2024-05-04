@@ -1,4 +1,4 @@
-package com.indianstudygroup.bottom_nav_bar.library.ui
+package com.indianstudygroup.bottom_nav_bar.library
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -13,13 +13,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.ApiCallsConstant
-import com.indianstudygroup.app_utils.HideKeyboard
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
-import com.indianstudygroup.bottom_nav_bar.library.model.LibraryResponseItem
-import com.indianstudygroup.bottom_nav_bar.library.ui.adapter.LibraryAdapterPincode
-import com.indianstudygroup.bottom_nav_bar.library.viewModel.LibraryViewModel
-import com.indianstudygroup.databinding.ErrorBottomDialogLayoutBinding
+import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
+import com.indianstudygroup.bottom_nav_bar.library.adapter.LibraryAdapterPincode
+import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
 import com.indianstudygroup.databinding.FilterLibraryBottomDialogBinding
 import com.indianstudygroup.databinding.FragmentHomeBinding
 import com.indianstudygroup.notification.ui.NotificationActivity
@@ -33,7 +31,7 @@ class LibraryFragment : Fragment() {
     private lateinit var userDetailsViewModel: UserDetailsViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var userData: UserDetailsResponseModel
-    private lateinit var viewModel: LibraryViewModel
+    private lateinit var libraryDetailsViewModel: LibraryViewModel
     private lateinit var adapter: LibraryAdapterPincode
     private lateinit var libraryList: ArrayList<LibraryResponseItem>
 
@@ -41,7 +39,7 @@ class LibraryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[LibraryViewModel::class.java]
+        libraryDetailsViewModel = ViewModelProvider(this)[LibraryViewModel::class.java]
         userDetailsViewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
         auth = FirebaseAuth.getInstance()
 
@@ -94,7 +92,7 @@ class LibraryFragment : Fragment() {
     private fun callPincodeLibraryDetailsApi(
         pincode: String?
     ) {
-        viewModel.callPincodeLibrary(pincode)
+        libraryDetailsViewModel.callPincodeLibrary(pincode)
     }
 
     //    private fun callAllLibraryDetailsApi(
@@ -106,28 +104,32 @@ class LibraryFragment : Fragment() {
             userData = it
             binding.currentLocation.text = "${it.address?.district}, ${it.address?.state}"
             initListener()
-
-
+            userDetailsViewModel.setUserDetailsResponse(it)
         })
     }
 
     private fun observeProgress() {
-        viewModel.showProgress.observe(viewLifecycleOwner, Observer {
+        libraryDetailsViewModel.showProgress.observe(viewLifecycleOwner, Observer {
             if (it) {
                 binding.shimmerLayout.visibility = View.VISIBLE
                 binding.noLibAvailable.visibility = View.GONE
+                binding.pincodeRecyclerView.visibility = View.GONE
                 binding.shimmerLayout.startShimmer()
             } else {
                 binding.shimmerLayout.visibility = View.GONE
+                binding.pincodeRecyclerView.visibility = View.VISIBLE
                 binding.shimmerLayout.stopShimmer()
             }
         })
         userDetailsViewModel.showProgress.observe(viewLifecycleOwner, Observer {
             if (it) {
                 binding.shimmerLayout.visibility = View.VISIBLE
+                binding.noLibAvailable.visibility = View.GONE
+                binding.pincodeRecyclerView.visibility = View.GONE
                 binding.shimmerLayout.startShimmer()
             } else {
                 binding.shimmerLayout.visibility = View.GONE
+                binding.pincodeRecyclerView.visibility = View.VISIBLE
                 binding.shimmerLayout.stopShimmer()
             }
         })
@@ -137,13 +139,13 @@ class LibraryFragment : Fragment() {
         userDetailsViewModel.errorMessage.observe(viewLifecycleOwner, Observer {
             ToastUtil.makeToast(requireContext(), it)
         })
-        viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
+        libraryDetailsViewModel.errorMessage.observe(viewLifecycleOwner, Observer {
             ToastUtil.makeToast(requireContext(), it)
         })
     }
 
     private fun observerPincodeLibraryApiResponse() {
-        viewModel.pincodeLibraryReponse.observe(viewLifecycleOwner, Observer {
+        libraryDetailsViewModel.pincodeLibraryReponse.observe(viewLifecycleOwner, Observer {
             libraryList = it
             if (libraryList.isEmpty()) {
                 binding.noLibAvailable.visibility = View.VISIBLE

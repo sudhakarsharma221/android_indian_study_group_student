@@ -1,10 +1,11 @@
-package com.indianstudygroup.bottom_nav_bar.library.ui
+package com.indianstudygroup.bottom_nav_bar.library
 
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
@@ -12,21 +13,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.indianstudygroup.R
-import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.book_seat.SeatBookActivity
-import com.indianstudygroup.bottom_nav_bar.library.viewModel.LibraryViewModel
+import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
 import com.indianstudygroup.databinding.ActivityLibraryDetailsBinding
 import com.indianstudygroup.databinding.ErrorBottomDialogLayoutBinding
-import com.indianstudygroup.databinding.FilterLibraryBottomDialogBinding
 import com.indianstudygroup.databinding.ReviewBottomDialogBinding
-import com.indianstudygroup.databinding.ScannerBottomDialogBinding
-import com.indianstudygroup.qr_code.ScannerActivity
 
 class LibraryDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLibraryDetailsBinding
     private lateinit var viewModel: LibraryViewModel
-    private lateinit var id: String
+    private lateinit var libraryId: String
     private var longitude: Double? = null
     private var latitude: Double? = null
     private var isExpanded = false
@@ -40,7 +37,8 @@ class LibraryDetailsActivity : AppCompatActivity() {
 //        window.statusBarColor = Color.parseColor("#2f3133")
 
         viewModel = ViewModelProvider(this@LibraryDetailsActivity)[LibraryViewModel::class.java]
-        id = intent.getStringExtra("LibraryId").toString()
+        libraryId = intent.getStringExtra("LibraryId").toString()
+        callIdLibraryDetailsApi(libraryId)
 
         initListener()
         observeProgress()
@@ -80,6 +78,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
         }
         binding.bookSeatButton.setOnClickListener {
             val intent = Intent(this, SeatBookActivity::class.java)
+            intent.putExtra("LibraryId",libraryId)
             startActivityForResult(intent, 2)
         }
 
@@ -87,7 +86,6 @@ class LibraryDetailsActivity : AppCompatActivity() {
             finish()
         }
 
-        callIdLibraryDetailsApi(id)
 
 
         binding.tvAddress.setOnClickListener {
@@ -140,32 +138,36 @@ class LibraryDetailsActivity : AppCompatActivity() {
 
     private fun observerIdLibraryApiResponse() {
         viewModel.idLibraryResponse.observe(this, Observer {
-            latitude = it.address?.latitude?.toDouble()
-            longitude = it.address?.longitude?.toDouble()
-            Glide.with(this).load(it.photo).placeholder(R.drawable.noimage)
+            viewModel.setLibraryDetailsResponse(it)
+
+            Log.d("LIBRARYDETAILSIDRESPONSE", it.toString())
+
+            latitude = it.libData?.address?.latitude?.toDouble()
+            longitude = it.libData?.address?.longitude?.toDouble()
+            Glide.with(this).load(it.libData?.photo).placeholder(R.drawable.noimage)
                 .error(R.drawable.noimage).into(binding.libImage)
-            binding.tvName.text = it.name
-            binding.tvBio.text = it.bio
+            binding.tvName.text = it.libData?.name
+            binding.tvBio.text = it.libData?.bio
 //            binding.tvContact.text = HtmlCompat.fromHtml(
 //                "<b>Contact : </b>${it.contact}", HtmlCompat.FROM_HTML_MODE_LEGACY
 //            )
             binding.tvSeats.text = HtmlCompat.fromHtml(
-                "Seats Available : <b>${it.vacantSeats} / ${it.seats} </b>",
+                "Seats Available : <b>${it.libData?.vacantSeats} / ${it.libData?.seats} </b>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
-            binding.tvAmmenities.text = it.ammenities.joinToString("\n")
+            binding.tvAmmenities.text = it.libData?.ammenities?.joinToString("\n")
 //            binding.tvPrice.text = HtmlCompat.fromHtml(
 //                "<b>Daily Charge : </b> ₹${it.pricing?.daily}<br/>",
 //                HtmlCompat.FROM_HTML_MODE_LEGACY
 //            )
 
             binding.tvAddress.text =
-                "${it.address?.street}, ${it.address?.district}, ${it.address?.state}, ${it.address?.pincode}"
+                "${it.libData?.address?.street}, ${it.libData?.address?.district}, ${it.libData?.address?.state}, ${it.libData?.address?.pincode}"
 
 
             val timingStringBuilder = StringBuilder()
-            timingStringBuilder.append("Time Slots :<br/>")
-            it.timing.forEachIndexed { index, timing ->
+            timingStringBuilder.append("Time Slots : ")
+            it.libData?.timing?.forEachIndexed { index, timing ->
                 timingStringBuilder.append(
                     "<b>${timing.from} to ${timing.to}<br/>(${
                         timing.days.joinToString(
@@ -173,7 +175,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
                         )
                     }) </b>"
                 )
-                if (index != it.timing.size - 1) {
+                if (index != it.libData?.timing!!.size - 1) {
                     timingStringBuilder.append("<br/>")
                 }
             }

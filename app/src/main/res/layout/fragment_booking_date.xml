@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="15dp"
-    tools:context=".book_seat.screens.BookingDateFragment">
+    tools:context=".book_seat.ui.screens.BookingDateFragment">
 
     <ImageView
         android:id="@+id/backButton"
@@ -35,10 +35,10 @@
         android:id="@+id/calendarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:dateTextAppearance="@style/CalendarViewTextAppearance"
-        android:weekDayTextAppearance="@style/CalendarViewTextAppearance"
         android:layout_marginTop="10dp"
         android:background="@drawable/background_button_color_change_2"
+        android:dateTextAppearance="@style/CalendarViewTextAppearance"
+        android:weekDayTextAppearance="@style/CalendarViewTextAppearance"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -69,10 +69,43 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/noLibAvailable"
+        android:id="@+id/error"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="visible"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/submitButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView15"
+        tools:layout_editor_absoluteX="15dp">
+
+<!--        <ImageView-->
+<!--            android:id="@+id/imageNoLib"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:src="@drawable/nolibavailable"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/textView18"-->
+<!--            app:layout_constraintDimensionRatio="3:1"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Oops! Error getting the data"
+            android:textColor="@color/drawable_color"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/noSchedule"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/submitButton"
         app:layout_constraintTop_toBottomOf="@+id/textView15"
         tools:layout_editor_absoluteX="15dp">
@@ -102,6 +135,14 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/noSchedule"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/noSchedule" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

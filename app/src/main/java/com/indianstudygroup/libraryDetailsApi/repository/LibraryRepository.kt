@@ -1,11 +1,12 @@
-package com.indianstudygroup.bottom_nav_bar.library.repository
+package com.indianstudygroup.libraryDetailsApi.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.indianstudygroup.app_utils.AppConstant
-import com.indianstudygroup.bottom_nav_bar.library.model.LibraryDetailsResponseModel
-import com.indianstudygroup.bottom_nav_bar.library.model.LibraryResponseItem
-import com.indianstudygroup.bottom_nav_bar.library.network.LibraryDetailsNetworkService
+import com.indianstudygroup.libraryDetailsApi.model.LibraryDetailsResponseModel
+import com.indianstudygroup.libraryDetailsApi.model.LibraryIdDetailsResponseModel
+import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
+import com.indianstudygroup.libraryDetailsApi.network.LibraryDetailsNetworkService
 import com.indianstudygroup.retrofitUtils.RetrofitUtilClass
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,7 +17,7 @@ class LibraryRepository {
     val errorMessage = MutableLiveData<String>()
     val allLibraryResponse = MutableLiveData<LibraryDetailsResponseModel>()
     val pincodeLibraryReponse = MutableLiveData<LibraryDetailsResponseModel>()
-    val idLibraryResponse = MutableLiveData<LibraryResponseItem>()
+    val idLibraryResponse = MutableLiveData<LibraryIdDetailsResponseModel>()
 
     fun getAllLibraryDetailsResponse() {
         showProgress.value = true
@@ -100,15 +101,15 @@ class LibraryRepository {
     }
 
 
-    fun getIdPincodeDetailsResponse(id: String?) {
+    fun getIdDetailsResponse(id: String?) {
         showProgress.value = true
         val client =
             RetrofitUtilClass.getRetrofit().create(LibraryDetailsNetworkService::class.java)
-        val call = client.callLibraryDetails(id)
-        call.enqueue(object : Callback<LibraryResponseItem?> {
+        val call = client.callIdLibraryDetails(id)
+        call.enqueue(object : Callback<LibraryIdDetailsResponseModel?> {
             override fun onResponse(
-                call: Call<LibraryResponseItem?>,
-                response: Response<LibraryResponseItem?>
+                call: Call<LibraryIdDetailsResponseModel?>,
+                response: Response<LibraryIdDetailsResponseModel?>
             ) {
                 showProgress.postValue(false)
                 val body = response.body()
@@ -130,7 +131,7 @@ class LibraryRepository {
                 }
             }
 
-            override fun onFailure(call: Call<LibraryResponseItem?>, t: Throwable) {
+            override fun onFailure(call: Call<LibraryIdDetailsResponseModel?>, t: Throwable) {
                 Log.d("idLibraryResponse", "failed : ${t.localizedMessage}")
                 showProgress.postValue(false)
                 errorMessage.postValue("Server error please try after sometime")

@@ -77,27 +77,22 @@ class EditProfileActivity : AppCompatActivity() {
         }
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var selectedQualificationFromList: String
-    private lateinit var pincodeViewModel: PincodeViewModel
-    lateinit var viewModel: UserDetailsViewModel
+    private lateinit var pinCodeViewModel: PincodeViewModel
+    private lateinit var userDetailsViewModel: UserDetailsViewModel
     private lateinit var district: String
     lateinit var state: String
-    private var selectedTopics: ArrayList<String>? = arrayListOf()
+    private var selectedTopics: ArrayList<String> = arrayListOf()
 
     private val qualificationList =
         arrayOf("High School", "Intermediate", "Graduation", "Post Graduation")
-    private val topicsList =
-        arrayOf("JEE Mains", "NEET", "Defence", "NDA", "CDS", "SSC CHSL", "SSC CGL", "Police")
-    private val checkedTopics =
-        BooleanArray(topicsList.size) // Initialize with the same length as topicsList
-    val checkedQualification = BooleanArray(qualificationList.size)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
-        pincodeViewModel = ViewModelProvider(this)[PincodeViewModel::class.java]
+        userDetailsViewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
+        pinCodeViewModel = ViewModelProvider(this)[PincodeViewModel::class.java]
         auth = FirebaseAuth.getInstance()
         storageRef = FirebaseStorage.getInstance()
         window.statusBarColor = Color.parseColor("#5669FF")
@@ -134,15 +129,13 @@ class EditProfileActivity : AppCompatActivity() {
             ToastUtil.makeToast(this, "User details not found")
             finish()
         }
-
-
-        initListener()
     }
 
     private fun initListener() {
-        selectedTopics = userData.topic
+        topicsSelectListener()
+
         binding.nameEt.setText(userData.name)
-        binding.usernameEt.setText(userData.username)
+        binding.usernameEt.text = userData.username
         binding.pincodeEt.setText(userData.address?.pincode)
         binding.tvCity.text = userData.address?.district
         binding.tvState.text = userData.address?.state
@@ -161,10 +154,6 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.tvQualification.setOnClickListener {
             chooseQualificationsDialog()
-        }
-
-        binding.tvTopics.setOnClickListener {
-            chooseTopicsDialog()
         }
         binding.tvDone.setOnClickListener {
             uploadImage()
@@ -216,48 +205,84 @@ class EditProfileActivity : AppCompatActivity() {
             } else if (highestQualification == "Choose Your Qualification") {
                 binding.tvchoosequalification.visibility = android.view.View.VISIBLE
             } else {
+                val uniqueSelectedTopics = selectedTopics.toSet().toList()
+//                Log.d("SELECTEDTOPICSEDIT", uniqueSelectedTopics.toString())
                 callPutUserDetailsApi(
                     auth.currentUser!!.uid, UserDetailsPutRequestBodyModel(
                         name.trim(), photoUrl ?: "", Address(
                             state.trim(), district, pincode
-                        ), bio ?: "", highestQualification ?: "", selectedTopics ?: arrayListOf()
+                        ), bio ?: "", highestQualification ?: "", uniqueSelectedTopics
                     )
                 )
             }
         }
     }
 
-    private fun chooseTopicsDialog() {
+    private fun topicsSelectListener() {
+        selectedTopics = userData.topic
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select Items").setMultiChoiceItems(
-            topicsList, checkedTopics
-        ) { dialog, which, isChecked ->
-            checkedTopics[which] = isChecked
-        }.setPositiveButton("OK") { dialog, which ->
-            // Check if none of the options is selected
-            if (checkedTopics.all { !it }) {
-                Toast.makeText(
-                    applicationContext, "Please select at least one item", Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                // User clicked OK and at least one item is selected
-                for (i in checkedTopics.indices) {
-                    if (checkedTopics[i]) {
-                        selectedTopics?.add(topicsList[i])
-                    }
-                }
+        for (topic in userData.topic) {
+            when (topic) {
+                "JEE Mains" -> setButtonState(binding.buttonJee, true)
+                "NEET" -> setButtonState(binding.buttonNeet, true)
+                "Defence" -> setButtonState(binding.buttonDefence, true)
+                "NDA" -> setButtonState(binding.buttonNda, true)
+                "CDS" -> setButtonState(binding.buttonCds, true)
+                "SSC CHSL" -> setButtonState(binding.buttonChsl, true)
+                "SSC CGL" -> setButtonState(binding.buttoncgl, true)
+                "Police" -> setButtonState(binding.buttonPolice, true)
             }
-        }.setNegativeButton("Cancel") { dialog, which ->
-            // User cancelled the dialog
-            dialog.dismiss()
-        }.setNeutralButton("Clear All") { dialog, which ->
-            // Clear all selections
-            checkedTopics.fill(false)
         }
-        // Create and show the AlertDialog
-        val dialog = builder.create()
-        dialog.show()
+
+
+        val buttonIds = listOf(
+            R.id.buttonCds,
+            R.id.buttonChsl,
+            R.id.buttonJee,
+            R.id.buttonNda,
+            R.id.buttonNeet,
+            R.id.buttonDefence,
+            R.id.buttonPolice,
+            R.id.buttoncgl
+        )
+
+        buttonIds.forEach { buttonId ->
+            val button = findViewById<TextView>(buttonId)
+            button.setOnClickListener {
+                toggleButtonState(button)
+            }
+        }
+
+    }
+
+    private fun toggleButtonState(textView: TextView) {
+        textView.isSelected = !textView.isSelected
+        val topic = textView.text.toString()
+        if (textView.isSelected) {
+            if (!selectedTopics.contains(topic)) {
+                selectedTopics.add(topic)
+            }
+        } else {
+            selectedTopics.remove(topic)
+        }
+        setButtonState(textView, textView.isSelected)
+    }
+
+
+    private fun setButtonState(textView: TextView, isSelected: Boolean) {
+        if (isSelected) {
+            textView.setBackgroundResource(R.drawable.background_button) // Change to selected background
+            textView.setTextColor(
+                ContextCompat.getColor(
+                    this, android.R.color.white
+                )
+            ) // Change to white text color
+        } else {
+            textView.setBackgroundResource(R.drawable.background_button_color_change_2) // Revert to normal background
+            textView.setTextColor(
+                Color.parseColor("#120D26")
+            ) // Revert to original text color
+        }
     }
 
     private fun chooseQualificationsDialog() {
@@ -407,18 +432,18 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun callPincodeApi(pincode: String?) {
-        pincodeViewModel.callPinCodeDetails(pincode)
+        pinCodeViewModel.callPinCodeDetails(pincode)
     }
 
     private fun callPutUserDetailsApi(
         userId: String?, putUserDetailsPutRequestBodyModel: UserDetailsPutRequestBodyModel
     ) {
-        viewModel.callPutUserDetails(userId, putUserDetailsPutRequestBodyModel)
+        userDetailsViewModel.callPutUserDetails(userId, putUserDetailsPutRequestBodyModel)
     }
 
 
     private fun observeProgress() {
-        viewModel.showProgress.observe(this, Observer {
+        userDetailsViewModel.showProgress.observe(this, Observer {
             if (it) {
                 binding.progressBar.visibility = View.VISIBLE
                 binding.mainView.visibility = View.GONE
@@ -428,7 +453,7 @@ class EditProfileActivity : AppCompatActivity() {
             }
         })
 
-        pincodeViewModel.showProgress.observe(this, Observer {
+        pinCodeViewModel.showProgress.observe(this, Observer {
             if (it) {
                 binding.progressBar.visibility = View.VISIBLE
                 binding.mainView.visibility = View.GONE
@@ -440,16 +465,16 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun observerErrorMessageApiResponse() {
-        viewModel.errorMessage.observe(this, Observer {
+        userDetailsViewModel.errorMessage.observe(this, Observer {
             ToastUtil.makeToast(this, it)
         })
-        pincodeViewModel.errorMessage.observe(this, Observer {
+        pinCodeViewModel.errorMessage.observe(this, Observer {
             ToastUtil.makeToast(this, it)
         })
     }
 
     private fun observerPincodeApiResponse() {
-        pincodeViewModel.pincodeResponse.observe(this, Observer {
+        pinCodeViewModel.pincodeResponse.observe(this, Observer {
             Log.d("testPINCODEAPI", it.toString())
             if (it[0].postOffice == null) {
                 ToastUtil.makeToast(this, "Please enter valid pincode")
@@ -465,7 +490,9 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun observerUserFillDetailsApiResponse() {
-        viewModel.userDetailsResponse.observe(this, Observer {
+        userDetailsViewModel.userDetailsResponse.observe(this, Observer {
+            userDetailsViewModel.setUserDetailsResponse(it)
+
             ToastUtil.makeToast(this, "Details Updated")
             setResult(RESULT_OK)
             finish()

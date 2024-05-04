@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/navigation_library"
-        android:name="com.indianstudygroup.bottom_nav_bar.library.ui.LibraryFragment"
+        android:name="com.indianstudygroup.bottom_nav_bar.library.LibraryFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
     <fragment

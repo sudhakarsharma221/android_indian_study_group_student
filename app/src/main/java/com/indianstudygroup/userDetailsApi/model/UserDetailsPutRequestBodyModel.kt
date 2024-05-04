@@ -9,6 +9,6 @@ data class UserDetailsPutRequestBodyModel(
     @SerializedName("address") val address: Address? = Address(),
     @SerializedName("bio") val bio: String? = null,
     @SerializedName("highestQualification") val highestQualification: String? = null,
-    @SerializedName("topic") val topic: ArrayList<String> = arrayListOf(),
+    @SerializedName("topic") val topic: List<String> = arrayListOf(),
 )
 

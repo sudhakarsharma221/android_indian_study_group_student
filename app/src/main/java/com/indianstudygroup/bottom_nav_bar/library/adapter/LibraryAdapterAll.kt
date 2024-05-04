@@ -1,4 +1,4 @@
-package com.indianstudygroup.bottom_nav_bar.library.ui.adapter
+package com.indianstudygroup.bottom_nav_bar.library.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
