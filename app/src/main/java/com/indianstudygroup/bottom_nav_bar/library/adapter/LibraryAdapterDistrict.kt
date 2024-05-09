@@ -13,9 +13,9 @@ import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
 import com.indianstudygroup.bottom_nav_bar.library.LibraryDetailsActivity
 import com.indianstudygroup.databinding.LibraryShowItemLayoutBinding
 
-class LibraryAdapterPincode(
-    val context: Context, val list: ArrayList<LibraryResponseItem>
-) : Adapter<LibraryAdapterPincode.MyViewHolder>() {
+class LibraryAdapterDistrict(
+    val context: Context, private val list: ArrayList<LibraryResponseItem>
+) : Adapter<LibraryAdapterDistrict.MyViewHolder>() {
     inner class MyViewHolder(val binding: LibraryShowItemLayoutBinding) : ViewHolder(binding.root) {
         fun bindView(library: LibraryResponseItem, context: Context, position: Int) {
 

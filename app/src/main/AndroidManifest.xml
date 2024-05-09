@@ -27,6 +27,9 @@
         android:theme="@style/Theme.IndianStudyGroup"
         tools:targetApi="31">
         <activity
+            android:name=".bottom_nav_bar.more.setting.screens.AboutUsActivity"
+            android:exported="false" />
+        <activity
             android:name=".book_seat.SeatBookActivity"
             android:exported="false" />
         <activity

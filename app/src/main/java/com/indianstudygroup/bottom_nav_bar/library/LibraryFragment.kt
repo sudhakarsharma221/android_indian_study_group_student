@@ -16,7 +16,7 @@ import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
-import com.indianstudygroup.bottom_nav_bar.library.adapter.LibraryAdapterPincode
+import com.indianstudygroup.bottom_nav_bar.library.adapter.LibraryAdapterDistrict
 import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
 import com.indianstudygroup.databinding.FilterLibraryBottomDialogBinding
 import com.indianstudygroup.databinding.FragmentHomeBinding
@@ -32,8 +32,9 @@ class LibraryFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var userData: UserDetailsResponseModel
     private lateinit var libraryDetailsViewModel: LibraryViewModel
-    private lateinit var adapter: LibraryAdapterPincode
+    private lateinit var adapter: LibraryAdapterDistrict
     private lateinit var libraryList: ArrayList<LibraryResponseItem>
+    private lateinit var allLibraryList: ArrayList<LibraryResponseItem>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -51,8 +52,14 @@ class LibraryFragment : Fragment() {
             ApiCallsConstant.apiCallsOnceHome = true
             ApiCallsConstant.apiCallsOnceLibrary = false
         }
+        if (!ApiCallsConstant.apiCallsOnceAllLibrary) {
+            callAllLibraryDetailsApi()
+            ApiCallsConstant.apiCallsOnceAllLibrary = true
+        }
 
-        observerPincodeLibraryApiResponse()
+
+        observerAllLibraryApiResponse()
+        observerDistrictLibraryApiResponse()
         observeProgress()
         observerErrorMessageApiResponse()
         observerUserDetailsApiResponse()
@@ -76,13 +83,13 @@ class LibraryFragment : Fragment() {
         if (!ApiCallsConstant.apiCallsOnceLibrary) {
             Log.d("PINCODEGONE", userData.address?.pincode.toString())
 
-            callPincodeLibraryDetailsApi(userData.address?.pincode)
+            callPincodeLibraryDetailsApi(userData.address?.district)
             ApiCallsConstant.apiCallsOnceLibrary = true
         }
         binding.swiperefresh.setOnRefreshListener {
             Log.d("PINCODEGONE", userData.address?.pincode.toString())
 
-            callPincodeLibraryDetailsApi(userData.address?.pincode)
+            callPincodeLibraryDetailsApi(userData.address?.district)
         }
 
         binding.pincodeRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -90,15 +97,16 @@ class LibraryFragment : Fragment() {
     }
 
     private fun callPincodeLibraryDetailsApi(
-        pincode: String?
+        district: String?
     ) {
-        libraryDetailsViewModel.callPincodeLibrary(pincode)
+        libraryDetailsViewModel.callPincodeLibrary(district)
     }
 
-    //    private fun callAllLibraryDetailsApi(
-//    ) {
-//        viewModel.callGetAllLibrary()
-//    }
+    private fun callAllLibraryDetailsApi(
+    ) {
+        libraryDetailsViewModel.callGetAllLibrary()
+    }
+
     private fun observerUserDetailsApiResponse() {
         userDetailsViewModel.userDetailsResponse.observe(viewLifecycleOwner, Observer {
             userData = it
@@ -144,8 +152,8 @@ class LibraryFragment : Fragment() {
         })
     }
 
-    private fun observerPincodeLibraryApiResponse() {
-        libraryDetailsViewModel.pincodeLibraryReponse.observe(viewLifecycleOwner, Observer {
+    private fun observerDistrictLibraryApiResponse() {
+        libraryDetailsViewModel.districtLibraryResponse.observe(viewLifecycleOwner, Observer {
             libraryList = it
             if (libraryList.isEmpty()) {
                 binding.noLibAvailable.visibility = View.VISIBLE
@@ -153,7 +161,7 @@ class LibraryFragment : Fragment() {
             } else {
                 binding.noLibAvailable.visibility = View.GONE
                 binding.pincodeRecyclerView.visibility = View.VISIBLE
-                adapter = LibraryAdapterPincode(requireContext(), libraryList)
+                adapter = LibraryAdapterDistrict(requireContext(), libraryList)
                 binding.pincodeRecyclerView.adapter = adapter
             }
 
@@ -162,11 +170,12 @@ class LibraryFragment : Fragment() {
         })
     }
 
-    //    private fun observerAllLibraryApiResponse() {
-//        viewModel.allLibraryResponse.observe(viewLifecycleOwner, Observer {
-//
-//        })
-//    }
+    private fun observerAllLibraryApiResponse() {
+        libraryDetailsViewModel.allLibraryResponse.observe(viewLifecycleOwner, Observer {
+            allLibraryList = it
+        })
+    }
+
     private fun showFilterDialog() {
         val bottomDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         val dialogBinding = FilterLibraryBottomDialogBinding.inflate(layoutInflater)

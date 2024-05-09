@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black1"
+    android:background="@color/white"
     tools:context=".SplashScreenActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:padding="70dp"
         android:src="@drawable/logo"
+        android:textColor="@color/blue1"
         android:textSize="30sp" />
 
     <ProgressBar

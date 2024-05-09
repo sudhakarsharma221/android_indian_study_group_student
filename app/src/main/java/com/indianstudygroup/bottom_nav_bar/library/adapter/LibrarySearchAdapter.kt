@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.indianstudygroup.databinding.SearchItemLayoutBinding
 import java.util.Locale
 
-class LibraryAdapterAll(
+class LibrarySearchAdapter(
     val context: Context, val list: ArrayList<String>, private val onItemClick: (String?) -> Unit
-) : Adapter<LibraryAdapterAll.MyViewHolder>() {
+) : Adapter<LibrarySearchAdapter.MyViewHolder>() {
 
 
     private var filteredSections: List<String> = list
@@ -21,7 +21,7 @@ class LibraryAdapterAll(
             filteredSections = fullList
         } else {
             filteredSections = fullList.filter {
-                it.lowercase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)) == true
+                it.lowercase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
             }
         }
         notifyDataSetChanged()

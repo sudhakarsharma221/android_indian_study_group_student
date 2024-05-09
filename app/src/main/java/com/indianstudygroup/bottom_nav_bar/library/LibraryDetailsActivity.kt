@@ -76,11 +76,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
         binding.writeReview.setOnClickListener {
             showReviewDialog()
         }
-        binding.bookSeatButton.setOnClickListener {
-            val intent = Intent(this, SeatBookActivity::class.java)
-            intent.putExtra("LibraryId",libraryId)
-            startActivityForResult(intent, 2)
-        }
+
 
         binding.backButton.setOnClickListener {
             finish()
@@ -113,6 +109,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 2 && resultCode == RESULT_OK) {
+            callIdLibraryDetailsApi(libraryId)
             showConfirmBookingDialog()
         }
     }
@@ -137,37 +134,45 @@ class LibraryDetailsActivity : AppCompatActivity() {
     }
 
     private fun observerIdLibraryApiResponse() {
-        viewModel.idLibraryResponse.observe(this, Observer {
-            viewModel.setLibraryDetailsResponse(it)
+        viewModel.idLibraryResponse.observe(this, Observer { libraryData ->
+            viewModel.setLibraryDetailsResponse(libraryData)
 
-            Log.d("LIBRARYDETAILSIDRESPONSE", it.toString())
+            binding.bookSeatButton.setOnClickListener {
+                if (libraryData.libData?.vacantSeats == 0) {
+                    ToastUtil.makeToast(this, "No Vacant Seat Available")
+                } else {
+                    val intent = Intent(this, SeatBookActivity::class.java)
+                    intent.putExtra("LibraryId", libraryId)
+                    startActivityForResult(intent, 2)
+                }
+            }
 
-            latitude = it.libData?.address?.latitude?.toDouble()
-            longitude = it.libData?.address?.longitude?.toDouble()
-            Glide.with(this).load(it.libData?.photo).placeholder(R.drawable.noimage)
+            latitude = libraryData.libData?.address?.latitude?.toDouble()
+            longitude = libraryData.libData?.address?.longitude?.toDouble()
+            Glide.with(this).load(libraryData.libData?.photo).placeholder(R.drawable.noimage)
                 .error(R.drawable.noimage).into(binding.libImage)
-            binding.tvName.text = it.libData?.name
-            binding.tvBio.text = it.libData?.bio
+            binding.tvName.text = libraryData.libData?.name
+            binding.tvBio.text = libraryData.libData?.bio
 //            binding.tvContact.text = HtmlCompat.fromHtml(
 //                "<b>Contact : </b>${it.contact}", HtmlCompat.FROM_HTML_MODE_LEGACY
 //            )
             binding.tvSeats.text = HtmlCompat.fromHtml(
-                "Seats Available : <b>${it.libData?.vacantSeats} / ${it.libData?.seats} </b>",
+                "Seats Available : <b>${libraryData.libData?.vacantSeats} / ${libraryData.libData?.seats} </b>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
-            binding.tvAmmenities.text = it.libData?.ammenities?.joinToString("\n")
+            binding.tvAmmenities.text = libraryData.libData?.ammenities?.joinToString("\n")
 //            binding.tvPrice.text = HtmlCompat.fromHtml(
 //                "<b>Daily Charge : </b> ₹${it.pricing?.daily}<br/>",
 //                HtmlCompat.FROM_HTML_MODE_LEGACY
 //            )
 
             binding.tvAddress.text =
-                "${it.libData?.address?.street}, ${it.libData?.address?.district}, ${it.libData?.address?.state}, ${it.libData?.address?.pincode}"
+                "${libraryData.libData?.address?.street}, ${libraryData.libData?.address?.district}, ${libraryData.libData?.address?.state}, ${libraryData.libData?.address?.pincode}"
 
 
             val timingStringBuilder = StringBuilder()
             timingStringBuilder.append("Time Slots : ")
-            it.libData?.timing?.forEachIndexed { index, timing ->
+            libraryData.libData?.timing?.forEachIndexed { index, timing ->
                 timingStringBuilder.append(
                     "<b>${timing.from} to ${timing.to}<br/>(${
                         timing.days.joinToString(
@@ -175,7 +180,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
                         )
                     }) </b>"
                 )
-                if (index != it.libData?.timing!!.size - 1) {
+                if (index != libraryData.libData?.timing!!.size - 1) {
                     timingStringBuilder.append("<br/>")
                 }
             }

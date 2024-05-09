@@ -68,5 +68,27 @@
         android:id="@+id/bookingOrderSummaryFragment"
         android:name="com.indianstudygroup.book_seat.ui.screens.BookingOrderSummaryFragment"
         android:label="fragment_booking_order_summary"
-        tools:layout="@layout/fragment_booking_order_summary" />
+        tools:layout="@layout/fragment_booking_order_summary">
+        <argument
+            android:name="priceSeats"
+            app:argType="string" />
+        <argument
+            android:name="libId"
+            app:argType="string" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <argument
+            android:name="startTimeHour"
+            app:argType="string" />
+        <argument
+            android:name="startTimeMinute"
+            app:argType="string" />
+        <argument
+            android:name="endTimeHour"
+            app:argType="string" />
+        <argument
+            android:name="endTimeMinute"
+            app:argType="string" />
+    </fragment>
 </navigation>

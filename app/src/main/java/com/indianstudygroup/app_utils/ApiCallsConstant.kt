@@ -4,5 +4,6 @@ object ApiCallsConstant {
 
     var apiCallsOnceProfile = false
     var apiCallsOnceHome = false
+    var apiCallsOnceAllLibrary = false
     var apiCallsOnceLibrary = false
 }

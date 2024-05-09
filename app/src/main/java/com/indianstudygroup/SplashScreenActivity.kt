@@ -26,7 +26,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        window.statusBarColor = Color.BLACK
+        window.statusBarColor = Color.WHITE
         auth = FirebaseAuth.getInstance()
 
         viewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]

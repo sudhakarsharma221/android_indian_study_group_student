@@ -17,7 +17,7 @@ interface LibraryDetailsNetworkService {
 
     @GET(AppUrlsEndpoint.GET_LIBRARY)
     fun callPincodeLibraryDetails(
-        @Query("pincode") pincode: String?
+        @Query("district") district: String?
     ): Call<LibraryDetailsResponseModel>
 
     @GET(AppUrlsEndpoint.GET_LIBRARY + "{id}")

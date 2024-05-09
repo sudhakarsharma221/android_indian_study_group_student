@@ -76,11 +76,11 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
-    private lateinit var selectedQualificationFromList: String
     private lateinit var pinCodeViewModel: PincodeViewModel
     private lateinit var userDetailsViewModel: UserDetailsViewModel
     private lateinit var district: String
     lateinit var state: String
+    private lateinit var selectedQualificationFromList: String
     private var selectedTopics: ArrayList<String> = arrayListOf()
 
     private val qualificationList =
@@ -186,7 +186,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.continueButton.setOnClickListener {
             val name = binding.nameEt.text.toString()
-            val pincode = binding.pincodeEt.text.toString()
+            val pinCode = binding.pincodeEt.text.toString()
             val state = binding.tvState.text.toString()
             val district = binding.tvCity.text.toString()
             val bio = binding.aboutET.text.toString()
@@ -198,9 +198,9 @@ class EditProfileActivity : AppCompatActivity() {
                 binding.nameEt.error = "Enter minimum 2 characters"
             } else if (name.length > 30) {
                 binding.nameEt.error = "Enter less than 30 characters"
-            } else if (pincode.trim().isEmpty()) {
+            } else if (pinCode.trim().isEmpty()) {
                 binding.pincodeEt.error = "Empty Field"
-            } else if (pincode.length < 6) {
+            } else if (pinCode.length < 6) {
                 binding.pincodeEt.error = "Enter Valid Pincode"
             } else if (highestQualification == "Choose Your Qualification") {
                 binding.tvchoosequalification.visibility = android.view.View.VISIBLE
@@ -210,7 +210,7 @@ class EditProfileActivity : AppCompatActivity() {
                 callPutUserDetailsApi(
                     auth.currentUser!!.uid, UserDetailsPutRequestBodyModel(
                         name.trim(), photoUrl ?: "", Address(
-                            state.trim(), district, pincode
+                            state.trim(), district, pinCode
                         ), bio ?: "", highestQualification ?: "", uniqueSelectedTopics
                     )
                 )

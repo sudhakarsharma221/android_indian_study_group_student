@@ -12,7 +12,6 @@
         android:id="@+id/backButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="15dp"
         android:rotation="180"
         android:src="@drawable/baseline_arrow_forward_24"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,4 +31,102 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/termsOfService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/outline_lock_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="Terms of Service"
+        android:textColor="@color/black_app"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+    <TextView
+        android:id="@+id/paymentTerms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/outline_lock_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="Payment Terms of Service"
+        android:textColor="@color/black_app"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/termsOfService" />
+
+
+    <TextView
+        android:id="@+id/privacyPolicy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/outline_lock_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="Privacy Policy"
+        android:textColor="@color/black_app"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paymentTerms" />
+
+    <TextView
+        android:id="@+id/aboutUs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/outline_info_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="About Us"
+        android:textColor="@color/black_app"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/privacyPolicy" />
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background_2"
+        android:drawableStart="@drawable/outline_info_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
+        android:fontFamily="@font/poppins"
+        android:paddingVertical="20dp"
+        android:paddingStart="15dp"
+        android:text="Version: 22.3.0"
+        android:textColor="@color/blue1"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aboutUs" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

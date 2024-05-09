@@ -33,11 +33,11 @@
 
 
     <TextView
-        android:id="@+id/tvMorning"
+        android:id="@+id/buttonMorning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/background_button_color_change"
         android:gravity="center"
         android:paddingVertical="15dp"
@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
-        android:id="@+id/tvNoon"
+        android:id="@+id/buttonAfternoon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
@@ -62,10 +62,10 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMorning" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonMorning" />
 
     <TextView
-        android:id="@+id/tvEvening"
+        android:id="@+id/buttonEvening"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
@@ -78,7 +78,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNoon" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonAfternoon" />
 
 
     <com.google.android.material.card.MaterialCardView

@@ -52,7 +52,6 @@ class OtpActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         initListener()
 
-
         observerUserDetailsApiResponse()
         observeProgress()
         observerErrorMessageApiResponse()
@@ -231,7 +230,7 @@ class OtpActivity : AppCompatActivity() {
                     Log.d("USERIDFROMSIGNUP", auth.currentUser!!.uid)
                     callPostUserDetailsApi(
                         UserDetailsPostRequestBodyModel(
-                            auth.currentUser!!.uid, togoPhoneNo, "student", userName
+                            auth.currentUser!!.uid, togoPhoneNo, "student", "student", userName
                         )
                     )
                     IntentUtil.startIntent(this@OtpActivity, FillUserDetailsActivity())

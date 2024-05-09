@@ -75,7 +75,7 @@ class PhotoFillFragment : Fragment() {
     ): View {
         binding = FragmentPhotoFillBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
-        inflater.inflate(R.layout.fragment_photo_fill, container, false)
+     //   inflater.inflate(R.layout.fragment_photo_fill, container, false)
         auth = FirebaseAuth.getInstance()
         storageRef = FirebaseStorage.getInstance()
 

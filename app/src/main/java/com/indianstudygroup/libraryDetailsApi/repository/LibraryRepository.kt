@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.indianstudygroup.app_utils.AppConstant
 import com.indianstudygroup.libraryDetailsApi.model.LibraryDetailsResponseModel
 import com.indianstudygroup.libraryDetailsApi.model.LibraryIdDetailsResponseModel
-import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
 import com.indianstudygroup.libraryDetailsApi.network.LibraryDetailsNetworkService
 import com.indianstudygroup.retrofitUtils.RetrofitUtilClass
 import retrofit2.Call
@@ -14,13 +13,14 @@ import retrofit2.Response
 
 class LibraryRepository {
     val showProgress = MutableLiveData<Boolean>()
+    val showProgressAll = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<String>()
     val allLibraryResponse = MutableLiveData<LibraryDetailsResponseModel>()
-    val pincodeLibraryReponse = MutableLiveData<LibraryDetailsResponseModel>()
+    val districtLibraryResponse = MutableLiveData<LibraryDetailsResponseModel>()
     val idLibraryResponse = MutableLiveData<LibraryIdDetailsResponseModel>()
 
     fun getAllLibraryDetailsResponse() {
-        showProgress.value = true
+        showProgressAll.value = true
         val client =
             RetrofitUtilClass.getRetrofit().create(LibraryDetailsNetworkService::class.java)
         val call = client.callAllLibraryDetails()
@@ -29,7 +29,7 @@ class LibraryRepository {
                 call: Call<LibraryDetailsResponseModel?>,
                 response: Response<LibraryDetailsResponseModel?>
             ) {
-                showProgress.postValue(false)
+                showProgressAll.postValue(false)
                 val body = response.body()
                 Log.d("allLibraryResponse", "body : ${body.toString()}")
 
@@ -52,7 +52,7 @@ class LibraryRepository {
 
             override fun onFailure(call: Call<LibraryDetailsResponseModel?>, t: Throwable) {
                 Log.d("allLibraryResponse", "failed : ${t.localizedMessage}")
-                showProgress.postValue(false)
+                showProgressAll.postValue(false)
                 errorMessage.postValue("Server error please try after sometime")
             }
 
@@ -60,11 +60,11 @@ class LibraryRepository {
     }
 
 
-    fun getPincodeLibraryResponseDetailsResponse(pincode: String?) {
+    fun getDistrictLibraryResponseDetailsResponse(district: String?) {
         showProgress.value = true
         val client =
             RetrofitUtilClass.getRetrofit().create(LibraryDetailsNetworkService::class.java)
-        val call = client.callPincodeLibraryDetails(pincode)
+        val call = client.callPincodeLibraryDetails(district)
         call.enqueue(object : Callback<LibraryDetailsResponseModel?> {
             override fun onResponse(
                 call: Call<LibraryDetailsResponseModel?>,
@@ -75,7 +75,7 @@ class LibraryRepository {
                 Log.d("pincodeLibraryReponse", "body : ${body.toString()}")
 
                 if (response.isSuccessful) {
-                    pincodeLibraryReponse.postValue(body!!)
+                    districtLibraryResponse.postValue(body!!)
                 } else {
 
                     if (response.code() == AppConstant.USER_NOT_FOUND) {
