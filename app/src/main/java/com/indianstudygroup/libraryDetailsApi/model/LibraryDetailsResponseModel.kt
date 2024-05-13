@@ -8,9 +8,9 @@ data class LibraryResponseItem(
     @SerializedName("name") var name: String? = null,
     @SerializedName("userid") var userid: String? = null,
     @SerializedName("contact") var contact: String? = null,
-    @SerializedName("photo") var photo: String? = null,
+    @SerializedName("photo") var photo: ArrayList<String>? = arrayListOf(),
     @SerializedName("seats") var seats: Int? = null,
-    @SerializedName("vacantSeats") var vacantSeats: Int? = null,
+    @SerializedName("vacantSeats") var vacantSeats: ArrayList<Int> = arrayListOf(),
     @SerializedName("bio") var bio: String? = null,
     @SerializedName("seatDetails") var seatDetails: ArrayList<SeatDetails> = arrayListOf(),
     @SerializedName("ammenities") var ammenities: ArrayList<String> = arrayListOf(),
@@ -26,14 +26,15 @@ data class LibraryResponseItem(
 
 )
 
-data class SeatDetails (
+data class SeatDetails(
 
-    @SerializedName("seatNumber" ) var seatNumber : Int?     = null,
-    @SerializedName("isBooked"   ) var isBooked   : Boolean? = null,
-    @SerializedName("bookedBy"   ) var bookedBy   : String?  = null,
-    @SerializedName("_id"        ) var Id         : String?  = null
+    @SerializedName("seatNumber") var seatNumber: Int? = null,
+    @SerializedName("isBooked") var isBooked: Boolean? = null,
+    @SerializedName("bookedBy") var bookedBy: String? = null,
+    @SerializedName("_id") var id: String? = null
 
 )
+
 data class Pricing(
     @SerializedName("daily") var daily: Int? = null,
     @SerializedName("monthly") var monthly: Int? = null,

@@ -28,7 +28,7 @@ class SignInActivity : AppCompatActivity() {
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
-        window.statusBarColor = Color.parseColor("#2f3133")
+        window.statusBarColor = Color.WHITE
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
             IntentUtil.startIntent(this@SignInActivity, MainActivity())

@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 //            )
 //        )
 //        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
 //        navController.addOnDestinationChangedListener { _, destination, _ ->
 //            if (destination.id == R.id.navigation_profile) {
 //                window.statusBarColor = Color.parseColor("#5669FF")
@@ -66,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 //                window.statusBarColor = Color.WHITE
 //            }
 //        }
+        navView.setupWithNavController(navController)
     }
 
     private fun showStartDialog(
@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
                 val noSession = data?.getBooleanExtra("NoSession", false)
                 if (noSession == true) {
                     showStartDialog("You don't have any session", false, "", "", "")
-                }else{
+                } else {
                     showStartDialog("Error Scanning the QR code", false, "", "", "")
 
                 }

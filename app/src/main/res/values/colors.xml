@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#C0C0C0</color>
     <color name="blue1">#5669FF</color>
+    <color name="blue_second">#E6E6FB</color>
     <color name="bluedark">#5B74FB</color>
     <color name="red">#FB5C5C</color>
     <color name="red_logout">#DF0000</color>

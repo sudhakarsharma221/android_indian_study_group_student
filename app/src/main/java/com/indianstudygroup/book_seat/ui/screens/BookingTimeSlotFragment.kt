@@ -105,9 +105,11 @@ class BookingTimeSlotFragment : Fragment() {
                 findNavController().navigate(R.id.action_bookingTimeSlotFragment_to_bookingSeatSelectionFragment,
                     Bundle().apply {
                         putString("totalSeats", libraryResponse.libData?.seats.toString())
-                        putString("vacantSeats", libraryResponse.libData?.vacantSeats.toString())
+                        putString(
+                            "vacantSeats", libraryResponse.libData?.vacantSeats?.get(0).toString()
+                        )
                         putString("priceSeats", libraryResponse.libData?.pricing?.daily.toString())
-                        putString("libId", libraryResponse.libData?.Id)
+                        putString("libId", libraryResponse.libData?.id)
                         putString("userId", userId)
                         putString("startTimeHour", "00")
                         putString("startTimeMinute", "20")

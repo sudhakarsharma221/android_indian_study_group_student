@@ -13,7 +13,7 @@
         />
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/outline_person_24"
+        android:icon="@drawable/profile_icon"
         android:iconTint="#262626"
         android:title="Profile" />
     <item

@@ -1,5 +1,6 @@
 package com.indianstudygroup.bottom_nav_bar.library
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -43,6 +44,7 @@ class LibraryFragment : Fragment() {
         libraryDetailsViewModel = ViewModelProvider(this)[LibraryViewModel::class.java]
         userDetailsViewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
         auth = FirebaseAuth.getInstance()
+        requireActivity().window.statusBarColor = Color.WHITE
 
 //        inflater.inflate(R.layout.fragment_home, container, false)
 

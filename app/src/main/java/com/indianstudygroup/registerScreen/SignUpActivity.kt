@@ -29,7 +29,7 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
 
-        window.statusBarColor = Color.parseColor("#2f3133")
+        window.statusBarColor = Color.WHITE
         focusChangeListeners()
 
         initListener()

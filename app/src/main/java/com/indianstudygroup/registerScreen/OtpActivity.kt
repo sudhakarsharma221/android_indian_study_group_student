@@ -46,7 +46,7 @@ class OtpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        window.statusBarColor = Color.parseColor("#2f3133")
+        window.statusBarColor = Color.WHITE
         viewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
 
         auth = FirebaseAuth.getInstance()

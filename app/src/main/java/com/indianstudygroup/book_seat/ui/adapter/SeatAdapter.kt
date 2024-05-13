@@ -34,14 +34,18 @@ class SeatAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val isVacant = position < vacantSeats
+        val isSelected = selectedSeatIndex == position
 
-        // Set seat color
-        holder.binding.imageView.setColorFilter(
+        // Set seat drawable
+        holder.binding.imageView.setImageResource(
             if (isVacant) {
-                if (selectedSeatIndex == position) context.resources.getColor(R.color.blue1)
-                else context.resources.getColor(R.color.green)
-            } else context.resources.getColor(R.color.drawable_color)
+                if (isSelected) R.drawable.bookseat
+                else R.drawable.availableseat
+            } else {
+                R.drawable.notavailableseat
+            }
         )
+
 
         holder.itemView.setOnClickListener {
             if (isVacant) {

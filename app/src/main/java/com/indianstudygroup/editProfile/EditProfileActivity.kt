@@ -28,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.ApiCallsConstant
+import com.indianstudygroup.app_utils.HideKeyboard
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.ActivityEditProfileBinding
 import com.indianstudygroup.pincode.PincodeViewModel
@@ -178,6 +179,7 @@ class EditProfileActivity : AppCompatActivity() {
                 override fun afterTextChanged(s: Editable?) {
                     val pincode = s.toString().trim()
                     if (pincode.length == 6) {
+                        HideKeyboard.hideKeyboard(this@EditProfileActivity, binding.pincodeEt.windowToken)
                         callPincodeApi(pincode)
                     }
                 }

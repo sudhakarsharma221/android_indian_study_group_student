@@ -5,9 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:paddingVertical="10dp"
-    android:paddingHorizontal="20dp"
+    android:paddingHorizontal="15dp"
+    android:paddingTop="10dp"
     tools:context=".bottom_nav_bar.library.LibraryFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/noLibAvailable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="15dp">
+
+        <ImageView
+            android:id="@+id/imageNoLib"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/nolibavailable"
+            app:layout_constraintDimensionRatio="2:1"
+            app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nothing to see here"
+            android:textColor="@color/drawable_color"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
@@ -84,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="-5dp"
                 android:layout_marginEnd="40dp"
-                android:drawableStart="@drawable/baseline_location_on_24"
+                android:drawableStart="@drawable/outline_location_on_24"
                 android:drawableTint="@color/blue1"
                 android:fontFamily="@font/poppins"
                 android:text="Current location"
@@ -107,9 +143,10 @@
                 app:strokeWidth="0.5dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_margin="5dp"
+                    android:padding="1dp"
                     android:src="@drawable/baseline_favorite_border_24" />
             </com.google.android.material.card.MaterialCardView>
 
@@ -126,9 +163,10 @@
                 app:strokeWidth="0.5dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_margin="5dp"
+                    android:padding="1dp"
                     android:src="@drawable/baseline_notifications_none_24" />
             </com.google.android.material.card.MaterialCardView>
 
@@ -144,8 +182,8 @@
 
                 <ImageView
                     android:id="@+id/viewSearch"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_marginStart="10dp"
                     android:src="@drawable/baseline_search_24"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -163,8 +201,8 @@
                     android:hint="Search"
                     android:inputType="textPersonName"
                     android:maxLength="30"
-                    android:paddingVertical="10dp"
-                    android:paddingStart="10dp"
+                    android:paddingVertical="8dp"
+                    android:paddingStart="8dp"
                     android:textColor="@color/black_app"
                     android:textColorHint="#A09F9F"
                     app:layout_constraintEnd_toStartOf="@+id/filterButton"
@@ -197,44 +235,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/searchLayout" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/noLibAvailable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:elevation="10dp"
-                android:orientation="vertical"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/textView4">
-
-                <ImageView
-                    android:id="@+id/imageNoLib"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:src="@drawable/nolibavailable"
-                    app:layout_constraintDimensionRatio="3:1"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Sorry! No library available near you"
-                    android:textColor="@color/drawable_color"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageNoLib" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/pincodeRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
-                android:paddingBottom="5dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

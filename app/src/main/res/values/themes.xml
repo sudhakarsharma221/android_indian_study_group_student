@@ -31,8 +31,21 @@
         </item>
 
     </style>
+
+    <style name="FullScreenTheme" parent="Theme.IndianStudyGroup">
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/drawable_color</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowFullscreen">true</item>
+
+
+    </style>
+
+
     <style name="CalendarViewTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">#120D26</item> <!-- Black color -->
+        <item name="fontFamily">@font/poppins</item>
+
     </style>
 
 

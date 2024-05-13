@@ -41,6 +41,7 @@ class ProfileFragment : Fragment() {
         userDetailsViewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
 //        requireActivity().window.statusBarColor = Color.parseColor("#5669FF")
         auth = FirebaseAuth.getInstance()
+        requireActivity().window.statusBarColor = Color.parseColor("#5669FF")
 
         if (!ApiCallsConstant.apiCallsOnceProfile) {
             userDetailsViewModel.callGetUserDetails(auth.currentUser!!.uid)
@@ -78,7 +79,7 @@ class ProfileFragment : Fragment() {
             binding.tvState.text = userData.address?.state
             binding.aboutET.text = userData.bio
             binding.tvQualification.text = userData.highestQualification
-            binding.tvTopics.text = userData.topic.joinToString("\n")
+            binding.tvTopics.text = userData.topic.joinToString("\t\t\t\t\t\t")
             Glide.with(this).load(userData.photo).placeholder(R.drawable.profile)
                 .error(R.drawable.profile).into(binding.ivProfile)
 

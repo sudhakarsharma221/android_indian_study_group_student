@@ -35,13 +35,12 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="70dp"
         android:fontFamily="@font/poppins"
-        android:text="OTP Verification"
+        android:text="Verification"
         android:textColor="@color/black_app"
         android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/otpEt"
         app:layout_constraintTop_toBottomOf="@+id/backButton" />
 
 
@@ -72,7 +71,7 @@
         android:id="@+id/continueButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
+        android:layout_marginHorizontal="65dp"
         android:layout_marginTop="80dp"
         android:outlineAmbientShadowColor="@color/blue1"
         android:outlineSpotShadowColor="@color/blue1"
@@ -98,7 +97,6 @@
                 android:text="SUBMIT"
                 android:textColor="@color/white"
                 android:textSize="15sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -130,15 +128,16 @@
 
     <TextView
         android:id="@+id/phoneNo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins"
-        android:gravity="center"
+        android:gravity="start"
         android:text="We’ve send you the verification code on +91721058****"
         android:textColor="@color/black_app"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
@@ -185,15 +184,15 @@
 
     <TextView
         android:id="@+id/tvResendTimer"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins"
         android:gravity="center"
         android:textColor="@color/black_app"
         android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/continueButton"
+        app:layout_constraintStart_toStartOf="@+id/continueButton"
         app:layout_constraintTop_toBottomOf="@+id/resendButton" />
 
     <TextView

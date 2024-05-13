@@ -1,6 +1,7 @@
 package com.indianstudygroup.bottom_nav_bar.more
 
 import android.app.Dialog
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.widget.TextView
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.indianstudygroup.R
+import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.bottom_nav_bar.more.help_desk.HelpDeskActivity
@@ -32,6 +34,8 @@ class MoreFragment : Fragment() {
         binding = FragmentMoreBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[MoreViewModel::class.java]
         auth = FirebaseAuth.getInstance()
+        requireActivity().window.statusBarColor = Color.WHITE
+
         initListener()
 //        inflater.inflate(R.layout.fragment_profile, container, false)
 
@@ -71,6 +75,7 @@ class MoreFragment : Fragment() {
             auth.signOut()
             ToastUtil.makeToast(requireContext(), "Successful Sign Out")
             IntentUtil.startIntent(requireContext(), SignInActivity())
+            ApiCallsConstant.apiCallsOnceHome = false
             requireActivity().finish()
         }
     }

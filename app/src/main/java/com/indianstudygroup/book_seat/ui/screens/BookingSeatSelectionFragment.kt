@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.indianstudygroup.R
+import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.book_seat.model.BookingRequestModel
 import com.indianstudygroup.book_seat.ui.adapter.SeatAdapter
@@ -130,7 +131,7 @@ class BookingSeatSelectionFragment : Fragment() {
 
             callBookSeatApi(
                 BookingRequestModel(
-                    libId, userId, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute
+                    libId, userId, 0, "", startTimeHour, startTimeMinute, endTimeHour, endTimeMinute
                 )
             )
 
@@ -148,6 +149,7 @@ class BookingSeatSelectionFragment : Fragment() {
         bookSeatViewModel.bookSeatResponse.observe(viewLifecycleOwner, Observer {
             requireActivity().setResult(AppCompatActivity.RESULT_OK)
             requireActivity().finish()
+            ApiCallsConstant.apiCallsOnceSchedule = false
         })
     }
 

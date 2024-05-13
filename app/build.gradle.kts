@@ -76,8 +76,8 @@ dependencies {
     //ShimmerEffect
     implementation("com.facebook.shimmer:shimmer:0.5.0")
 
-//    //Image Slider
-//    implementation("com.github.dangiashish:Auto-Image-Slider:1.0.4")
+    //Image Slider
+    implementation("com.github.dangiashish:Auto-Image-Slider:1.0.4")
 
     //Refresh Layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")

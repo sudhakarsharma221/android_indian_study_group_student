@@ -2,17 +2,27 @@ package com.indianstudygroup.notification.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.indianstudygroup.databinding.NotificationItemLayoutBinding
+import com.indianstudygroup.notification.model.NotificationResponseModel
 
-class NotificationAdapter(val context: Context, val list: ArrayList<String>) :
-    Adapter<NotificationAdapter.MyViewHolder>() {
+class NotificationAdapter(
+    val context: Context, private val list: ArrayList<NotificationResponseModel>
+) : Adapter<NotificationAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(val binding: NotificationItemLayoutBinding) :
         ViewHolder(binding.root) {
-        fun bindView(item: String, context: Context, position: Int) {
+        fun bindView(item: NotificationResponseModel, context: Context, position: Int) {
+            binding.tvHeading.text = item.heading
+            binding.tvSubHeading.text = item.subHeading
+            if (item.isNew == true) {
+                binding.newNotification.visibility = View.VISIBLE
+            } else {
+                binding.newNotification.visibility = View.GONE
+            }
 
         }
     }

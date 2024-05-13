@@ -6,19 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:elevation="1dp"
-        android:background="@color/drawable_color"
-        app:layout_constraintBottom_toTopOf="@+id/bottomAppBar" />
+    <!--    <View-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0.5dp"-->
+    <!--        android:background="@color/drawable_color"-->
+    <!--        android:elevation="1dp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/bottomAppBar" />-->
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="#F8F8F8"
         app:fabCradleMargin="10dp"
         app:fabCradleRoundedCornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -30,6 +30,7 @@
             android:background="@android:color/transparent"
             app:itemActiveIndicatorStyle="@drawable/bottom_nav_colors"
             app:itemIconTint="#262626"
+            app:itemPaddingTop="20dp"
             app:itemTextColor="#262626"
             app:menu="@menu/bottom_menu" />
 
@@ -50,7 +51,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_margin="5dp"
-            android:padding="5dp"
+            android:padding="10dp"
             android:src="@drawable/baseline_qr_code_scanner_24"
             app:tint="@color/white" />
     </androidx.cardview.widget.CardView>

@@ -61,7 +61,8 @@
             android:exported="false" />
         <activity
             android:name=".bottom_nav_bar.library.LibraryDetailsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".editProfile.EditProfileActivity"
             android:exported="false" />
@@ -99,6 +100,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBWUHaqYz3B_AizhixxT--Z9zlw6aFTmBw" />
 
         <meta-data
             android:name="preloaded_fonts"

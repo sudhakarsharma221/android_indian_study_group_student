@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.indianstudygroup.R
+import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.HideKeyboard
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.book_seat.model.BookingRequestModel
@@ -82,7 +83,7 @@ class BookingOrderSummaryFragment : Fragment() {
 
             callBookSeatApi(
                 BookingRequestModel(
-                    libId, userId, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute
+                    libId, userId, 0, "", startTimeHour, startTimeMinute, endTimeHour, endTimeMinute
                 )
             )
 
@@ -100,6 +101,7 @@ class BookingOrderSummaryFragment : Fragment() {
         bookSeatViewModel.bookSeatResponse.observe(viewLifecycleOwner, Observer {
             requireActivity().setResult(AppCompatActivity.RESULT_OK)
             requireActivity().finish()
+            ApiCallsConstant.apiCallsOnceSchedule = false
         })
     }
 
