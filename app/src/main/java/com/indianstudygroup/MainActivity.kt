@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         dialogBinding.libraryName.text = name
         dialogBinding.libraryAddress.text = address
         Glide.with(this).load(photo).placeholder(R.drawable.noimage).error(R.drawable.noimage)
-            .into(dialogBinding.circleImageView)
+            .into(dialogBinding.libraryPhoto)
 
         if (!layoutShow) {
             dialogBinding.layoutView.visibility = View.GONE

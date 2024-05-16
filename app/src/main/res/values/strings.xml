@@ -3,4 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="aboutUsText">"\"Indian Study Group\" is more than just a library booking app; it's a gateway to academic excellence and communal learning. Designed with the needs of Indian scholars and students in mind, this innovative platform seamlessly connects avid learners with the resources they need to thrive."</string>
+    <string name="moreInfoText"><b>For any other query contact : </b>\n\nFor any inquiries, feedback, or assistance regarding Indian Study Group, please contact our support team at:\n\nEmail: indianstudygroup1@gmail.com\n\nPhone: +91 82730 45785
+
+</string>
 </resources>

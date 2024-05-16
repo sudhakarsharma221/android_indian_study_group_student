@@ -14,7 +14,10 @@ import com.indianstudygroup.bottom_nav_bar.library.LibraryDetailsActivity
 import com.indianstudygroup.databinding.LibraryShowItemLayoutBinding
 
 class LibraryAdapterDistrict(
-    val context: Context, private val list: ArrayList<LibraryResponseItem>
+    val context: Context,
+    private val list: ArrayList<LibraryResponseItem>,
+    private val onNotFavouriteClickListener: (LibraryResponseItem) -> Unit,
+    private val onFavouriteClickListener: (LibraryResponseItem) -> Unit
 ) : Adapter<LibraryAdapterDistrict.MyViewHolder>() {
     private var isClickedFav = false
 
@@ -24,9 +27,11 @@ class LibraryAdapterDistrict(
             binding.favourite.setOnClickListener {
                 isClickedFav = if (!isClickedFav) {
                     binding.favImage.setImageResource(R.drawable.baseline_favorite_24)
+                    onFavouriteClickListener(list[position])
                     true
                 } else {
                     binding.favImage.setImageResource(R.drawable.baseline_favorite_border_24)
+                    onNotFavouriteClickListener(list[position])
                     false
                 }
             }
@@ -35,7 +40,7 @@ class LibraryAdapterDistrict(
                 "<b><font color='#5669FF'>₹${library.pricing?.daily}</font></b> /Day<br/>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
-            if (library.photo?.isNotEmpty() == true){
+            if (library.photo?.isNotEmpty() == true) {
                 Glide.with(context).load(library.photo?.get(0)).placeholder(R.drawable.noimage)
                     .error(R.drawable.noimage).into(binding.imageView)
             }

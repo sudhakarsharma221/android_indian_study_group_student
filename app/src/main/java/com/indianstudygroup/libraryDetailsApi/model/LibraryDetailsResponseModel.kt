@@ -1,5 +1,7 @@
 package com.indianstudygroup.libraryDetailsApi.model
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class LibraryDetailsResponseModel : ArrayList<LibraryResponseItem>()
@@ -7,6 +9,8 @@ data class LibraryResponseItem(
     @SerializedName("_id") var id: String? = null,
     @SerializedName("name") var name: String? = null,
     @SerializedName("userid") var userid: String? = null,
+    @SerializedName("ownerName") var ownerName: String? = null,
+    @SerializedName("ownerPhoto") var ownerPhoto: String? = null,
     @SerializedName("contact") var contact: String? = null,
     @SerializedName("photo") var photo: ArrayList<String>? = arrayListOf(),
     @SerializedName("seats") var seats: Int? = null,
@@ -16,13 +20,13 @@ data class LibraryResponseItem(
     @SerializedName("ammenities") var ammenities: ArrayList<String> = arrayListOf(),
     @SerializedName("pricing") var pricing: Pricing? = Pricing(),
     @SerializedName("address") var address: Address? = Address(),
-    @SerializedName("createdByAgent") var createdByAgent: String? = null,
     @SerializedName("timing") var timing: ArrayList<Timing> = arrayListOf(),
-    @SerializedName("upcomingBooking") var upcomingBooking: ArrayList<String> = arrayListOf(),
-    @SerializedName("createdAt") var createdAt: String? = null,
-    @SerializedName("updatedAt") var updatedAt: String? = null,
-    @SerializedName("__v") var v: Int? = null,
-    @SerializedName("qr") var qr: String? = null
+//    @SerializedName("createdByAgent") var createdByAgent: String? = null,
+//    @SerializedName("upcomingBooking") var upcomingBooking: ArrayList<String> = arrayListOf(),
+//    @SerializedName("createdAt") var createdAt: String? = null,
+//    @SerializedName("updatedAt") var updatedAt: String? = null,
+//    @SerializedName("__v") var v: Int? = null,
+//    @SerializedName("qr") var qr: String? = null
 
 )
 
@@ -40,7 +44,34 @@ data class Pricing(
     @SerializedName("monthly") var monthly: Int? = null,
     @SerializedName("weekly") var weekly: Int? = null
 
-)
+):Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(daily)
+        parcel.writeValue(monthly)
+        parcel.writeValue(weekly)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Pricing> {
+        override fun createFromParcel(parcel: Parcel): Pricing {
+            return Pricing(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Pricing?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
 data class Address(
     @SerializedName("street") val street: String? = null,
@@ -49,7 +80,40 @@ data class Address(
     @SerializedName("state") val state: String? = null,
     @SerializedName("longitude") val longitude: String? = null,
     @SerializedName("latitude") val latitude: String? = null
-)
+):Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(street)
+        parcel.writeString(pincode)
+        parcel.writeString(district)
+        parcel.writeString(state)
+        parcel.writeString(longitude)
+        parcel.writeString(latitude)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Address> {
+        override fun createFromParcel(parcel: Parcel): Address {
+            return Address(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Address?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
 data class Timing(
     @SerializedName("from") var from: String? = null,

@@ -105,7 +105,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="#384AED"
                 app:cardCornerRadius="20dp"
                 app:cardUseCompatPadding="true"

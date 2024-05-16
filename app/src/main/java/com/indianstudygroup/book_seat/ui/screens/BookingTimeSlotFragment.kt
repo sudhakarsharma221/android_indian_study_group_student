@@ -150,6 +150,10 @@ class BookingTimeSlotFragment : Fragment() {
             ) // Revert to original text color
         }
     }
-
+    private fun formatTime(hours: Int?, minutes: Int?): String {
+        val hourFormatted = if (hours == 0 || hours == 21) 12 else hours?.rem(12)
+        val amPm = if (hours!! < 12) "am" else "pm"
+        return String.format("%02d:%02d %s", hourFormatted, minutes, amPm)
+    }
 
 }

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="15dp"
     android:background="@color/white"
+    android:paddingTop="15dp"
     tools:context=".bottom_nav_bar.schedule.ui.ScheduleDetailsActivity">
 
 
@@ -13,8 +13,8 @@
         android:id="@+id/backButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:rotation="180"
         android:layout_marginStart="15dp"
+        android:rotation="180"
         android:src="@drawable/baseline_arrow_forward_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +39,9 @@
         android:layout_height="wrap_content"
         android:outlineAmbientShadowColor="@color/blue1"
         android:outlineSpotShadowColor="@color/blue1"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp"
+        android:layout_marginTop="30dp"
         app:cardElevation="5dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -64,6 +66,7 @@
 
 
                     <ImageView
+                        android:id="@+id/libImage"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:scaleType="fitXY"
@@ -78,38 +81,40 @@
                 android:id="@+id/tvName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/poppins"
                 android:text="Central Library"
                 android:textColor="@color/black_app"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/tvPrice"
                 app:layout_constraintStart_toEndOf="@+id/cardView8"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/cardView8" />
 
 
             <TextView
                 android:id="@+id/tvTime"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="10dp"
                 android:drawableStart="@drawable/outline_location_on_24"
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/blue1"
                 android:fontFamily="@font/poppins"
+                android:gravity="center_vertical"
                 android:text="10:00 am to 12:00 pm"
                 android:textColor="@color/gray_text_color"
-                android:textSize="15sp"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cardView8"
                 app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
 
             <TextView
                 android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
@@ -117,9 +122,11 @@
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/blue1"
                 android:fontFamily="@font/poppins"
+                android:gravity="center_vertical"
                 android:text="19 Oct 2024 - 19 Aug 2025"
                 android:textColor="@color/gray_text_color"
-                android:textSize="15sp"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cardView8"
                 app:layout_constraintTop_toBottomOf="@+id/tvTime" />
 
@@ -130,10 +137,10 @@
                 android:fontFamily="@font/poppins"
                 android:text="₹ 1753"
                 android:textColor="@color/blue1"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tvName" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -149,7 +156,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="40dp"
                 android:fontFamily="@font/poppins"
                 android:text="Sunshine Valley Library 123 Serenity Street Meadowville, Anytown, USA"
                 android:textColor="@color/black_app"
@@ -163,16 +170,16 @@
                 android:id="@+id/view3"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="25dp"
                 android:background="@color/gray_text_color"
                 app:layout_constraintTop_toBottomOf="@+id/tvAddress"
                 tools:layout_editor_absoluteX="15dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/circleImageView"
+                android:id="@+id/libraryOwnerPhoto"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:src="@drawable/profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view3" />
@@ -187,8 +194,8 @@
                 android:textColor="@color/black_app"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/circleImageView"
-                app:layout_constraintTop_toTopOf="@+id/circleImageView" />
+                app:layout_constraintStart_toEndOf="@+id/libraryOwnerPhoto"
+                app:layout_constraintTop_toTopOf="@+id/libraryOwnerPhoto" />
 
             <TextView
                 android:id="@+id/tvLibraryOwnerName"
@@ -200,7 +207,7 @@
                 android:text="Arjun Rampal"
                 android:textColor="@color/black_app"
                 android:textSize="10sp"
-                app:layout_constraintStart_toEndOf="@+id/circleImageView"
+                app:layout_constraintStart_toEndOf="@+id/libraryOwnerPhoto"
                 app:layout_constraintTop_toBottomOf="@+id/libraryOwner" />
 
 

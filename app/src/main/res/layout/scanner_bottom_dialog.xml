@@ -40,7 +40,7 @@
         >
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/circleImageView"
+            android:id="@+id/libraryPhoto"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/profile"
@@ -59,8 +59,8 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/tvRating"
-            app:layout_constraintStart_toEndOf="@+id/circleImageView"
-            app:layout_constraintTop_toTopOf="@+id/circleImageView" />
+            app:layout_constraintStart_toEndOf="@+id/libraryPhoto"
+            app:layout_constraintTop_toTopOf="@+id/libraryPhoto" />
 
         <TextView
             android:id="@+id/libraryAddress"
@@ -109,7 +109,7 @@
             android:textColor="@color/black_app"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/circleImageView"
+            app:layout_constraintStart_toStartOf="@+id/libraryPhoto"
             app:layout_constraintTop_toBottomOf="@+id/libraryAddress" />
 
         <TextView

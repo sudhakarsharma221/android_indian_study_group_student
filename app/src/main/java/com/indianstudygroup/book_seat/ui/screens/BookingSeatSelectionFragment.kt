@@ -24,13 +24,13 @@ import com.indianstudygroup.databinding.FragmentBookingSeatSelectionBinding
 
 
 class BookingSeatSelectionFragment : Fragment() {
+    private lateinit var binding: FragmentBookingSeatSelectionBinding
     private var endTimeHour: String? = null
     private var endTimeMinute: String? = null
     private var startTimeMinute: String? = null
     private var startTimeHour: String? = null
     private var userId: String? = null
     private var libId: String? = null
-    private lateinit var binding: FragmentBookingSeatSelectionBinding
     private lateinit var dialogBinding: ConfirmBookingBottomDialogBinding
     private lateinit var adapter: SeatAdapter
     private var selectedPosition = -1
@@ -65,7 +65,7 @@ class BookingSeatSelectionFragment : Fragment() {
 
 
 
-        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 6)
         adapter = SeatAdapter(
             requireContext(), totalSeats?.toInt() ?: 0, vacantSeats?.toInt() ?: 0
         ) { position ->

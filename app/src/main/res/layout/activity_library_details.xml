@@ -95,10 +95,13 @@
         android:layout_height="250dp"
         app:ais_auto_sliding="true"
         app:ais_corner_radius="10"
+        app:ais_exception_image="@drawable/noimage"
         app:ais_indicator_align="@string/center"
+        app:ais_placeholder="@drawable/noimage"
         app:ais_time_interval="2000"
         app:ais_title_background="@drawable/text_background"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -122,8 +125,10 @@
                 android:padding="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
 
 
                 <TextView
@@ -203,9 +208,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:padding="5dp"
+                    android:drawableStart="@drawable/outline_location_on_24"
+                    android:drawableTint="@color/blue1"
                     android:fontFamily="@font/poppins"
-                    android:text="Open Map"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="Get Directions"
                     android:textColor="@color/blue1"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -213,15 +221,14 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvAddress" />
 
 
-                <TextView
-                    android:id="@+id/tvTiming"
-                    android:layout_width="wrap_content"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDays"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
                     android:layout_marginTop="5dp"
-                    android:text="Time Slots  : 10:00AM to 10:00PM \nMonday to Saturday "
-                    android:textColor="@color/black_app"
-                    android:textSize="12sp"
+                    android:orientation="horizontal"
+                    android:scrollbars="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/openMap" />
 
@@ -229,13 +236,14 @@
                     android:id="@+id/tvSeats"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
                     android:fontFamily="@font/poppins"
-                    android:text="Slot Number"
+                    android:text="Slot"
                     android:textColor="@color/black_app"
                     android:textSize="12sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTiming" />
+                    app:layout_constraintTop_toBottomOf="@+id/rvDays" />
 
                 <TextView
                     android:id="@+id/textView27"
@@ -246,8 +254,56 @@
                     android:text="Vacant Seats"
                     android:textColor="@color/black_app"
                     android:textSize="12sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/tvSeats"
                     app:layout_constraintTop_toTopOf="@+id/tvSeats" />
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Timing"
+                    android:textColor="@color/black_app"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/textView27"
+                    app:layout_constraintTop_toTopOf="@+id/tvSeats" />
+
+
+                <TextView
+                    android:id="@+id/tvTime1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="10:00 am to 10:00 pm"
+                    android:textColor="@color/black_app"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@+id/textView25"
+                    app:layout_constraintTop_toTopOf="@+id/tvSeats11" />
+
+                <TextView
+                    android:id="@+id/tvTime2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="10:00 am to 10:00 pm"
+                    android:textColor="@color/black_app"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@+id/textView25"
+                    app:layout_constraintTop_toTopOf="@+id/tvSeats22" />
+
+                <TextView
+                    android:id="@+id/tvTime3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="10:00 am to 10:00 pm"
+                    android:textColor="@color/black_app"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@+id/textView25"
+                    app:layout_constraintTop_toTopOf="@+id/tvSeats33" />
 
 
                 <TextView
@@ -271,7 +327,6 @@
                     android:text="Seats"
                     android:textColor="@color/black_app"
                     android:textSize="12sp"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/textView27"
                     app:layout_constraintTop_toBottomOf="@+id/tvSeats" />
 
@@ -297,7 +352,6 @@
                     android:text="Seats"
                     android:textColor="@color/black_app"
                     android:textSize="12sp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/tvSeats11"
                     app:layout_constraintTop_toBottomOf="@+id/tvSeats1" />
 
@@ -322,7 +376,6 @@
                     android:text="Seats"
                     android:textColor="@color/black_app"
                     android:textSize="12sp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/tvSeats22"
                     app:layout_constraintTop_toBottomOf="@+id/tvSeats2" />
 
@@ -348,8 +401,9 @@
                     android:layout_marginVertical="10dp"
                     android:fontFamily="@font/poppins"
                     android:text="Ammenities"
+                    android:drawablePadding="5dp"
                     android:textColor="@color/black_app"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/offer" />
 
@@ -375,12 +429,12 @@
                     android:id="@+id/view3"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@color/drawable_color"
                     app:layout_constraintTop_toBottomOf="@+id/tvAmmenities" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/circleImageView"
+                    android:id="@+id/libraryOwnerPhoto"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
@@ -398,8 +452,8 @@
                     android:textColor="@color/black_app"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/circleImageView"
-                    app:layout_constraintTop_toTopOf="@+id/circleImageView" />
+                    app:layout_constraintStart_toEndOf="@+id/libraryOwnerPhoto"
+                    app:layout_constraintTop_toTopOf="@+id/libraryOwnerPhoto" />
 
                 <TextView
                     android:id="@+id/tvLibraryOwnerName"
@@ -411,7 +465,7 @@
                     android:text="Arjun Rampal"
                     android:textColor="@color/black_app"
                     android:textSize="10sp"
-                    app:layout_constraintStart_toEndOf="@+id/circleImageView"
+                    app:layout_constraintStart_toEndOf="@+id/libraryOwnerPhoto"
                     app:layout_constraintTop_toBottomOf="@+id/libraryOwner" />
 
                 <TextView
@@ -467,41 +521,41 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
 
 
-<!--                <TextView-->
-<!--                    android:id="@+id/youWillBe"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:fontFamily="@font/poppins"-->
-<!--                    android:text="Where you will be"-->
-<!--                    android:textColor="@color/black_app"-->
-<!--                    android:textSize="18sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/readMore" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/youWillBe"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:fontFamily="@font/poppins"-->
+                <!--                    android:text="Where you will be"-->
+                <!--                    android:textColor="@color/black_app"-->
+                <!--                    android:textSize="18sp"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@+id/readMore" />-->
 
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/mapView"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="250dp"-->
-<!--                    android:layout_marginTop="15dp"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/defaultmap"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/youWillBe" />-->
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/mapView"-->
+                <!--                    android:layout_width="0dp"-->
+                <!--                    android:layout_height="250dp"-->
+                <!--                    android:layout_marginTop="15dp"-->
+                <!--                    android:scaleType="fitXY"-->
+                <!--                    android:src="@drawable/defaultmap"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@+id/youWillBe" />-->
 
 
                 <TextView
                     android:id="@+id/review"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:fontFamily="@font/poppins"
                     android:text="Customer Reviews"
                     android:textColor="@color/black_app"
                     android:textSize="18sp"
-                    android:layout_marginTop="20dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/readMore" />

@@ -1,28 +1,66 @@
 package com.indianstudygroup.bottom_nav_bar.schedule.ui.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.indianstudygroup.R
+import com.indianstudygroup.bottom_nav_bar.schedule.model.ScheduleResponseModelItem
+import com.indianstudygroup.bottom_nav_bar.schedule.ui.ScheduleDetailsActivity
 import com.indianstudygroup.databinding.NotificationItemLayoutBinding
 import com.indianstudygroup.databinding.ScheduleItemLayoutBinding
 import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class ScheduleAdapter(val context: Context, private val list: ArrayList<LibraryResponseItem>) :
-    Adapter<ScheduleAdapter.MyViewHolder>() {
+class ScheduleAdapter(
+    val context: Context, private val list: ArrayList<ScheduleResponseModelItem>
+) : Adapter<ScheduleAdapter.MyViewHolder>() {
     inner class MyViewHolder(val binding: ScheduleItemLayoutBinding) : ViewHolder(binding.root) {
-        fun bindView(item: LibraryResponseItem, context: Context, position: Int) {
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun bindView(item: ScheduleResponseModelItem, context: Context, position: Int) {
 
             binding.tvName.text = item.name
-            binding.tvPrice.text = "₹ ${item.pricing?.daily}"
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            val date = LocalDateTime.parse(item.date, formatter)
+            val formattedDate = date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+            Log.d("ITEMOFSCHEDULE", item.toString())
 
+            binding.tvDate.text = "$formattedDate - $formattedDate"
+            if (item.address?.pincode == null) {
+                binding.tvAdress.visibility = View.GONE
+            } else {
+                binding.tvAdress.visibility = View.VISIBLE
+
+                binding.tvAdress.text =
+                    "${item?.address?.street}, ${item?.address?.district}, ${item?.address?.state}, ${item?.address?.pincode}"
+            }
+
+            if (item.pricing?.daily == null) {
+                binding.tvPrice.visibility = View.GONE
+            } else {
+                binding.tvPrice.visibility = View.VISIBLE
+
+                binding.tvPrice.text = "₹ ${item.pricing?.daily}"
+            }
+
+//            binding.tvDate.text = ""
             if (item.photo?.isNotEmpty() == true) {
-                Glide.with(context).load(item.photo?.get(0)).placeholder(R.drawable.noimage)
+                Glide.with(context).load(item.photo.get(0)).placeholder(R.drawable.noimage)
                     .error(R.drawable.noimage).into(binding.libImage)
+            }
+            binding.scheduleLayout.setOnClickListener {
+                val intent = Intent(context, ScheduleDetailsActivity::class.java)
+                intent.putExtra("ScheduleData", item)
+                context.startActivity(intent)
             }
         }
     }
@@ -38,6 +76,7 @@ class ScheduleAdapter(val context: Context, private val list: ArrayList<LibraryR
         return list.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         list[position].let {
             holder.bindView(it, context, position)

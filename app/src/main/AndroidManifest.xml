@@ -27,6 +27,15 @@
         android:theme="@style/Theme.IndianStudyGroup"
         tools:targetApi="31">
         <activity
+            android:name=".bottom_nav_bar.more.setting.screens.TermsOfServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.more.setting.screens.PrivacyPolicyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.more.setting.screens.PaymentTermsActivity"
+            android:exported="false" />
+        <activity
             android:name=".bottom_nav_bar.more.setting.screens.AboutUsActivity"
             android:exported="false" />
         <activity
@@ -104,7 +113,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBWUHaqYz3B_AizhixxT--Z9zlw6aFTmBw" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

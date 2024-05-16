@@ -288,7 +288,7 @@
                     android:inputType="textMultiLine|textCapSentences"
                     android:maxLength="100"
                     android:minLines="2"
-                    android:paddingVertical="15dp"
+                    android:paddingVertical="20dp"
                     android:paddingStart="20dp"
                     android:textColor="@color/black_app"
                     android:textSize="14sp" />
@@ -404,7 +404,7 @@
                             android:background="@drawable/background_button_color_change_2"
                             android:fontFamily="@font/poppins"
                             android:gravity="center"
-                            android:paddingHorizontal="20dp"
+                            android:paddingHorizontal="24dp"
                             android:paddingVertical="6dp"
                             android:text="Defence"
                             android:textAllCaps="false"

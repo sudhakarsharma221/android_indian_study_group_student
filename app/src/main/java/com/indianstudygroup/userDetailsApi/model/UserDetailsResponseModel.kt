@@ -26,6 +26,7 @@ data class UserDetailsResponseModel(
     @SerializedName("updatedAt") val updatedAt: String? = null,
     @SerializedName("__v") val v: Int? = null,
     @SerializedName("userName") val username: String? = null,
+    @SerializedName("wishlist") val wishlist: ArrayList<String>? = arrayListOf(),
     @SerializedName("sex") val sex: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -52,6 +53,7 @@ data class UserDetailsResponseModel(
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
+        parcel.createStringArrayList() ?: arrayListOf(),
         parcel.readString()
     )
 
@@ -77,6 +79,7 @@ data class UserDetailsResponseModel(
         parcel.writeString(updatedAt)
         parcel.writeValue(v)
         parcel.writeString(username)
+        parcel.writeStringList(wishlist)
         parcel.writeString(sex)
     }
 

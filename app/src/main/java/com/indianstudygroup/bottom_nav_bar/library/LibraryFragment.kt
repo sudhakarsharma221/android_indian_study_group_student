@@ -24,17 +24,22 @@ import com.indianstudygroup.databinding.FragmentHomeBinding
 import com.indianstudygroup.notification.ui.NotificationActivity
 import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
+import com.indianstudygroup.wishlist.model.WishlistAddRequestModel
+import com.indianstudygroup.wishlist.model.WishlistDeleteRequestModel
 import com.indianstudygroup.wishlist.ui.WishListActivity
+import com.indianstudygroup.wishlist.viewModel.WishlistViewModel
 
 class LibraryFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var userDetailsViewModel: UserDetailsViewModel
+    private lateinit var wishlistViewModel: WishlistViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var userData: UserDetailsResponseModel
     private lateinit var libraryDetailsViewModel: LibraryViewModel
     private lateinit var adapter: LibraryAdapterDistrict
     private lateinit var libraryList: ArrayList<LibraryResponseItem>
+    private var wishList: ArrayList<String>? = arrayListOf()
     private lateinit var allLibraryList: ArrayList<LibraryResponseItem>
 
     override fun onCreateView(
@@ -43,6 +48,7 @@ class LibraryFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         libraryDetailsViewModel = ViewModelProvider(this)[LibraryViewModel::class.java]
         userDetailsViewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
+        wishlistViewModel = ViewModelProvider(this)[WishlistViewModel::class.java]
         auth = FirebaseAuth.getInstance()
         requireActivity().window.statusBarColor = Color.WHITE
 
@@ -63,6 +69,7 @@ class LibraryFragment : Fragment() {
         observerAllLibraryApiResponse()
         observerDistrictLibraryApiResponse()
         observeProgress()
+        observerWishlistApiResponse()
         observerErrorMessageApiResponse()
         observerUserDetailsApiResponse()
         return binding.root
@@ -112,6 +119,7 @@ class LibraryFragment : Fragment() {
     private fun observerUserDetailsApiResponse() {
         userDetailsViewModel.userDetailsResponse.observe(viewLifecycleOwner, Observer {
             userData = it
+            wishList = userData.wishlist!!
             binding.currentLocation.text = "${it.address?.district}, ${it.address?.state}"
             initListener()
             userDetailsViewModel.setUserDetailsResponse(it)
@@ -143,13 +151,18 @@ class LibraryFragment : Fragment() {
                 binding.shimmerLayout.stopShimmer()
             }
         })
+
     }
 
     private fun observerErrorMessageApiResponse() {
+
         userDetailsViewModel.errorMessage.observe(viewLifecycleOwner, Observer {
             ToastUtil.makeToast(requireContext(), it)
         })
         libraryDetailsViewModel.errorMessage.observe(viewLifecycleOwner, Observer {
+            ToastUtil.makeToast(requireContext(), it)
+        })
+        wishlistViewModel.errorMessage.observe(viewLifecycleOwner, Observer {
             ToastUtil.makeToast(requireContext(), it)
         })
     }
@@ -163,7 +176,16 @@ class LibraryFragment : Fragment() {
             } else {
                 binding.noLibAvailable.visibility = View.GONE
                 binding.pincodeRecyclerView.visibility = View.VISIBLE
-                adapter = LibraryAdapterDistrict(requireContext(), libraryList)
+                adapter = LibraryAdapterDistrict(requireContext(), libraryList, { library ->
+                    wishlistViewModel.deleteWishlist(
+                        WishlistDeleteRequestModel(library.id, auth.currentUser!!.uid)
+                    )
+                }, { library ->
+                    wishList?.add(library.id!!)
+                    wishlistViewModel.putWishlist(
+                        auth.currentUser!!.uid, WishlistAddRequestModel(wishList)
+                    )
+                })
                 binding.pincodeRecyclerView.adapter = adapter
             }
 
@@ -175,6 +197,15 @@ class LibraryFragment : Fragment() {
     private fun observerAllLibraryApiResponse() {
         libraryDetailsViewModel.allLibraryResponse.observe(viewLifecycleOwner, Observer {
             allLibraryList = it
+        })
+    }
+
+    private fun observerWishlistApiResponse() {
+        wishlistViewModel.wishlistResponse.observe(viewLifecycleOwner, Observer {
+            ToastUtil.makeToast(requireContext(), "Item added to wishlist")
+        })
+        wishlistViewModel.wishlistDeleteResponse.observe(viewLifecycleOwner, Observer {
+            ToastUtil.makeToast(requireContext(), "Item removed from wishlist")
         })
     }
 

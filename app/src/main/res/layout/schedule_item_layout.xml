@@ -7,13 +7,12 @@
     android:background="@color/white">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/scheduleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:outlineAmbientShadowColor="@color/blue1"
-        android:outlineSpotShadowColor="@color/blue1"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
+        app:cardElevation="2dp"
         app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,8 +37,8 @@
 
                     <ImageView
                         android:id="@+id/libImage"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:scaleType="fitXY"
                         android:src="@drawable/noimage"
                         app:layout_constraintStart_toStartOf="parent"
@@ -52,32 +51,33 @@
                 android:id="@+id/tvName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/poppins"
                 android:text="Central Library"
                 android:textColor="@color/black_app"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/tvPrice"
                 app:layout_constraintStart_toEndOf="@+id/cardView8"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/cardView8" />
 
 
             <TextView
-                android:id="@+id/tvTime"
+                android:id="@+id/tvAdress"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="10dp"
                 android:drawableStart="@drawable/outline_location_on_24"
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/blue1"
                 android:fontFamily="@font/poppins"
-                android:text="10:00 am to 12:00 pm"
+                android:gravity="center_vertical"
+                android:text="Wilora NT 0872, Australia"
                 android:textColor="@color/gray_text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cardView8"
                 app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
@@ -92,12 +92,13 @@
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/blue1"
                 android:fontFamily="@font/poppins"
+                android:gravity="center_vertical"
                 android:text="19 Oct 2024 - 19 Aug 2025"
                 android:textColor="@color/gray_text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cardView8"
-                app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+                app:layout_constraintTop_toBottomOf="@+id/tvAdress" />
 
             <TextView
                 android:id="@+id/tvPrice"
@@ -106,10 +107,10 @@
                 android:fontFamily="@font/poppins"
                 android:text="₹ 1753"
                 android:textColor="@color/blue1"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tvName" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
