@@ -6,6 +6,8 @@ object AppUrlsEndpoint {
     const val GET_LIBRARY = "api/newlibrary/"
     const val BOOK_SEAT = "api/booking/booklibrary"
     const val GET_SESSIONS = "api/get-sessions"
+    const val GET_HISTORY = "api/get-hitory"
+    const val MARK_ATTENDANCE = "api/mark-attendance"
     const val GET_INFO = "api/get-info"
     const val WISHLIST_DELETE = "api/librarydetails/modifywishlist"
 }

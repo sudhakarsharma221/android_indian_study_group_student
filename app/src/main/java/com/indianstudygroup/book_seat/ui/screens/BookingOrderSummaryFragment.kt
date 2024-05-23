@@ -1,6 +1,7 @@
 package com.indianstudygroup.book_seat.ui.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,7 @@ class BookingOrderSummaryFragment : Fragment() {
     private var startTimeMinute: String? = null
     private var startTimeHour: String? = null
     private var userId: String? = null
+    private var slot: Int? = null
     private var libId: String? = null
     private lateinit var dialogBinding: ConfirmBookingBottomDialogBinding
 
@@ -50,6 +52,7 @@ class BookingOrderSummaryFragment : Fragment() {
 
         libId = requireArguments().getString("libId")
         userId = requireArguments().getString("userId")
+        slot = requireArguments().getInt("slot")
         startTimeHour = requireArguments().getString("startTimeHour")
         startTimeMinute = requireArguments().getString("startTimeMinute")
         endTimeHour = requireArguments().getString("endTimeHour")
@@ -68,7 +71,6 @@ class BookingOrderSummaryFragment : Fragment() {
         }
     }
 
-
     private fun showConfirmBookingDialog(price: String) {
         val bottomDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         dialogBinding = ConfirmBookingBottomDialogBinding.inflate(layoutInflater)
@@ -80,10 +82,20 @@ class BookingOrderSummaryFragment : Fragment() {
         dialogBinding.textView8.text = "Book For ₹ $price"
         dialogBinding.bookButton.setOnClickListener {
             bottomDialog.dismiss()
-
+            Log.d(
+                "BOOKINGSEATRESPONSECOMING",
+                "  $slot  $startTimeHour   $startTimeMinute    $endTimeHour   $endTimeMinute"
+            )
             callBookSeatApi(
                 BookingRequestModel(
-                    libId, userId, 0, "", startTimeHour, startTimeMinute, endTimeHour, endTimeMinute
+                    libId,
+                    userId,
+                    slot,
+                    "",
+                    startTimeHour,
+                    startTimeMinute,
+                    endTimeHour,
+                    endTimeMinute
                 )
             )
 
@@ -126,7 +138,7 @@ class BookingOrderSummaryFragment : Fragment() {
         val bottomDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         val dialogBinding = ErrorBottomDialogLayoutBinding.inflate(layoutInflater)
         bottomDialog.setContentView(dialogBinding.root)
-        bottomDialog.setCancelable(true)
+        bottomDialog.setCancelable(false)
         bottomDialog.show()
         dialogBinding.messageTv.text = message
         dialogBinding.continueButton.setOnClickListener {

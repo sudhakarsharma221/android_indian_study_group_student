@@ -84,6 +84,7 @@ dependencies {
     implementation("com.google.android.play:integrity:1.3.0")
 
     //Scanner
+    implementation("com.github.yuriy-budiyev:code-scanner:2.3.0")
     implementation("com.google.zxing:core:3.4.1")
     implementation("com.journeyapps:zxing-android-embedded:4.2.0")
 
@@ -93,6 +94,5 @@ dependencies {
     //MAP
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
-
 
 }

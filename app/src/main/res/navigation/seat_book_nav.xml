@@ -61,6 +61,9 @@
         <argument
             android:name="endTimeMinute"
             app:argType="string" />
+        <argument
+            android:name="slot"
+            app:argType="integer" />
 
 
     </fragment>
@@ -90,5 +93,8 @@
         <argument
             android:name="endTimeMinute"
             app:argType="string" />
+        <argument
+            android:name="slot"
+            app:argType="integer" />
     </fragment>
 </navigation>

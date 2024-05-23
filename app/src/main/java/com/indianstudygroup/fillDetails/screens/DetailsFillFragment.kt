@@ -1,7 +1,12 @@
 package com.indianstudygroup.fillDetails.screens
 
+import android.app.Dialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -10,14 +15,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.card.MaterialCardView
 import com.indianstudygroup.R
+import com.indianstudygroup.app_utils.ApiCallsConstant
+import com.indianstudygroup.app_utils.HideKeyboard
+import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.FragmentDetailsFillBinding
 import com.indianstudygroup.pincode.PincodeViewModel
+import com.indianstudygroup.registerScreen.SignInActivity
 
 
 class DetailsFillFragment : Fragment() {
@@ -30,6 +42,18 @@ class DetailsFillFragment : Fragment() {
     lateinit var state: String
     private var selectedQualificationFromList = ""
     private lateinit var selectedQualificationButton: TextView
+    private val requestForPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                ToastUtil.makeToast(requireContext(), "Location Permission Granted")
+            } else {
+                if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    showRationaleDialog()
+                } else {
+                    requestDialogDialog()
+                }
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -46,6 +70,25 @@ class DetailsFillFragment : Fragment() {
         initListener()
         focusChangeListeners()
         return binding.root
+    }
+
+    private fun showRationaleDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Camera Permission")
+            .setMessage("This app requires location permission. If you deny this time you have to manually go to app setting to allow permission.")
+            .setPositiveButton("Ok") { _, _ ->
+                requestForPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        builder.create().show()
+    }
+
+    private fun checkPermission(): Boolean {
+        return (ContextCompat.checkSelfPermission(
+            requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION
+
+        ) == PackageManager.PERMISSION_GRANTED)
     }
 
     private fun initListener() {
@@ -83,6 +126,7 @@ class DetailsFillFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 val pincode = s.toString().trim()
                 if (pincode.length == 6) {
+                    HideKeyboard.hideKeyboard(requireContext(), binding.pincodeEt.windowToken)
                     callPincodeApi(pincode)
                 }
             }
@@ -111,20 +155,19 @@ class DetailsFillFragment : Fragment() {
             } else if (selectedQualificationFromList.isEmpty()) {
                 binding.tvchoosequalification.visibility = View.VISIBLE
             } else {
-                Log.d(
-                    "DATAFROMSCREENS",
-                    "$name $pincode $city $state $bio $selectedQualificationFromList"
-                )
-                findNavController().navigate(
-                    R.id.action_detailsFillFragment_to_photoFillFragment,
-                    Bundle().apply {
-                        putString("name", name)
-                        putString("pincode", pincode)
-                        putString("city", city)
-                        putString("state", state)
-                        putString("bio", bio)
-                        putString("qualification", selectedQualificationFromList ?: "")
-                    })
+                if (checkPermission()) {
+                    findNavController().navigate(R.id.action_detailsFillFragment_to_photoFillFragment,
+                        Bundle().apply {
+                            putString("name", name)
+                            putString("pincode", pincode)
+                            putString("city", city)
+                            putString("state", state)
+                            putString("bio", bio)
+                            putString("qualification", selectedQualificationFromList ?: "")
+                        })
+                } else {
+                    requestForPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                }
             }
 
         }
@@ -228,4 +271,23 @@ class DetailsFillFragment : Fragment() {
 
 
     }
+
+    private fun requestDialogDialog() {
+        val builder = Dialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.request_permission_dialog_layout, null)
+        builder.setContentView(view)
+        builder.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        builder.show()
+        builder.setCancelable(true)
+        val openSettings = view.findViewById<MaterialCardView>(R.id.openSettings)
+        openSettings.setOnClickListener {
+            builder.dismiss()
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", context?.packageName, null)
+            }
+            startActivity(intent)
+        }
+    }
+
+
 }

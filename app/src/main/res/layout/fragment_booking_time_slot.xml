@@ -33,7 +33,7 @@
 
 
     <TextView
-        android:id="@+id/buttonMorning"
+        android:id="@+id/buttonSlot1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
-        android:id="@+id/buttonAfternoon"
+        android:id="@+id/buttonSlot2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
@@ -62,10 +62,10 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMorning" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonSlot1" />
 
     <TextView
-        android:id="@+id/buttonEvening"
+        android:id="@+id/buttonSlot3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
@@ -78,7 +78,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAfternoon" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonSlot2" />
 
 
     <com.google.android.material.card.MaterialCardView

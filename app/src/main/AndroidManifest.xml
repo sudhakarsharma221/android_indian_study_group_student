@@ -5,6 +5,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-feature android:name="android.hardware.camera.flash" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -26,6 +27,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IndianStudyGroup"
         tools:targetApi="31">
+        <activity
+            android:name=".bottom_nav_bar.schedule.ui.HistoryActivity"
+            android:exported="false" />
         <activity
             android:name=".bottom_nav_bar.more.setting.screens.TermsOfServiceActivity"
             android:exported="false" />
@@ -66,8 +70,9 @@
             android:name=".bottom_nav_bar.more.wallet.WalletActivity"
             android:exported="false" />
         <activity
-            android:name=".qr_code.ScannerActivity"
-            android:exported="false" />
+            android:name=".qr_code.ui.ScannerActivity"
+            android:exported="false"
+            android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".bottom_nav_bar.library.LibraryDetailsActivity"
             android:exported="false"

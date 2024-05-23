@@ -1,6 +1,7 @@
 package com.indianstudygroup.book_seat.ui.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,6 @@ import com.indianstudygroup.databinding.ConfirmBookingBottomDialogBinding
 import com.indianstudygroup.databinding.ErrorBottomDialogLayoutBinding
 import com.indianstudygroup.databinding.FragmentBookingSeatSelectionBinding
 
-
 class BookingSeatSelectionFragment : Fragment() {
     private lateinit var binding: FragmentBookingSeatSelectionBinding
     private var endTimeHour: String? = null
@@ -31,6 +31,7 @@ class BookingSeatSelectionFragment : Fragment() {
     private var startTimeHour: String? = null
     private var userId: String? = null
     private var libId: String? = null
+    private var slot: Int? = null
     private lateinit var dialogBinding: ConfirmBookingBottomDialogBinding
     private lateinit var adapter: SeatAdapter
     private var selectedPosition = -1
@@ -57,6 +58,7 @@ class BookingSeatSelectionFragment : Fragment() {
         val vacantSeats = requireArguments().getString("vacantSeats")
         val priceSeats = requireArguments().getString("priceSeats")
         libId = requireArguments().getString("libId")
+        slot = requireArguments().getInt("slot")
         userId = requireArguments().getString("userId")
         startTimeHour = requireArguments().getString("startTimeHour")
         startTimeMinute = requireArguments().getString("startTimeMinute")
@@ -93,12 +95,22 @@ class BookingSeatSelectionFragment : Fragment() {
 
         }
         binding.moreBill.setOnClickListener {
-            findNavController().navigate(R.id.action_bookingSeatSelectionFragment_to_bookingOrderSummaryFragment,
-                Bundle().apply {
-                    putString("priceSeats", priceSeats)
-                })
+            if (selectedPosition < 0) {
+                ToastUtil.makeToast(requireContext(), "Select a seat first")
+            } else {
+                findNavController().navigate(R.id.action_bookingSeatSelectionFragment_to_bookingOrderSummaryFragment,
+                    Bundle().apply {
+                        putString("priceSeats", priceSeats)
+                        putString("libId", libId)
+                        putInt("slot", slot!!)
+                        putString("userId", userId)
+                        putString("startTimeHour", startTimeHour)
+                        putString("startTimeMinute", startTimeMinute)
+                        putString("endTimeHour", endTimeHour)
+                        putString("endTimeMinute", endTimeMinute)
+                    })
+            }
         }
-
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -117,21 +129,32 @@ class BookingSeatSelectionFragment : Fragment() {
                 Bundle().apply {
                     putString("priceSeats", price)
                     putString("libId", libId)
+                    putInt("slot", slot!!)
                     putString("userId", userId)
-                    putString("startTimeHour", "startTimeHour")
-                    putString("startTimeMinute", "startTimeMinute")
-                    putString("endTimeHour", "endTimeHour")
-                    putString("endTimeMinute", "endTimeMinute")
+                    putString("startTimeHour", startTimeHour)
+                    putString("startTimeMinute", startTimeMinute)
+                    putString("endTimeHour", endTimeHour)
+                    putString("endTimeMinute", endTimeMinute)
                 })
         }
         dialogBinding.tvTotalBill.text = "Total bill ₹ $price"
         dialogBinding.textView8.text = "Book For ₹ $price"
         dialogBinding.bookButton.setOnClickListener {
             bottomDialog.dismiss()
-
+            Log.d(
+                "BOOKINGSEATRESPONSECOMING",
+                "  $slot  $startTimeHour   $startTimeMinute    $endTimeHour   $endTimeMinute"
+            )
             callBookSeatApi(
                 BookingRequestModel(
-                    libId, userId, 0, "", startTimeHour, startTimeMinute, endTimeHour, endTimeMinute
+                    libId,
+                    userId,
+                    slot,
+                    "",
+                    startTimeHour,
+                    startTimeMinute,
+                    endTimeHour,
+                    endTimeMinute
                 )
             )
 
@@ -174,7 +197,7 @@ class BookingSeatSelectionFragment : Fragment() {
         val bottomDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         val dialogBinding = ErrorBottomDialogLayoutBinding.inflate(layoutInflater)
         bottomDialog.setContentView(dialogBinding.root)
-        bottomDialog.setCancelable(true)
+        bottomDialog.setCancelable(false)
         bottomDialog.show()
         dialogBinding.messageTv.text = message
         dialogBinding.continueButton.setOnClickListener {

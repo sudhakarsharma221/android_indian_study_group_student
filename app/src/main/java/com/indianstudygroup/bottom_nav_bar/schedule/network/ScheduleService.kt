@@ -14,5 +14,9 @@ interface ScheduleService {
         @Header("userid") userId: String?
     ): Call<ScheduleResponseModel>
 
+    @GET(AppUrlsEndpoint.GET_HISTORY)
+    fun callSessionsHistoryDetails(
+        @Header("userid") userId: String?
+    ): Call<ScheduleResponseModel>
 
 }

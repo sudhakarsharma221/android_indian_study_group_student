@@ -10,5 +10,6 @@ class SeatBookActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seat_book)
         window.statusBarColor = Color.WHITE
+
     }
 }

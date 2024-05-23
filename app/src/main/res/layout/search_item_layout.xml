@@ -5,28 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingVertical="5dp">
+    android:id="@+id/searchLayout"
+    android:paddingTop="15dp">
 
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:background="@color/black_app"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text" />
+        app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:elevation="10dp"
+        android:outlineAmbientShadowColor="@color/white"
+        android:outlineSpotShadowColor="@color/white"
+        android:src="@drawable/profile"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/tvLibName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:fontFamily="@font/poppins"
         android:text="Library 1"
         android:textColor="@color/black_app"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+        app:layout_constraintStart_toEndOf="@+id/ivProfile"
+        app:layout_constraintTop_toTopOf="@+id/ivProfile" />
+
+    <TextView
+        android:id="@+id/tvDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/poppins"
+        android:text="10 km away"
+        android:textColor="@color/black_app"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvLibName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tvLibName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

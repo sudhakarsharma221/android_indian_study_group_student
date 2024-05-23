@@ -4,8 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -13,12 +13,11 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
+import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.IntentUtil
-import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.ActivityMainBinding
 import com.indianstudygroup.databinding.ScannerBottomDialogBinding
-import com.indianstudygroup.editProfile.EditProfileActivity
-import com.indianstudygroup.qr_code.ScannerActivity
+import com.indianstudygroup.qr_code.ui.ScannerActivity
 import com.indianstudygroup.registerScreen.SignInActivity
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
 
@@ -69,7 +68,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showStartDialog(
-        message: String, layoutShow: Boolean, address: String, name: String, photo: String
+        message: String,
+        layoutShow: Boolean,
+        address: String,
+        name: String,
+        photo: String,
+        time: String
     ) {
         val bottomDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val dialogBinding = ScannerBottomDialogBinding.inflate(layoutInflater)
@@ -78,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         bottomDialog.show()
         dialogBinding.textView.text = message
         dialogBinding.libraryName.text = name
+        dialogBinding.timeSlots.text = "Time Slot : $time"
         dialogBinding.libraryAddress.text = address
         Glide.with(this).load(photo).placeholder(R.drawable.noimage).error(R.drawable.noimage)
             .into(dialogBinding.libraryPhoto)
@@ -94,25 +99,32 @@ class MainActivity : AppCompatActivity() {
                 val libraryDataPhoto = data?.getStringExtra("libraryDataPhoto")
                 val libraryDataName = data?.getStringExtra("libraryDataName")
                 val libraryDataAddress = data?.getStringExtra("libraryDataAddress")
+                val libraryDataTime = data?.getStringExtra("libraryDataTime")
                 showStartDialog(
                     "Your session has started",
                     true,
                     libraryDataAddress ?: "",
                     libraryDataName ?: "",
-                    libraryDataPhoto ?: ""
+                    libraryDataPhoto ?: "",
+                    libraryDataTime ?: ""
                 )
             } else if (resultCode == RESULT_CANCELED) {
                 val noSession = data?.getBooleanExtra("NoSession", false)
                 if (noSession == true) {
-                    showStartDialog("You don't have any session", false, "", "", "")
+                    showStartDialog("You don't have any session", false, "", "", "", "")
                 } else {
-                    showStartDialog("Error Scanning the QR code", false, "", "", "")
-
+                    showStartDialog(
+                        "Error scanning the code. Contact the library owner", false, "", "", "", ""
+                    )
                 }
-
             }
         }
     }
 
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        ApiCallsConstant.apiCallsOnceHome = false
+        ApiCallsConstant.apiCallsOnceAllLibrary = false
+        ApiCallsConstant.apiCallsOnceLibrary = false
+    }
 }

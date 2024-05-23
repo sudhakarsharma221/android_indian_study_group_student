@@ -38,6 +38,13 @@ class MoreFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         requireActivity().window.statusBarColor = Color.WHITE
 
+        if (!ApiCallsConstant.apiCallsOnceMore) {
+            callPolicyDetails()
+            ApiCallsConstant.apiCallsOnceMore = true
+        }
+
+
+
         initListener()
 //        inflater.inflate(R.layout.fragment_profile, container, false)
         observeProgress()
@@ -48,7 +55,7 @@ class MoreFragment : Fragment() {
     }
 
     private fun initListener() {
-        callPolicyDetails()
+
 
         binding.tvWallet.setOnClickListener {
             IntentUtil.startIntent(requireContext(), WalletActivity())

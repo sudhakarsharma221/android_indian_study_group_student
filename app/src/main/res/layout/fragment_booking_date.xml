@@ -63,7 +63,8 @@
         android:fontFamily="@font/poppins"
         android:text="See all"
         android:textColor="@color/blue1"
-        android:textSize="16sp"
+        android:textSize="14sp"
+        android:visibility="gone"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView15"
         app:layout_constraintEnd_toEndOf="@+id/calendarView" />
 
@@ -135,6 +136,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

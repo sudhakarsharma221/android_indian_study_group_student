@@ -54,7 +54,7 @@ class ScheduleAdapter(
 
 //            binding.tvDate.text = ""
             if (item.photo?.isNotEmpty() == true) {
-                Glide.with(context).load(item.photo.get(0)).placeholder(R.drawable.noimage)
+                Glide.with(context).load(item.photo[0]).placeholder(R.drawable.noimage)
                     .error(R.drawable.noimage).into(binding.libImage)
             }
             binding.scheduleLayout.setOnClickListener {

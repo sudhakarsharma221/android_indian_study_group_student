@@ -29,10 +29,14 @@ class BookSeatRepository {
                 call: Call<BookingResponseModel?>, response: Response<BookingResponseModel?>
             ) {
                 showProgress.postValue(false)
-                val body = response.body()
-                Log.d("bookSeatResponse", "body : ${body.toString()}")
+                val body = response.body() ?: BookingResponseModel()
                 if (response.isSuccessful) {
-                    bookSeatResponse.postValue(body!!)
+                    if (response.code() == 200) {
+                        bookSeatResponse.postValue(body)
+                    } else {
+                        errorMessage.postValue("You already have an upcoming session in this library")
+                    }
+
                 } else {
                     errorMessage.postValue(response.errorBody().toString())
                 }

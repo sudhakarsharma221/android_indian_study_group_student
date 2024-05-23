@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.ApiCallsConstant
+import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.bottom_nav_bar.schedule.ui.adapter.ScheduleAdapter
 import com.indianstudygroup.bottom_nav_bar.schedule.viewModel.ScheduleViewModel
@@ -31,8 +32,8 @@ class ScheduleFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this)[ScheduleViewModel::class.java]
         binding = FragmentScheduleBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this)[ScheduleViewModel::class.java]
         auth = FirebaseAuth.getInstance()
         requireActivity().window.statusBarColor = Color.WHITE
 //         inflater.inflate(R.layout.fragment_schedule, container, false)
@@ -55,7 +56,7 @@ class ScheduleFragment : Fragment() {
         }
 
         binding.historyButton.setOnClickListener {
-            ToastUtil.makeToast(requireContext(), "History Activity")
+            IntentUtil.startIntent(requireContext(), HistoryActivity())
         }
     }
 

@@ -6,11 +6,15 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.ImageSpan
+import android.text.style.RelativeSizeSpan
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -30,33 +34,54 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
 import com.indianstudygroup.R
+import com.indianstudygroup.app_utils.ApiCallsConstant
+import com.indianstudygroup.app_utils.AppConstant
 import com.indianstudygroup.app_utils.HideStatusBarUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.book_seat.SeatBookActivity
+import com.indianstudygroup.bottom_nav_bar.library.adapter.AmenitiesAdapter
 import com.indianstudygroup.bottom_nav_bar.library.adapter.DaysAdapter
 import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
 import com.indianstudygroup.databinding.ActivityLibraryDetailsBinding
 import com.indianstudygroup.databinding.ErrorBottomDialogLayoutBinding
 import com.indianstudygroup.databinding.ReviewBottomDialogBinding
+import com.indianstudygroup.libraryDetailsApi.model.AmenityItem
 import com.indianstudygroup.libraryDetailsApi.model.LibraryIdDetailsResponseModel
+import com.indianstudygroup.wishlist.model.WishlistAddRequestModel
+import com.indianstudygroup.wishlist.model.WishlistDeleteRequestModel
+import com.indianstudygroup.wishlist.viewModel.WishlistViewModel
 
-class LibraryDetailsActivity : AppCompatActivity()
-//    , OnMapReadyCallback
-{
+class LibraryDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLibraryDetailsBinding
     private lateinit var viewModel: LibraryViewModel
     private lateinit var libraryId: String
+    private lateinit var auth: FirebaseAuth
     private var latitude: Double? = null
     private var longitude: Double? = null
     private var isExpanded = false
-    private var isClickedFav = false
     private lateinit var libraryDetails: LibraryIdDetailsResponseModel
+    private lateinit var wishlistViewModel: WishlistViewModel
+
     private lateinit var libImageList: ArrayList<ImageSlidesModel>
     private var listener: ItemsListener? = null
     private var listOfDays: ArrayList<String>? = arrayListOf()
-//    private var mapFragment: SupportMapFragment? = null
+
+    //    private var mapFragment: SupportMapFragment? = null
 //    private var googleMap: GoogleMap? = null
+    val amenityMappings = mapOf(
+        "AC" to Pair("Air Conditioning", R.drawable.ac),
+        "Studyspace" to Pair("Study Space", R.drawable.study),
+        "Wifi" to Pair("Wi-Fi", R.drawable.wifi),
+        "Printing" to Pair("Printing", R.drawable.printing),
+        "Charging" to Pair("Charging Station", R.drawable.charging),
+        "Groupstudyroom" to Pair("Group Study Room", R.drawable.groupstudy),
+        "Refreshment" to Pair("Refreshment Area", R.drawable.refreshment),
+        "Studyarea" to Pair("Study Area", R.drawable.study),
+        "Books" to Pair("Books and Magazines", R.drawable.books),
+        "Computer" to Pair("Computer", R.drawable.computer)
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,11 +89,13 @@ class LibraryDetailsActivity : AppCompatActivity()
         HideStatusBarUtil.hideStatusBar(this)
         binding = ActivityLibraryDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        auth = FirebaseAuth.getInstance()
         window.statusBarColor = Color.WHITE
         libImageList = ArrayList()
 //        window.statusBarColor = Color.parseColor("#2f3133")
 
         viewModel = ViewModelProvider(this@LibraryDetailsActivity)[LibraryViewModel::class.java]
+        wishlistViewModel = ViewModelProvider(this)[WishlistViewModel::class.java]
         libraryId = intent.getStringExtra("LibraryId").toString()
         callIdLibraryDetailsApi(libraryId)
 
@@ -76,25 +103,42 @@ class LibraryDetailsActivity : AppCompatActivity()
         observeProgress()
         observerIdLibraryApiResponse()
         observerErrorMessageApiResponse()
-
+        observerWishlistApiResponse()
 //        mapFragment = supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
 //        mapFragment?.getMapAsync(this)
     }
 
     private fun initListener() {
 
+        if (AppConstant.wishList.contains(libraryId)) {
+            binding.favImage.setImageResource(R.drawable.baseline_favorite_24)
+        }
+
         binding.rvDays.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        binding.tvAmmenities.layoutManager = LinearLayoutManager(this)
+
         binding.messageHost.setOnClickListener {
             ToastUtil.makeToast(this, "Coming Soon...")
         }
         binding.favourite.setOnClickListener {
-            isClickedFav = if (!isClickedFav) {
-                binding.favImage.setImageResource(R.drawable.baseline_favorite_24)
-                true
-            } else {
+            setResult(RESULT_OK)
+            ApiCallsConstant.apiCallsOnceLibrary = false
+            if (AppConstant.wishList.contains(libraryId)) {
+                // Remove from wishlist
+                AppConstant.wishList.remove(libraryId)
+                wishlistViewModel.deleteWishlist(
+                    WishlistDeleteRequestModel(libraryId, auth.currentUser!!.uid)
+                )
                 binding.favImage.setImageResource(R.drawable.baseline_favorite_border_24)
-                false
+
+            } else {
+                AppConstant.wishList.add(libraryId)
+                wishlistViewModel.putWishlist(
+                    auth.currentUser!!.uid, WishlistAddRequestModel(AppConstant.wishList)
+                )
+                binding.favImage.setImageResource(R.drawable.baseline_favorite_24)
             }
         }
 
@@ -312,23 +356,18 @@ class LibraryDetailsActivity : AppCompatActivity()
             }
 
             val amenities = libraryData.libData?.ammenities
-            val drawable = ContextCompat.getDrawable(this, R.drawable.baseline_air_24)
-            if (drawable != null) {
-                setAmenitiesWithDrawable(binding.tvAmmenities, amenities, drawable)
+            if (amenities != null) {
+                val allAmenities = getAmenitiesWithDrawable(amenities, amenityMappings)
+                val adapter = AmenitiesAdapter(this, allAmenities)
+                binding.tvAmmenities.adapter = adapter
+                //                setAmenitiesWithDrawable(binding.tvAmmenities, amenities)
             }
-
-
-//            binding.tvAmmenities.text = libraryData.libData?.ammenities?.joinToString("\n")
-//            binding.tvPrice.text = HtmlCompat.fromHtml(
-//                "<b>Daily Charge : </b> ₹${it.pricing?.daily}<br/>",
-//                HtmlCompat.FROM_HTML_MODE_LEGACY
-//            )
 
             binding.tvAddress.text =
                 "${libraryData.libData?.address?.street}, ${libraryData.libData?.address?.district}, ${libraryData.libData?.address?.state}, ${libraryData.libData?.address?.pincode}"
-
+            val listOfWeekDays = arrayListOf("mon", "tue", "wed", "thu", "fri", "sat", "sun")
             listOfDays = libraryData.libData?.timing?.get(0)?.days
-            binding.rvDays.adapter = DaysAdapter(this, listOfDays!!)
+            binding.rvDays.adapter = DaysAdapter(this, listOfDays!!, listOfWeekDays)
 //            val timingStringBuilder = StringBuilder()
 //            timingStringBuilder.append("Time Slots : ")
 //            libraryData.libData?.timing?.forEachIndexed { index, timing ->
@@ -349,31 +388,28 @@ class LibraryDetailsActivity : AppCompatActivity()
         })
     }
 
-    private fun setAmenitiesWithDrawable(textView: TextView, amenities: List<String>?, drawable: Drawable) {
+    private fun getAmenitiesWithDrawable(
+        amenities: List<String>?, amenityMappings: Map<String, Pair<String, Int>>
+    ): List<AmenityItem> {
+        val amenityItems = mutableListOf<AmenityItem>()
+
         if (amenities == null) {
-            binding.tvAmmenities.text= ""
-            return
+            return amenityItems
         }
 
-        val spannableStringBuilder = SpannableStringBuilder()
-
-        amenities.forEach { amenity ->
-            val spannableString = SpannableString(" $amenity\n")
-
-            // Adjust drawable size if needed
-            drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
-
-            // Create an ImageSpan and set it to the SpannableString
-            val imageSpan = ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM)
-            spannableString.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-            // Append this spannableString to the builder
-            spannableStringBuilder.append(spannableString)
+        amenities.forEach { amenityId ->
+            val amenityData = amenityMappings[amenityId]
+            if (amenityData != null) {
+                val (label, drawableResId) = amenityData
+                val drawable = ContextCompat.getDrawable(this, drawableResId)
+                if (drawable != null) {
+                    amenityItems.add(AmenityItem(label, drawable))
+                }
+            }
         }
 
-        binding.tvAmmenities.text= spannableStringBuilder
+        return amenityItems
     }
-
 
     private fun addImageOnAutoImageSlider() {
         // add some images or titles (text) inside the imagesArrayList
@@ -424,6 +460,18 @@ class LibraryDetailsActivity : AppCompatActivity()
     private fun observerErrorMessageApiResponse() {
         viewModel.errorMessage.observe(this, Observer {
             ToastUtil.makeToast(this, it)
+        })
+        wishlistViewModel.errorMessage.observe(this, Observer {
+            ToastUtil.makeToast(this, it)
+        })
+    }
+
+    private fun observerWishlistApiResponse() {
+        wishlistViewModel.wishlistResponse.observe(this, Observer {
+            ToastUtil.makeToast(this, "Item added to wishlist")
+        })
+        wishlistViewModel.wishlistDeleteResponse.observe(this, Observer {
+            ToastUtil.makeToast(this, "Item removed from wishlist")
         })
     }
 

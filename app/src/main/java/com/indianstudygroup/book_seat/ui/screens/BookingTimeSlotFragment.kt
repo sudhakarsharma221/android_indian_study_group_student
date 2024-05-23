@@ -13,18 +13,21 @@ import androidx.navigation.fragment.findNavController
 import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.FragmentBookingTimeSlotBinding
+import com.indianstudygroup.libraryDetailsApi.model.LibraryIdDetailsResponseModel
 import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
 
 class BookingTimeSlotFragment : Fragment() {
+    private lateinit var libraryResponse: LibraryIdDetailsResponseModel
     private lateinit var binding: FragmentBookingTimeSlotBinding
     private lateinit var viewModel: LibraryViewModel
     private var selectedTimingFromList = ""
-    private var startHour = ""
-    private var startMinute = ""
-    private var endHour = ""
-    private var endMinute = ""
+    private var vacantSeats: String? = null
     private lateinit var selectedTimingButton: TextView
-
+    private var slot: Int? = null
+    private var startHour = ""
+    private var startMinute = "00"
+    private var endHour = ""
+    private var endMinute = "00"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -41,24 +44,34 @@ class BookingTimeSlotFragment : Fragment() {
 
     private fun initListener() {
 
-        setButtonState(binding.buttonMorning, false)
-        setButtonState(binding.buttonAfternoon, false)
-        setButtonState(binding.buttonEvening, false)
+        setButtonState(binding.buttonSlot1, false)
+        setButtonState(binding.buttonSlot2, false)
+        setButtonState(binding.buttonSlot3, false)
 
-        binding.buttonMorning.setOnClickListener {
-            toggleButtonState(binding.buttonMorning)
+        binding.buttonSlot1.setOnClickListener {
+            slot = 0
+            startHour = libraryResponse.libData?.timing!![0].from!!
+            endHour = libraryResponse.libData?.timing!![0].to!!
+            vacantSeats = libraryResponse.libData?.vacantSeats?.get(0).toString()
+            toggleButtonState(binding.buttonSlot1)
         }
-        binding.buttonAfternoon.setOnClickListener {
-            toggleButtonState(binding.buttonAfternoon)
-        }
-        binding.buttonEvening.setOnClickListener {
-            toggleButtonState(binding.buttonEvening)
-        }
+        binding.buttonSlot2.setOnClickListener {
+            slot = 1
+            startHour = libraryResponse.libData?.timing!![1].from!!
+            endHour = libraryResponse.libData?.timing!![1].to!!
+            vacantSeats = libraryResponse.libData?.vacantSeats?.get(1).toString()
 
+            toggleButtonState(binding.buttonSlot2)
+        }
+        binding.buttonSlot3.setOnClickListener {
+            slot = 2
+            startHour = libraryResponse.libData?.timing!![2].from!!
+            endHour = libraryResponse.libData?.timing!![2].to!!
+            vacantSeats = libraryResponse.libData?.vacantSeats?.get(2).toString()
 
+            toggleButtonState(binding.buttonSlot3)
+        }
         callLibraryResponse()
-
-
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -69,27 +82,55 @@ class BookingTimeSlotFragment : Fragment() {
         val userId = requireArguments().getString("userId").toString()
 
 
-        val libraryResponse = viewModel.getLibraryDetailsResponse()
+        libraryResponse = viewModel.getLibraryDetailsResponse()!!
 
-        val timing = libraryResponse?.libData?.timing!!
+        val timing = libraryResponse.libData?.timing!!
 
         when (timing.size) {
             3 -> {
-                binding.buttonMorning.text = "Morning : ${timing[0].from} to ${timing[0].to}"
-                binding.buttonAfternoon.text = "Afternoon : ${timing[1].from} to ${timing[1].to}"
-                binding.buttonEvening.text = "Evening : ${timing[2].from} to ${timing[2].to}"
+                val timeStartFormatted2 = formatTime(timing[2].from?.toInt(), 0)
+                val timeEndFormatted2 = formatTime(timing[2].to?.toInt(), 0)
+
+                binding.buttonSlot3.text = "Slot 3 : $timeStartFormatted2 to $timeEndFormatted2"
+
+
+                val timeStartFormatted1 = formatTime(timing[1].from?.toInt(), 0)
+                val timeEndFormatted1 = formatTime(timing[1].to?.toInt(), 0)
+
+                binding.buttonSlot2.text = "Slot 2 : $timeStartFormatted1 to $timeEndFormatted1"
+
+
+                val timeStartFormatted = formatTime(timing[0].from?.toInt(), 0)
+                val timeEndFormatted = formatTime(timing[0].to?.toInt(), 0)
+
+                binding.buttonSlot1.text = "Slot 1 : $timeStartFormatted to $timeEndFormatted"
             }
 
             2 -> {
-                binding.buttonMorning.text = "Morning ${timing[0].from} to ${timing[0].to}"
-                binding.buttonAfternoon.text = "Afternoon ${timing[1].from} to ${timing[1].to}"
-                binding.buttonEvening.visibility = View.GONE
+
+                val timeStartFormatted1 = formatTime(timing[1].from?.toInt(), 0)
+                val timeEndFormatted1 = formatTime(timing[1].to?.toInt(), 0)
+
+                binding.buttonSlot2.text = "Slot 2 : $timeStartFormatted1 to $timeEndFormatted1"
+
+
+                val timeStartFormatted = formatTime(timing[0].from?.toInt(), 0)
+                val timeEndFormatted = formatTime(timing[0].to?.toInt(), 0)
+
+                binding.buttonSlot1.text = "Slot 1 : $timeStartFormatted to $timeEndFormatted"
+
+                binding.buttonSlot3.visibility = View.GONE
             }
 
             1 -> {
-                binding.buttonMorning.text = "Morning ${timing[0].from} to ${timing[0].to}"
-                binding.buttonEvening.visibility = View.GONE
-                binding.buttonAfternoon.visibility = View.GONE
+
+                val timeStartFormatted = formatTime(timing[0].from?.toInt(), 0)
+                val timeEndFormatted = formatTime(timing[0].to?.toInt(), 0)
+
+                binding.buttonSlot1.text = "Slot 1 : $timeStartFormatted to $timeEndFormatted"
+
+                binding.buttonSlot2.visibility = View.GONE
+                binding.buttonSlot3.visibility = View.GONE
             }
         }
 //        else if (timing.isEmpty()) {
@@ -106,15 +147,16 @@ class BookingTimeSlotFragment : Fragment() {
                     Bundle().apply {
                         putString("totalSeats", libraryResponse.libData?.seats.toString())
                         putString(
-                            "vacantSeats", libraryResponse.libData?.vacantSeats?.get(0).toString()
+                            "vacantSeats", vacantSeats
                         )
                         putString("priceSeats", libraryResponse.libData?.pricing?.daily.toString())
                         putString("libId", libraryResponse.libData?.id)
                         putString("userId", userId)
-                        putString("startTimeHour", "00")
-                        putString("startTimeMinute", "20")
-                        putString("endTimeHour", "20")
-                        putString("endTimeMinute", "24")
+                        putInt("slot", slot!!)
+                        putString("startTimeHour", startHour)
+                        putString("startTimeMinute", startMinute)
+                        putString("endTimeHour", endHour)
+                        putString("endTimeMinute", endMinute)
                     })
             }
         }
@@ -133,6 +175,7 @@ class BookingTimeSlotFragment : Fragment() {
         selectedTimingButton = textView
         val text = textView.text.toString()
         selectedTimingFromList = text
+
     }
 
     private fun setButtonState(textView: TextView, isSelected: Boolean) {
@@ -150,6 +193,7 @@ class BookingTimeSlotFragment : Fragment() {
             ) // Revert to original text color
         }
     }
+
     private fun formatTime(hours: Int?, minutes: Int?): String {
         val hourFormatted = if (hours == 0 || hours == 21) 12 else hours?.rem(12)
         val amPm = if (hours!! < 12) "am" else "pm"

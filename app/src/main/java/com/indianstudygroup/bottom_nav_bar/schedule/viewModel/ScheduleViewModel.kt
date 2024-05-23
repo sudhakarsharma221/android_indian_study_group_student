@@ -12,15 +12,21 @@ class ScheduleViewModel : ViewModel() {
     var showProgress = MutableLiveData<Boolean>()
     var errorMessage = MutableLiveData<String>()
     var sessionsDetailsResponse = MutableLiveData<ScheduleResponseModel>()
+    var sessionsHistoryDetailsResponse = MutableLiveData<ScheduleResponseModel>()
     private val repository = ScheduleRepository()
 
     init {
         this.sessionsDetailsResponse = repository.sessionsDetailsResponse
+        this.sessionsHistoryDetailsResponse = repository.sessionsHistoryDetailsResponse
         this.showProgress = repository.showProgress
         this.errorMessage = repository.errorMessage
     }
 
     fun callScheduleDetails(userId: String?) {
         repository.getScheduleDetailsResponse(userId)
+    }
+
+    fun callScheduleHistoryDetails(userId: String?) {
+        repository.getScheduleHistoryDetailsResponse(userId)
     }
 }
