@@ -19,31 +19,11 @@ class LibrarySearchAdapter(
     val currentLatitude: Double,
     val currentLongitude: Double,
     val wishList: ArrayList<String>,
-    private val list: ArrayList<LibraryResponseItem>,
-    private val onItemClick: (String?) -> Unit
+    private val list: List<LibraryResponseItem>,
+    private val onFilterResult: (Boolean) -> Unit
 ) : Adapter<LibrarySearchAdapter.MyViewHolder>() {
 
-
-//    private var filteredSections: List<String> = list[0]
-//    private var fullList: List<String> = list
-
-//    fun filter(query: String?) {
-//        if (query.isNullOrBlank()) {
-//            filteredSections = fullList
-//        } else {
-//            filteredSections = fullList.filter {
-//                it.lowercase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
-//            }
-//        }
-//        notifyDataSetChanged()
-//    }
-
-//    fun updateList(newList: List<String>) {
-//        fullList = newList
-//        filteredSections = newList
-//        notifyDataSetChanged()
-//    }
-
+    private var filteredList: List<LibraryResponseItem> = list
 
     inner class MyViewHolder(val binding: SearchItemLayoutBinding) : ViewHolder(binding.root) {
         fun bindView(library: LibraryResponseItem, context: Context, position: Int) {
@@ -76,17 +56,27 @@ class LibrarySearchAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return filteredList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        list[position].let { item ->
-            holder.bindView(item, context, position)
-//            holder.itemView.setOnClickListener {
-//                onItemClick(item)
-//            }
-        }
+        holder.bindView(filteredList[position], context, position)
+
     }
+
+    fun filter(query: String) {
+        val searchText = query.toLowerCase(Locale.getDefault())
+        filteredList = if (searchText.isEmpty()) {
+            list
+        } else {
+            list.filter { library ->
+                library.name?.toLowerCase(Locale.getDefault())?.contains(searchText) == true
+            }
+        }
+        onFilterResult(filteredList.isEmpty()) // Notify the fragment
+        notifyDataSetChanged()
+    }
+
 
     fun calculateDistance(lat1: Double?, lon1: Double?, lat2: Double?, lon2: Double?): Float {
         val results = FloatArray(1)

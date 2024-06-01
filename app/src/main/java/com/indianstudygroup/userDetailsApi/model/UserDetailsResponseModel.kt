@@ -21,6 +21,7 @@ data class UserDetailsResponseModel(
     @SerializedName("libraries") val libraries: ArrayList<String> = arrayListOf(),
     @SerializedName("address") val address: Address? = Address(),
     @SerializedName("bookings") val bookings: ArrayList<String> = arrayListOf(),
+    @SerializedName("devices") val devices: ArrayList<String> = arrayListOf(),
     @SerializedName("sessions") val sessions: ArrayList<Sessions> = arrayListOf(),
     @SerializedName("createdAt") val createdAt: String? = null,
     @SerializedName("updatedAt") val updatedAt: String? = null,
@@ -45,6 +46,7 @@ data class UserDetailsResponseModel(
         parcel.readString(),
         parcel.createStringArrayList() ?: arrayListOf(),
         parcel.readParcelable(Address::class.java.classLoader),
+        parcel.createStringArrayList() ?: arrayListOf(),
         parcel.createStringArrayList() ?: arrayListOf(),
         arrayListOf<Sessions>().apply {
             parcel.readArrayList(Sessions::class.java.classLoader)
@@ -74,6 +76,7 @@ data class UserDetailsResponseModel(
         parcel.writeStringList(libraries)
         parcel.writeParcelable(address, flags)
         parcel.writeStringList(bookings)
+        parcel.writeStringList(devices)
         parcel.writeList(sessions)
         parcel.writeString(createdAt)
         parcel.writeString(updatedAt)

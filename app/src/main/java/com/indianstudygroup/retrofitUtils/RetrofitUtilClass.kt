@@ -12,7 +12,7 @@ class RetrofitUtilClass {
     companion object {
         private lateinit var retrofit: Retrofit
         private lateinit var retrofit2: Retrofit
-        val API_BASE_URL = "https://indian-study-group.onrender.com/"
+        val API_BASE_URL = "https://admin.indianstudygroup.in/"
         val PINCODE_BASE_URL = "https://api.postalpincode.in/"
 
         fun getRetrofit(): Retrofit {

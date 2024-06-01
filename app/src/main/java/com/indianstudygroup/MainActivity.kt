@@ -12,7 +12,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.databinding.ActivityMainBinding
@@ -32,6 +34,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 //        window.statusBarColor = Color.parseColor("#2f3133")
         window.statusBarColor = Color.WHITE
+        FirebaseApp.initializeApp(this)
+        FirebaseMessaging.getInstance().isAutoInitEnabled = true
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.d("TOKENFIREBASE", it.result.toString())
+            }
+        }
         auth = FirebaseAuth.getInstance()
         viewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
 

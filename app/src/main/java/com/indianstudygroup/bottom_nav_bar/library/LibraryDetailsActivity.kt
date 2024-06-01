@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spannable
@@ -17,6 +18,8 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
@@ -43,12 +46,17 @@ import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.book_seat.SeatBookActivity
 import com.indianstudygroup.bottom_nav_bar.library.adapter.AmenitiesAdapter
 import com.indianstudygroup.bottom_nav_bar.library.adapter.DaysAdapter
+import com.indianstudygroup.bottom_nav_bar.library.adapter.ReviewAdapter
 import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
 import com.indianstudygroup.databinding.ActivityLibraryDetailsBinding
 import com.indianstudygroup.databinding.ErrorBottomDialogLayoutBinding
 import com.indianstudygroup.databinding.ReviewBottomDialogBinding
 import com.indianstudygroup.libraryDetailsApi.model.AmenityItem
 import com.indianstudygroup.libraryDetailsApi.model.LibraryIdDetailsResponseModel
+import com.indianstudygroup.rating.model.RatingRequestModel
+import com.indianstudygroup.rating.model.ReviewRequestModel
+import com.indianstudygroup.rating.ui.ReviewActivity
+import com.indianstudygroup.rating.viewModel.RatingReviewViewModel
 import com.indianstudygroup.wishlist.model.WishlistAddRequestModel
 import com.indianstudygroup.wishlist.model.WishlistDeleteRequestModel
 import com.indianstudygroup.wishlist.viewModel.WishlistViewModel
@@ -62,6 +70,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
     private var longitude: Double? = null
     private var isExpanded = false
     private lateinit var libraryDetails: LibraryIdDetailsResponseModel
+    private lateinit var ratingReviewViewModel: RatingReviewViewModel
     private lateinit var wishlistViewModel: WishlistViewModel
 
     private lateinit var libImageList: ArrayList<ImageSlidesModel>
@@ -70,7 +79,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
 
     //    private var mapFragment: SupportMapFragment? = null
 //    private var googleMap: GoogleMap? = null
-    val amenityMappings = mapOf(
+    private val amenityMappings = mapOf(
         "AC" to Pair("Air Conditioning", R.drawable.ac),
         "Studyspace" to Pair("Study Space", R.drawable.study),
         "Wifi" to Pair("Wi-Fi", R.drawable.wifi),
@@ -84,6 +93,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
     )
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         HideStatusBarUtil.hideStatusBar(this)
@@ -95,12 +105,15 @@ class LibraryDetailsActivity : AppCompatActivity() {
 //        window.statusBarColor = Color.parseColor("#2f3133")
 
         viewModel = ViewModelProvider(this@LibraryDetailsActivity)[LibraryViewModel::class.java]
+        ratingReviewViewModel =
+            ViewModelProvider(this@LibraryDetailsActivity)[RatingReviewViewModel::class.java]
         wishlistViewModel = ViewModelProvider(this)[WishlistViewModel::class.java]
         libraryId = intent.getStringExtra("LibraryId").toString()
         callIdLibraryDetailsApi(libraryId)
 
         initListener()
         observeProgress()
+        observeRatingReviewApiResponse()
         observerIdLibraryApiResponse()
         observerErrorMessageApiResponse()
         observerWishlistApiResponse()
@@ -109,7 +122,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
     }
 
     private fun initListener() {
-
+        binding.reviewRecyclerView.layoutManager = LinearLayoutManager(this)
         if (AppConstant.wishList.contains(libraryId)) {
             binding.favImage.setImageResource(R.drawable.baseline_favorite_24)
         }
@@ -228,6 +241,36 @@ class LibraryDetailsActivity : AppCompatActivity() {
         bottomDialog.setContentView(dialogBinding.root)
         bottomDialog.setCancelable(true)
         bottomDialog.show()
+        var ratingValue = 0f
+        dialogBinding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            dialogBinding.error.visibility = View.GONE
+            if (fromUser) {
+                ratingValue = rating
+            }
+        }
+
+
+        dialogBinding.tvLibraryOwnerName.text = libraryDetails.libData?.ownerName
+//
+        Glide.with(this).load(libraryDetails.libData?.ownerPhoto).placeholder(R.drawable.profile)
+            .error(R.drawable.profile).into(dialogBinding.libraryOwnerPhoto)
+
+        dialogBinding.submitButton.setOnClickListener {
+            val reviewText = dialogBinding.reviewEt.text.toString()
+            if (reviewText.trim().isEmpty()) {
+                dialogBinding.reviewEt.error = "Empty Field"
+            } else if (ratingValue == 0f) {
+                dialogBinding.error.visibility = View.VISIBLE
+            } else {
+                bottomDialog.dismiss()
+                ratingReviewViewModel.postRating(
+                    auth.currentUser!!.uid, RatingRequestModel(libraryId, ratingValue.toInt())
+                )
+                ratingReviewViewModel.postReview(
+                    auth.currentUser!!.uid, ReviewRequestModel(libraryId, reviewText)
+                )
+            }
+        }
 //        dialogBinding.messageTv.text = message
 //        dialogBinding.continueButton.setOnClickListener {
 //            HideKeyboard.hideKeyboard(requireContext(), binding.phoneEt.windowToken)
@@ -241,6 +284,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
         viewModel.callIdLibrary(id)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun observerIdLibraryApiResponse() {
         viewModel.idLibraryResponse.observe(this, Observer { libraryData ->
             viewModel.setLibraryDetailsResponse(libraryData)
@@ -276,6 +320,50 @@ class LibraryDetailsActivity : AppCompatActivity() {
 //            binding.tvContact.text = HtmlCompat.fromHtml(
 //                "<b>Contact : </b>${it.contact}", HtmlCompat.FROM_HTML_MODE_LEGACY
 //            )
+            binding.tvReviews.text = "${libraryData.libData?.reviews?.size} Reviews"
+            binding.tvReviews.setOnClickListener {
+
+                if (libraryData.libData?.reviews?.isEmpty() == true) {
+                    ToastUtil.makeToast(this, "No Reviews")
+                } else {
+                    val intent = Intent(this, ReviewActivity::class.java)
+                    intent.putExtra("Reviews", libraryData.libData?.reviews)
+                    startActivity(intent)
+                }
+
+            }
+            val adapter = libraryData.libData?.reviews?.let { ReviewAdapter(this, it) }
+            binding.reviewRecyclerView.adapter = adapter
+            var rating = 1f
+            if (libraryData.libData?.rating?.count == 0) {
+                binding.tvRating.text = "1.0"
+            } else {
+                if (libraryData.libData?.rating?.count == null) {
+                    binding.tvRating.text = "1.0"
+                } else {
+                    Log.d("RATING", rating.toInt().toString())
+
+
+                    rating = (libraryData.libData?.rating?.count?.toFloat()?.let {
+                        libraryData.libData?.rating?.totalRatings?.toFloat()?.div(
+                            it
+                        )
+                    })?.toFloat()!!
+
+                    Log.d("RATINGG", rating.toString())
+                }
+
+            }
+            binding.tvRating.text = String.format("%.1f", rating)
+
+            if (libraryData.libData?.rating?.count == null) {
+                binding.basedOnReview.text = "Based On 0 Reviews"
+            } else {
+                binding.basedOnReview.text =
+                    "Based On ${libraryData.libData?.rating?.count} Reviews"
+            }
+
+            binding.ratingBar.rating = rating
 
             val seats = libraryData.libData?.vacantSeats!!
 
@@ -455,6 +543,15 @@ class LibraryDetailsActivity : AppCompatActivity() {
                 binding.mainView.visibility = View.VISIBLE
             }
         })
+        ratingReviewViewModel.showProgress.observe(this, Observer {
+            if (it) {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.mainView.visibility = View.GONE
+            } else {
+                binding.progressBar.visibility = View.GONE
+                binding.mainView.visibility = View.VISIBLE
+            }
+        })
     }
 
     private fun observerErrorMessageApiResponse() {
@@ -462,6 +559,9 @@ class LibraryDetailsActivity : AppCompatActivity() {
             ToastUtil.makeToast(this, it)
         })
         wishlistViewModel.errorMessage.observe(this, Observer {
+            ToastUtil.makeToast(this, it)
+        })
+        ratingReviewViewModel.errorMessage.observe(this, Observer {
             ToastUtil.makeToast(this, it)
         })
     }
@@ -472,6 +572,15 @@ class LibraryDetailsActivity : AppCompatActivity() {
         })
         wishlistViewModel.wishlistDeleteResponse.observe(this, Observer {
             ToastUtil.makeToast(this, "Item removed from wishlist")
+        })
+    }
+
+    private fun observeRatingReviewApiResponse() {
+        ratingReviewViewModel.ratingResponse.observe(this, Observer {
+            ToastUtil.makeToast(this, "Review Posted")
+        })
+        ratingReviewViewModel.reviewResponse.observe(this, Observer {
+            ToastUtil.makeToast(this, "Rating Posted")
         })
     }
 

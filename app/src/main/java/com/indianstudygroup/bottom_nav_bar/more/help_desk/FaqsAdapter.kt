@@ -19,7 +19,7 @@ class FaqsAdapter(val context: Context, private val list: ArrayList<Faqs>) :
                 tvQuestion.text = item.question
                 tvAnswer.text = item.answer
 
-                imageView2.setOnClickListener {
+                faqsLayout.setOnClickListener {
                     if (!isExpanded) {
                         binding.tvAnswer.visibility = View.VISIBLE
                         binding.imageView2.rotation = 270f

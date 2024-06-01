@@ -22,6 +22,7 @@ import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.zxing.BarcodeFormat
+import com.indianstudygroup.app_utils.AppConstant
 import com.indianstudygroup.app_utils.HideStatusBarUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.databinding.ActivityScannerBinding
@@ -102,6 +103,7 @@ class ScannerActivity : AppCompatActivity() {
 
 
 //        startQRCodeScanner()
+        observerUserDetailsApiResponse()
         observeProgress()
         observeLibraryIdApiResponse()
         observerMarkAttendanceApiResponse()
@@ -276,10 +278,16 @@ class ScannerActivity : AppCompatActivity() {
         })
     }
 
+    private fun observerUserDetailsApiResponse() {
+        userDetailsViewModel.userDetailsResponse.observe(this, Observer {
+            userDetailsViewModel.setUserDetailsResponse(it)
+        })
+    }
+
     private fun observerMarkAttendanceApiResponse() {
         markAttendanceViewModel.markAttendanceResponse.observe(this, Observer {
             if (it.message == "success") {
-
+                userDetailsViewModel.callGetUserDetails(auth.currentUser!!.uid)
                 setResult(RESULT_OK, Intent().apply {
 
                     putExtra(
@@ -302,6 +310,7 @@ class ScannerActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun formatTime(hours: Int?, minutes: Int?): String {
         val hourFormatted = if (hours == 0 || hours == 21) 12 else hours?.rem(12)

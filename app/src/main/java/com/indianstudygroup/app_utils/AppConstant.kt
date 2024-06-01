@@ -7,4 +7,8 @@ object AppConstant {
     var userLatitude = 0.0
     var userLongitude = 0.0
     var wishList = ArrayList<String>()
+    const val CHANNEL_ID = "Notification"
+    const val CHANNEL_NAME = "Notification"
+    const val CHANNEL_DESC = "Notification"
+
 }

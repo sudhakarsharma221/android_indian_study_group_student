@@ -1,6 +1,8 @@
 package com.indianstudygroup.userDetailsApi.network
 
 import com.indianstudygroup.app_utils.AppUrlsEndpoint
+import com.indianstudygroup.userDetailsApi.model.AddFcmResponseModel
+import com.indianstudygroup.userDetailsApi.model.AddFcmTokenRequestBody
 import com.indianstudygroup.userDetailsApi.model.UserDetailsPostRequestBodyModel
 import com.indianstudygroup.userDetailsApi.model.UserDetailsPutRequestBodyModel
 import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
@@ -34,4 +36,10 @@ interface UserDetailsService {
     fun callGetUserExist(
         @Path("contact_number") phoneNo: String?, @Query("userName") userName: String?
     ): Call<UserExistResponseModel>
+
+    @POST(AppUrlsEndpoint.ADD_FCM_TOKEN)
+    fun callAddFcmToken(
+        @Header("userid") userId: String?, @Body addFcmTokenRequestBody: AddFcmTokenRequestBody?
+    ): Call<AddFcmResponseModel>
+
 }

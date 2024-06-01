@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/star"
                     android:drawablePadding="10dp"
-                    android:text="5.0"
+                    android:text="1.0"
                     android:textColor="@color/black_app"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -607,12 +607,13 @@
                     android:layout_marginTop="10dp"
                     android:numStars="5"
                     android:progressTint="@color/yellow"
-                    android:rating="2.5"
+                    android:rating="1"
                     android:stepSize="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/writeReview" />
 
                 <TextView
+                    android:id="@+id/basedOnReview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

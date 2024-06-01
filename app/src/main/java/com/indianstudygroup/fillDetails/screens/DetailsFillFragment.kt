@@ -74,7 +74,7 @@ class DetailsFillFragment : Fragment() {
 
     private fun showRationaleDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Camera Permission")
+        builder.setTitle("Location Permission")
             .setMessage("This app requires location permission. If you deny this time you have to manually go to app setting to allow permission.")
             .setPositiveButton("Ok") { _, _ ->
                 requestForPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)

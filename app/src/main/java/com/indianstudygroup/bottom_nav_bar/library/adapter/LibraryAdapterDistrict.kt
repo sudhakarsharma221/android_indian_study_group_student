@@ -20,7 +20,7 @@ class LibraryAdapterDistrict(
     val context: Context,
     val currentLatitude: Double,
     val currentLongitude: Double,
-    private val list: ArrayList<LibraryResponseItem>,
+    private val list: List<LibraryResponseItem>,
     private val onNotFavouriteClickListener: (LibraryResponseItem) -> Unit,
     private val onFavouriteClickListener: (LibraryResponseItem) -> Unit,
     private val libraryDetailsLauncher: (Intent) -> Unit
@@ -50,7 +50,27 @@ class LibraryAdapterDistrict(
                 }
                 // Update the favorite state in the wishlist
             }
+            var rating = 1f
+            if (library.rating?.count == 0) {
+                binding.tvRating.text = "1.0"
+            } else {
+                if (library.rating?.count == null) {
+                    binding.tvRating.text = "1.0"
+                } else {
+                    Log.d("RATING", rating.toInt().toString())
 
+
+                    rating = (library.rating?.count?.toFloat()?.let {
+                        library.rating?.totalRatings?.toFloat()?.div(
+                            it
+                        )
+                    })?.toFloat()!!
+
+                    Log.d("RATINGG", rating.toString())
+                }
+
+            }
+            binding.tvRating.text = String.format("%.1f", rating)
 
             binding.tvDistance.text = calculateDistance(
                 library.address?.latitude?.toDouble(),

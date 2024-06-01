@@ -58,7 +58,27 @@ class WishListAdapter(
                     onFavouriteClickListener(library)
                 }
             }
+            var rating = 1f
+            if (library.rating?.count == 0) {
+                binding.tvRating.text = "1.0"
+            } else {
+                if (library.rating?.count == null) {
+                    binding.tvRating.text = "1.0"
+                } else {
+                    Log.d("RATING", rating.toInt().toString())
 
+
+                    rating = (library.rating?.count?.toFloat()?.let {
+                        library.rating?.totalRatings?.toFloat()?.div(
+                            it
+                        )
+                    })?.toFloat()!!
+
+                    Log.d("RATINGG", rating.toString())
+                }
+
+            }
+            binding.tvRating.text = String.format("%.1f", rating)
             binding.tvDistance.text = calculateDistance(
                 library.address?.latitude?.toDouble(),
                 library.address?.longitude?.toDouble(),

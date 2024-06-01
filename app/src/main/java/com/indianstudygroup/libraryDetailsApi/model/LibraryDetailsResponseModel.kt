@@ -9,6 +9,8 @@ data class LibraryResponseItem(
     @SerializedName("_id") var id: String? = null,
     @SerializedName("name") var name: String? = null,
     @SerializedName("userid") var userid: String? = null,
+    @SerializedName("rating") var rating: Rating? = null,
+    @SerializedName("reviews") var reviews: ArrayList<Reviews>? = arrayListOf(),
     @SerializedName("ownerName") var ownerName: String? = null,
     @SerializedName("ownerPhoto") var ownerPhoto: String? = null,
     @SerializedName("contact") var contact: String? = null,
@@ -30,6 +32,52 @@ data class LibraryResponseItem(
 
 )
 
+data class Reviews(
+    @SerializedName("date") var date: String? = null,
+    @SerializedName("userName") var userName: String? = null,
+    @SerializedName("userPhoto") var photo: String? = null,
+    @SerializedName("message") var message: String? = null,
+    @SerializedName("_id") var id: String? = null,
+
+    ) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(date)
+        parcel.writeString(userName)
+        parcel.writeString(photo)
+        parcel.writeString(message)
+        parcel.writeString(id)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Reviews> {
+        override fun createFromParcel(parcel: Parcel): Reviews {
+            return Reviews(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Reviews?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
+data class Rating(
+    @SerializedName("totalRatings") var totalRatings: Int? = null,
+    @SerializedName("count") var count: Int? = null,
+
+    )
+
 data class SeatDetails(
 
     @SerializedName("seatNumber") var seatNumber: Int? = null,
@@ -44,7 +92,7 @@ data class Pricing(
     @SerializedName("monthly") var monthly: Int? = null,
     @SerializedName("weekly") var weekly: Int? = null
 
-):Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
@@ -80,7 +128,7 @@ data class Address(
     @SerializedName("state") val state: String? = null,
     @SerializedName("longitude") val longitude: String? = null,
     @SerializedName("latitude") val latitude: String? = null
-):Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
