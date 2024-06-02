@@ -56,11 +56,11 @@ class ScheduleDetailsActivity : AppCompatActivity() {
         val formattedDate = date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
 
 
-        val timeStartHours = scheduleData.startTime?.toString()?.substring(8)?.toInt()?.div(60)
-        val timeStartMinutes = scheduleData.startTime?.toString()?.substring(8)?.toInt()?.rem(60)
+        val timeStartHours = scheduleData.startTime?.toString()?.substring(9)?.toInt()?.div(60)
+        val timeStartMinutes = scheduleData.startTime?.toString()?.substring(9)?.toInt()?.rem(60)
 
-        val timeEndHours = scheduleData.endTime?.toString()?.substring(8)?.toInt()?.div(60)
-        val timeEndMinutes = scheduleData.endTime?.toString()?.substring(8)?.toInt()?.rem(60)
+        val timeEndHours = scheduleData.endTime?.toString()?.substring(9)?.toInt()?.div(60)
+        val timeEndMinutes = scheduleData.endTime?.toString()?.substring(9)?.toInt()?.rem(60)
 
 
         val timeStartFormatted = formatTime(timeStartHours, timeStartMinutes)

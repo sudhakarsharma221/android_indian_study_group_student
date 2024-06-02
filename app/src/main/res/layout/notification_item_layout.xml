@@ -18,18 +18,27 @@
         app:layout_constraintTop_toTopOf="@+id/ivProfile" />
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/ivProfile"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:strokeWidth="0.5dp"
+        app:strokeColor="@color/black_app"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/white"
         android:layout_gravity="center"
         android:layout_marginStart="15dp"
-        android:elevation="10dp"
-        android:outlineAmbientShadowColor="@color/white"
-        android:outlineSpotShadowColor="@color/white"
-        android:src="@drawable/lib"
         app:layout_constraintStart_toStartOf="@+id/newNotification"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_gravity="center"
+            android:layout_height="20dp"
+            android:padding="1dp"
+            android:src="@drawable/baseline_notifications_none_24"/>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/tvHeading"
@@ -37,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:fontFamily="@font/poppins"
+        android:layout_marginEnd="10dp"
         android:gravity="start"
         android:text="Central Library"
         android:textColor="@color/black_app"
@@ -65,9 +75,21 @@
         android:fontFamily="@font/poppins"
         android:text="1 hr"
         android:textColor="@color/black_app"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/poppins"
+        android:text="01/12/2024"
+        android:textColor="@color/black_app"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSubHeading" />
 
 
     <ImageView
@@ -76,6 +98,7 @@
         android:layout_height="wrap_content"
         android:rotation="90"
         android:src="@drawable/more_icon"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/tvSubHeading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTime"
@@ -85,9 +108,9 @@
         android:id="@+id/view5"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:background="@color/gray_text_color"
-        app:layout_constraintTop_toBottomOf="@+id/tvSubHeading"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate"
         tools:layout_editor_absoluteX="10dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

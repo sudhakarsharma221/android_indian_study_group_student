@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Indian Study Group</string>
+    <string name="app_name">Student-ISG</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="aboutUsText">"\"Indian Study Group\" is more than just a library booking app; it's a gateway to academic excellence and communal learning. Designed with the needs of Indian scholars and students in mind, this innovative platform seamlessly connects avid learners with the resources they need to thrive."</string>

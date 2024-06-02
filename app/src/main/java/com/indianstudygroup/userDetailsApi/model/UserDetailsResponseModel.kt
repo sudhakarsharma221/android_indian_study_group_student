@@ -23,6 +23,7 @@ data class UserDetailsResponseModel(
     @SerializedName("bookings") val bookings: ArrayList<String> = arrayListOf(),
     @SerializedName("devices") val devices: ArrayList<String> = arrayListOf(),
     @SerializedName("sessions") val sessions: ArrayList<Sessions> = arrayListOf(),
+    @SerializedName("notifications") val notifications: ArrayList<Notifications> = arrayListOf(),
     @SerializedName("createdAt") val createdAt: String? = null,
     @SerializedName("updatedAt") val updatedAt: String? = null,
     @SerializedName("__v") val v: Int? = null,
@@ -51,6 +52,9 @@ data class UserDetailsResponseModel(
         arrayListOf<Sessions>().apply {
             parcel.readArrayList(Sessions::class.java.classLoader)
         },
+        arrayListOf<Notifications>().apply {
+            parcel.readArrayList(Notifications::class.java.classLoader)
+        },
         parcel.readString(),
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
@@ -78,6 +82,7 @@ data class UserDetailsResponseModel(
         parcel.writeStringList(bookings)
         parcel.writeStringList(devices)
         parcel.writeList(sessions)
+        parcel.writeList(notifications)
         parcel.writeString(createdAt)
         parcel.writeString(updatedAt)
         parcel.writeValue(v)
@@ -168,6 +173,48 @@ data class Address(
         }
 
         override fun newArray(size: Int): Array<Address?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
+data class Notifications(
+    @SerializedName("date") val date: String? = null,
+    @SerializedName("title") val title: String? = null,
+    @SerializedName("subtitle") val subtitle: String? = null,
+    @SerializedName("message") val message: String? = null,
+    @SerializedName("status") val status: String? = null,
+    @SerializedName("_id") val id: String? = null,
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(date)
+        parcel.writeString(title)
+        parcel.writeString(subtitle)
+        parcel.writeString(message)
+        parcel.writeString(status)
+        parcel.writeString(id)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Notifications> {
+        override fun createFromParcel(parcel: Parcel): Notifications {
+            return Notifications(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Notifications?> {
             return arrayOfNulls(size)
         }
     }

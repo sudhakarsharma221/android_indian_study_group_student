@@ -132,7 +132,10 @@ class LibraryFragment : Fragment() {
             startActivityForResult(intent, 1)
         }
         binding.notification.setOnClickListener {
-            IntentUtil.startIntent(requireContext(), NotificationActivity())
+            val intent = Intent(requireContext(), NotificationActivity::class.java)
+            startActivityForResult(
+                intent, 2
+            )
         }
 
         if (!ApiCallsConstant.apiCallsOnceLibrary) {
@@ -293,6 +296,13 @@ class LibraryFragment : Fragment() {
     private fun observerUserDetailsApiResponse() {
         userDetailsViewModel.userDetailsResponse.observe(viewLifecycleOwner, Observer {
             userData = it
+
+            userData.notifications.forEach { noti ->
+                if (noti.status == "unread") {
+                    binding.newNotification.visibility = View.VISIBLE
+                }
+            }
+
             wishList = userData.wishlist!!
             AppConstant.wishList = wishList as ArrayList<String>
             binding.currentLocation.text = "${it.address?.district}, ${it.address?.state}"
@@ -422,6 +432,8 @@ class LibraryFragment : Fragment() {
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             callPincodeLibraryDetailsApi(userData.address?.district)
 
+        } else if (requestCode == 2 && resultCode == AppCompatActivity.RESULT_OK) {
+            binding.newNotification.visibility = View.GONE
         }
     }
 

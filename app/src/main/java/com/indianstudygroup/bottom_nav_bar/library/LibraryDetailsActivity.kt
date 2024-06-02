@@ -72,6 +72,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
     private lateinit var libraryDetails: LibraryIdDetailsResponseModel
     private lateinit var ratingReviewViewModel: RatingReviewViewModel
     private lateinit var wishlistViewModel: WishlistViewModel
+    private var seats = ArrayList<Int>()
 
     private lateinit var libImageList: ArrayList<ImageSlidesModel>
     private var listener: ItemsListener? = null
@@ -290,7 +291,13 @@ class LibraryDetailsActivity : AppCompatActivity() {
             viewModel.setLibraryDetailsResponse(libraryData)
             libraryDetails = libraryData
             binding.bookSeatButton.setOnClickListener {
-                if (libraryData.libData?.vacantSeats?.get(0) == 0) {
+                var noSeat = 0
+                for (seat in seats) {
+                    if (seat == 0) {
+                        noSeat += 1
+                    }
+                }
+                if (noSeat == seats.size) {
                     ToastUtil.makeToast(this, "No Vacant Seat Available")
                 } else {
                     val intent = Intent(this, SeatBookActivity::class.java)
@@ -365,7 +372,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
 
             binding.ratingBar.rating = rating
 
-            val seats = libraryData.libData?.vacantSeats!!
+            seats = libraryData.libData?.vacantSeats!!
 
             when (seats.size) {
                 3 -> {

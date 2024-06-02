@@ -189,11 +189,11 @@ class ScannerActivity : AppCompatActivity() {
         for (lib in userData.sessions) {
             if (lib.libraryId == scannedData) {
 
-                val timeStartHours = lib.startTime?.substring(8)?.toInt()?.div(60)
-                val timeStartMinutes = lib.startTime?.substring(8)?.toInt()?.rem(60)
+                val timeStartHours = lib.startTime?.substring(9)?.toInt()?.div(60)
+                val timeStartMinutes = lib.startTime?.substring(9)?.toInt()?.rem(60)
 
-                val timeEndHours = lib.endTime?.substring(8)?.toInt()?.div(60)
-                val timeEndMinutes = lib.endTime?.substring(8)?.toInt()?.rem(60)
+                val timeEndHours = lib.endTime?.substring(9)?.toInt()?.div(60)
+                val timeEndMinutes = lib.endTime?.substring(9)?.toInt()?.rem(60)
 
                 val timeStartFormatted = formatTime(timeStartHours, timeStartMinutes)
                 val timeEndFormatted = formatTime(timeEndHours, timeEndMinutes)

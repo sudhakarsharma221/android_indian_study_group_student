@@ -13,4 +13,5 @@ object AppUrlsEndpoint {
     const val MARK_ATTENDANCE = "api/mark-attendance"
     const val GET_INFO = "api/get-info"
     const val WISHLIST_DELETE = "api/librarydetails/modifywishlist"
+    const val NOTIFICATION_STATUS = "api/changeNotificationStatus"
 }

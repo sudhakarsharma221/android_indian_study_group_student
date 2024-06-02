@@ -204,7 +204,7 @@ class OtpActivity : AppCompatActivity() {
             if (!it.devices.contains(fcmToken)) {
                 viewModel.callPostFcmToken(
                     auth.currentUser!!.uid, AddFcmTokenRequestBody(
-                        fcmToken, "library"
+                        fcmToken, "student"
                     )
                 )
             }

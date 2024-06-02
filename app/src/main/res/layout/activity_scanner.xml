@@ -114,7 +114,6 @@
         android:id="@+id/openSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="65dp"
         android:layout_marginTop="100dp"
         android:outlineAmbientShadowColor="@color/blue1"
         android:outlineSpotShadowColor="@color/blue1"

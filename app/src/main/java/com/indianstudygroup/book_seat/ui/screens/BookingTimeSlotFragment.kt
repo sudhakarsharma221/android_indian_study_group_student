@@ -2,6 +2,7 @@ package com.indianstudygroup.book_seat.ui.screens
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -143,6 +144,7 @@ class BookingTimeSlotFragment : Fragment() {
             if (selectedTimingFromList == "") {
                 ToastUtil.makeToast(requireContext(), "Select a time slot")
             } else {
+
                 findNavController().navigate(R.id.action_bookingTimeSlotFragment_to_bookingSeatSelectionFragment,
                     Bundle().apply {
                         putString("totalSeats", libraryResponse.libData?.seats.toString())
