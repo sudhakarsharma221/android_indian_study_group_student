@@ -63,13 +63,15 @@
 
         <TextView
             android:id="@+id/libraryAddress"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
             android:fontFamily="@font/poppins"
             android:text="Wilora NT 0872, Australia"
             android:textColor="@color/gray_text_color"
             android:textSize="10sp"
+            app:layout_constraintEnd_toStartOf="@+id/tvReviews"
             app:layout_constraintStart_toStartOf="@+id/libraryName"
             app:layout_constraintTop_toBottomOf="@+id/libraryName" />
 
@@ -79,8 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:drawableStart="@drawable/star"
-            android:drawablePadding="10dp"
-            android:text="5.0"
+            android:drawablePadding="5dp"
+            android:text="1.0"
             android:textColor="@color/black_app"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="11 Reviews"
+            android:text="0 Reviews"
             android:textColor="@color/black_app"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="@+id/tvRating"

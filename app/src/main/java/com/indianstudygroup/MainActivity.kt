@@ -79,6 +79,8 @@ class MainActivity : AppCompatActivity() {
     private fun showStartDialog(
         message: String,
         layoutShow: Boolean,
+        rating: String,
+        review: String,
         address: String,
         name: String,
         photo: String,
@@ -90,6 +92,8 @@ class MainActivity : AppCompatActivity() {
         bottomDialog.setCancelable(true)
         bottomDialog.show()
         dialogBinding.textView.text = message
+        dialogBinding.tvReviews.text = "$review Reviews"
+        dialogBinding.tvRating.text = rating
         dialogBinding.libraryName.text = name
         dialogBinding.timeSlots.text = "Time Slot : $time"
         dialogBinding.libraryAddress.text = address
@@ -109,9 +113,13 @@ class MainActivity : AppCompatActivity() {
                 val libraryDataName = data?.getStringExtra("libraryDataName")
                 val libraryDataAddress = data?.getStringExtra("libraryDataAddress")
                 val libraryDataTime = data?.getStringExtra("libraryDataTime")
+                val libraryRating = data?.getStringExtra("libraryRating")
+                val libraryReview = data?.getStringExtra("libraryReview")
                 showStartDialog(
                     "Your session has started",
                     true,
+                    libraryRating ?: "",
+                    libraryReview ?: "",
                     libraryDataAddress ?: "",
                     libraryDataName ?: "",
                     libraryDataPhoto ?: "",
@@ -120,10 +128,17 @@ class MainActivity : AppCompatActivity() {
             } else if (resultCode == RESULT_CANCELED) {
                 val noSession = data?.getBooleanExtra("NoSession", false)
                 if (noSession == true) {
-                    showStartDialog("You don't have any session", false, "", "", "", "")
+                    showStartDialog("You don't have any session", false, "", "", "", "", "", "")
                 } else {
                     showStartDialog(
-                        "Error scanning the code. Contact the library owner", false, "", "", "", ""
+                        "Error scanning the code. Contact the library owner",
+                        false,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
                     )
                 }
             }
