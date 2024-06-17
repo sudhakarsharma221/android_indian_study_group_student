@@ -71,7 +71,7 @@ class OtpActivity : AppCompatActivity() {
         }
         val progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please Wait..")
-        progressDialog.setMessage("Wait while we are redirecting you for reCaptcha verification...")
+        progressDialog.setMessage("Wait while we are verifying you are not a robot...")
         progressDialog.setCancelable(false)
         progressDialog.show()
 
@@ -80,10 +80,10 @@ class OtpActivity : AppCompatActivity() {
         togoPhoneNo = intent.getStringExtra("phoneNumber").toString()
         fromSignUp = intent.getBooleanExtra("fromSignUp", false)
 
-        val shortPhoneNo = phoneNo.substring(0, 7)
+        val shortPhoneNo = phoneNo.substring(0, 11)
 
         binding.phoneNo.text =
-            "We will send you an One Time Password on \n $shortPhoneNo****** mobile number"
+            "We will send you an One Time Password on \n $shortPhoneNo** mobile number"
         val options =
             PhoneAuthOptions.newBuilder(auth).setPhoneNumber(phoneNo) // Phone number to verify
                 .setTimeout(90L, TimeUnit.SECONDS) // Timeout and unit
@@ -109,7 +109,7 @@ class OtpActivity : AppCompatActivity() {
                     ) {
                         super.onCodeSent(verification, token)
                         binding.phoneNo.text =
-                            "We’ve send you the verification code on \n $shortPhoneNo******"
+                            "We’ve send you the verification code on \n $shortPhoneNo**"
                         progressDialog.dismiss()
                         startCountdownTimer()
 
@@ -296,6 +296,11 @@ class OtpActivity : AppCompatActivity() {
     // Function to cancel the countdown timer if needed
     private fun cancelCountdownTimer() {
         countdownTimer?.cancel()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 
 }

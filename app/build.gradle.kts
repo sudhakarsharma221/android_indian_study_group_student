@@ -21,10 +21,21 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            buildConfigField(
+                "String", "API_BASE_URL", "\"https://indian-study-group-pqyn.onrender.com/\""
+            )
+            buildConfigField("String", "PINCODE_BASE_URL", "\"https://api.postalpincode.in/\"")
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+        }
+        debug {
+            buildConfigField(
+                "String", "API_BASE_URL", "\"https://indian-study-group-pqyn.onrender.com/\""
+            )
+            buildConfigField("String", "PINCODE_BASE_URL", "\"https://api.postalpincode.in/\"")
         }
     }
     compileOptions {
@@ -36,6 +47,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

@@ -218,13 +218,14 @@ class LibraryDetailsActivity : AppCompatActivity() {
         val bottomDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val dialogBinding = ErrorBottomDialogLayoutBinding.inflate(layoutInflater)
         bottomDialog.setContentView(dialogBinding.root)
-        bottomDialog.setCancelable(true)
+        bottomDialog.setCancelable(false)
         bottomDialog.show()
         dialogBinding.headingTv.visibility = View.VISIBLE
         dialogBinding.messageTv.text =
-            "Your booking will be confirmed once library owner approves it. You can check it on your sessions "
+            "Your booking is Confirmed. You can check it on your sessions "
         dialogBinding.continueButton.setOnClickListener {
             bottomDialog.dismiss()
+            setResult(RESULT_CANCELED)
         }
     }
 
@@ -386,7 +387,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
                     val timeEndFormatted2 =
                         formatTime(libraryData.libData?.timing?.get(2)?.to?.toInt(), 0)
 
-                    binding.tvTime2.text = "$timeStartFormatted2 to $timeEndFormatted2"
+                    binding.tvTime3.text = "$timeStartFormatted2 to $timeEndFormatted2"
 
 
                     val timeStartFormatted1 =

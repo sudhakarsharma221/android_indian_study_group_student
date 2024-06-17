@@ -59,7 +59,7 @@ class NotificationActivity : AppCompatActivity() {
             } else {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.noNotiAvailable.visibility = View.GONE
-                adapter = NotificationAdapter(this, notificationList) { id ->
+                adapter = NotificationAdapter(this, notificationList.asReversed()) { id ->
                     notificationViewModel.callPostChangeNotificationStatus(
                         auth.currentUser!!.uid, NotificationStatusChangeRequestModel(id)
                     )
@@ -73,7 +73,7 @@ class NotificationActivity : AppCompatActivity() {
         notificationViewModel.notificationChangeResponse.observe(this, Observer {
             notificationList = it.updatedUser?.notifications!!
 
-            adapter = NotificationAdapter(this, notificationList) { id ->
+            adapter = NotificationAdapter(this, notificationList.asReversed()) { id ->
                 notificationViewModel.callPostChangeNotificationStatus(
                     auth.currentUser!!.uid, NotificationStatusChangeRequestModel(id)
                 )

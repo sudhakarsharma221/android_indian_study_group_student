@@ -1,7 +1,6 @@
 package com.indianstudygroup.book_seat.ui.screens
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +43,7 @@ class BookingSeatSelectionFragment : Fragment() {
         // Inflate the layout for this fragment
 //        inflater.inflate(R.layout.fragment_booking_seat_selection, container, false)
         observeProgress()
-        observerIdLibraryApiResponse()
+        observerBookingApiResponse()
         observerErrorMessageApiResponse()
 
         intiListener()
@@ -141,10 +140,7 @@ class BookingSeatSelectionFragment : Fragment() {
         dialogBinding.textView8.text = "Book For ₹ $price"
         dialogBinding.bookButton.setOnClickListener {
             bottomDialog.dismiss()
-            Log.d(
-                "BOOKINGSEATRESPONSECOMING",
-                "  $slot  $startTimeHour   $startTimeMinute    $endTimeHour   $endTimeMinute"
-            )
+
             callBookSeatApi(
                 BookingRequestModel(
                     libId,
@@ -168,11 +164,12 @@ class BookingSeatSelectionFragment : Fragment() {
         bookSeatViewModel.callBookSeat(bookingRequestModel)
     }
 
-    private fun observerIdLibraryApiResponse() {
+    private fun observerBookingApiResponse() {
         bookSeatViewModel.bookSeatResponse.observe(viewLifecycleOwner, Observer {
             requireActivity().setResult(AppCompatActivity.RESULT_OK)
             requireActivity().finish()
             ApiCallsConstant.apiCallsOnceSchedule = false
+
         })
     }
 

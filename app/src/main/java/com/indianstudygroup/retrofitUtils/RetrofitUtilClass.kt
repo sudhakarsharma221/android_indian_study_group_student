@@ -1,6 +1,7 @@
 package com.indianstudygroup.retrofitUtils
 
 import com.google.firebase.auth.FirebaseAuth
+import com.indianstudygroup.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,8 +13,8 @@ class RetrofitUtilClass {
     companion object {
         private lateinit var retrofit: Retrofit
         private lateinit var retrofit2: Retrofit
-        val API_BASE_URL = "https://indian-study-group.onrender.com/"
-        val PINCODE_BASE_URL = "https://api.postalpincode.in/"
+        private const val API_BASE_URL = BuildConfig.API_BASE_URL
+        private const val PINCODE_BASE_URL = BuildConfig.PINCODE_BASE_URL
 
         fun getRetrofit(): Retrofit {
 
@@ -43,6 +44,7 @@ class RetrofitUtilClass {
             }
             return retrofit
         }
+
         fun getRetrofitPincode(): Retrofit {
 
             if (!::retrofit2.isInitialized) {

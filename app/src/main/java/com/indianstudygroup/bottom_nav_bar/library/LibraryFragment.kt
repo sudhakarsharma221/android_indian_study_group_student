@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +20,6 @@ import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -32,7 +30,6 @@ import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.AppConstant
 import com.indianstudygroup.app_utils.HideKeyboard
-import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
 import com.indianstudygroup.bottom_nav_bar.library.adapter.LibraryAdapterDistrict
@@ -41,7 +38,6 @@ import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
 import com.indianstudygroup.databinding.FilterLibraryBottomDialogBinding
 import com.indianstudygroup.databinding.FragmentHomeBinding
 import com.indianstudygroup.notification.ui.NotificationActivity
-import com.indianstudygroup.userDetailsApi.model.AddFcmTokenRequestBody
 import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
 import com.indianstudygroup.wishlist.model.WishlistAddRequestModel
@@ -77,6 +73,16 @@ class LibraryFragment : Fragment() {
                 }
             }
         }
+    private val requestForPermissionLocation =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                ToastUtil.makeToast(requireContext(), "Location Permission Granted")
+            } else {
+                if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    showRationaleDialogLocation()
+                }
+            }
+        }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateView(
@@ -91,8 +97,9 @@ class LibraryFragment : Fragment() {
         requireActivity().window.statusBarColor = Color.WHITE
 
 //        inflater.inflate(R.layout.fragment_home, container, false)
-        if (!checkPermissionLocation()) {
-            requestForPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+
+        if (!checkPermission()) {
+            requestForPermissionLocation.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
 
         if (!ApiCallsConstant.apiCallsOnceHome) {
@@ -116,6 +123,7 @@ class LibraryFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun initListener() {
 
         binding.backButton.setOnClickListener {
@@ -132,6 +140,10 @@ class LibraryFragment : Fragment() {
             startActivityForResult(intent, 1)
         }
         binding.notification.setOnClickListener {
+            if (!checkPermissionNotification()) {
+                requestForPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+
             val intent = Intent(requireContext(), NotificationActivity::class.java)
             startActivityForResult(
                 intent, 2
@@ -140,12 +152,14 @@ class LibraryFragment : Fragment() {
 
         if (!ApiCallsConstant.apiCallsOnceLibrary) {
 
-            callPincodeLibraryDetailsApi(userData.address?.district)
+            callPinCodeLibraryDetailsApi(userData.address?.district)
             ApiCallsConstant.apiCallsOnceLibrary = true
         }
         binding.swiperefresh.setOnRefreshListener {
-
-            callPincodeLibraryDetailsApi(userData.address?.district)
+            binding.backButton.visibility = View.GONE
+            binding.searchEt.clearFocus()
+            HideKeyboard.hideKeyboard(requireContext(), binding.searchEt.windowToken)
+            callPinCodeLibraryDetailsApi(userData.address?.district)
         }
 
         binding.pincodeRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -243,8 +257,18 @@ class LibraryFragment : Fragment() {
         builder.create().show()
     }
 
+    private fun showRationaleDialogLocation() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Location Permission")
+            .setMessage("This app requires location permission. If you deny this time you have to manually go to app setting to allow permission.")
+            .setPositiveButton("Ok") { _, _ ->
+                requestForPermissionLocation.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        builder.create().show()
+    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun checkPermissionLocation(): Boolean {
+    private fun checkPermissionNotification(): Boolean {
         val permission = android.Manifest.permission.POST_NOTIFICATIONS
         return ContextCompat.checkSelfPermission(
             requireContext(), permission
@@ -282,7 +306,7 @@ class LibraryFragment : Fragment() {
 
     }
 
-    private fun callPincodeLibraryDetailsApi(
+    private fun callPinCodeLibraryDetailsApi(
         district: String?
     ) {
         libraryDetailsViewModel.callPincodeLibrary(district)
@@ -293,6 +317,7 @@ class LibraryFragment : Fragment() {
         libraryDetailsViewModel.callGetAllLibrary()
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun observerUserDetailsApiResponse() {
         userDetailsViewModel.userDetailsResponse.observe(viewLifecycleOwner, Observer {
             userData = it
@@ -381,14 +406,12 @@ class LibraryFragment : Fragment() {
                     libraryList,
                     { library ->
 //                        AppConstant.wishList.remove(library.id!!)
-                        Log.d("WISHLISTAPPCONSTANT1", library.id.toString())
                         wishlistViewModel.deleteWishlist(
                             WishlistDeleteRequestModel(library.id, auth.currentUser!!.uid)
                         )
                     },
                     { library ->
 //                        AppConstant.wishList.add(library.id!!)
-                        Log.d("WISHLISTAPPCONSTANT2", AppConstant.wishList.toString())
                         wishlistViewModel.putWishlist(
                             auth.currentUser!!.uid, WishlistAddRequestModel(AppConstant.wishList)
                         )
@@ -430,10 +453,12 @@ class LibraryFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-            callPincodeLibraryDetailsApi(userData.address?.district)
+            callPinCodeLibraryDetailsApi(userData.address?.district)
 
         } else if (requestCode == 2 && resultCode == AppCompatActivity.RESULT_OK) {
             binding.newNotification.visibility = View.GONE
+        } else if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_CANCELED) {
+            userDetailsViewModel.callGetUserDetails(auth.currentUser!!.uid)
         }
     }
 

@@ -78,8 +78,8 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_margin="5dp"
                     android:src="@drawable/baseline_arrow_forward_24" />
             </androidx.cardview.widget.CardView>
@@ -94,11 +94,11 @@
         android:id="@+id/usernameEt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableTint="@color/drawable_color"
         android:layout_marginTop="25dp"
         android:background="@drawable/edit_text_background_2"
         android:drawableStart="@drawable/outline_person_24"
         android:drawablePadding="10dp"
+        android:drawableTint="@color/drawable_color"
         android:fontFamily="@font/poppins"
         android:hint="Username"
         android:inputType="textPersonName"
@@ -144,28 +144,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/continueButton">
 
-
-        <TextView
-            android:id="@+id/textView2"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
-            android:text="Already have an account?"
-            android:textColor="@color/black_app"
-            android:textSize="15sp" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="Already have an account?"
+                android:textColor="@color/black_app"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/tvLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/textView2"
-            android:background="?attr/selectableItemBackground"
-            android:fontFamily="@font/poppins"
-            android:text="Login"
-            android:textColor="#314FEF"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tvLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/textView2"
+                android:background="?attr/selectableItemBackground"
+                android:fontFamily="@font/poppins"
+                android:text="Login"
+                android:textColor="#314FEF"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </RelativeLayout>
 

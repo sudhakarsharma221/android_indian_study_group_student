@@ -11,17 +11,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.IntentUtil
 import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.bottom_nav_bar.schedule.ui.adapter.ScheduleAdapter
 import com.indianstudygroup.bottom_nav_bar.schedule.viewModel.ScheduleViewModel
 import com.indianstudygroup.databinding.FragmentScheduleBinding
-import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
-import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
-import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
-import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
 
 class ScheduleFragment : Fragment() {
     private lateinit var binding: FragmentScheduleBinding
@@ -44,7 +39,7 @@ class ScheduleFragment : Fragment() {
         initListener()
         observeProgress()
         observerErrorMessageApiResponse()
-        observerIdLibraryApiResponse()
+        observerSessionApiResponse()
         return binding.root
     }
 
@@ -61,7 +56,7 @@ class ScheduleFragment : Fragment() {
     }
 
 
-    private fun observerIdLibraryApiResponse() {
+    private fun observerSessionApiResponse() {
         viewModel.sessionsDetailsResponse.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
                 binding.noSchedule.visibility = View.VISIBLE

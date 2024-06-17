@@ -182,7 +182,7 @@ data class Notifications(
     @SerializedName("date") val date: String? = null,
     @SerializedName("title") val title: String? = null,
     @SerializedName("subtitle") val subtitle: String? = null,
-    @SerializedName("message") val message: String? = null,
+    @SerializedName("message") val message: Message? = null,
     @SerializedName("status") val status: String? = null,
     @SerializedName("_id") val id: String? = null,
 ) : Parcelable {
@@ -190,7 +190,7 @@ data class Notifications(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
+        parcel.readParcelable(Message::class.java.classLoader),
         parcel.readString(),
         parcel.readString()
     ) {
@@ -200,7 +200,7 @@ data class Notifications(
         parcel.writeString(date)
         parcel.writeString(title)
         parcel.writeString(subtitle)
-        parcel.writeString(message)
+        parcel.writeParcelable(message, flags)
         parcel.writeString(status)
         parcel.writeString(id)
     }
@@ -215,6 +215,55 @@ data class Notifications(
         }
 
         override fun newArray(size: Int): Array<Notifications?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
+data class Message(
+    @SerializedName("message") val message: String? = null,
+    @SerializedName("senderName") val senderName: String? = null,
+    @SerializedName("senderDp") val senderDp: String? = null,
+    @SerializedName("senderId") val senderId: String? = null,
+    @SerializedName("reciverId") val receiverId: String? = null,
+    @SerializedName("recvierDp") val receiverDp: String? = null,
+    @SerializedName("reciverName") val receiverName: String? = null,
+    @SerializedName("slot") val slot: Int? = null,
+
+    ) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readValue(Int::class.java.classLoader) as? Int
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(message)
+        parcel.writeString(senderName)
+        parcel.writeString(senderDp)
+        parcel.writeString(senderId)
+        parcel.writeString(receiverId)
+        parcel.writeString(receiverDp)
+        parcel.writeString(receiverName)
+        parcel.writeValue(slot)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Message> {
+        override fun createFromParcel(parcel: Parcel): Message {
+            return Message(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Message?> {
             return arrayOfNulls(size)
         }
     }

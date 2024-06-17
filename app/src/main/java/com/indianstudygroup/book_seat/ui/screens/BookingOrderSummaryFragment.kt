@@ -13,8 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.indianstudygroup.R
 import com.indianstudygroup.app_utils.ApiCallsConstant
-import com.indianstudygroup.app_utils.HideKeyboard
-import com.indianstudygroup.app_utils.ToastUtil
 import com.indianstudygroup.book_seat.model.BookingRequestModel
 import com.indianstudygroup.book_seat.viewModel.BookSeatViewModel
 import com.indianstudygroup.databinding.ConfirmBookingBottomDialogBinding
@@ -43,7 +41,7 @@ class BookingOrderSummaryFragment : Fragment() {
 //         inflater.inflate(R.layout.fragment_booking_order_summary, container, false)
         initListener()
         observeProgress()
-        observerIdLibraryApiResponse()
+        observerBookingApiResponse()
         observerErrorMessageApiResponse()
         return binding.root
     }
@@ -109,7 +107,7 @@ class BookingOrderSummaryFragment : Fragment() {
         bookSeatViewModel.callBookSeat(bookingRequestModel)
     }
 
-    private fun observerIdLibraryApiResponse() {
+    private fun observerBookingApiResponse() {
         bookSeatViewModel.bookSeatResponse.observe(viewLifecycleOwner, Observer {
             requireActivity().setResult(AppCompatActivity.RESULT_OK)
             requireActivity().finish()
