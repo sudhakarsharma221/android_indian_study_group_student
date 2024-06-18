@@ -18,6 +18,7 @@ import com.indianstudygroup.databinding.LibraryShowItemLayoutBinding
 
 class LibraryAdapterDistrict(
     val context: Context,
+    val locationPermission: Boolean,
     val currentLatitude: Double,
     val currentLongitude: Double,
     private val list: List<LibraryResponseItem>,
@@ -71,13 +72,17 @@ class LibraryAdapterDistrict(
 
             }
             binding.tvRating.text = String.format("%.1f", rating)
+            if (locationPermission) {
+                binding.tvDistance.text = calculateDistance(
+                    library.address?.latitude?.toDouble(),
+                    library.address?.longitude?.toDouble(),
+                    currentLatitude,
+                    currentLongitude
+                )
+            } else {
+                binding.tvDistance.text = "-- km away"
+            }
 
-            binding.tvDistance.text = calculateDistance(
-                library.address?.latitude?.toDouble(),
-                library.address?.longitude?.toDouble(),
-                currentLatitude,
-                currentLongitude
-            )
             binding.tvName.text = library.name
             binding.tvPrice.text = HtmlCompat.fromHtml(
                 "<b><font color='#5669FF'>₹${library.pricing?.daily}</font></b> /Day<br/>",

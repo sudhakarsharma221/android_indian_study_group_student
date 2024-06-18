@@ -16,23 +16,33 @@ import java.util.Locale
 
 class LibrarySearchAdapter(
     val context: Context,
+    val locationPermission: Boolean,
     val currentLatitude: Double,
     val currentLongitude: Double,
     val wishList: ArrayList<String>,
     private val list: List<LibraryResponseItem>,
-    private val onFilterResult: (Boolean) -> Unit
+    private val onFilterResult: (Boolean) -> Unit,
+    private val libraryDetailsLauncher: (Intent) -> Unit
+
 ) : Adapter<LibrarySearchAdapter.MyViewHolder>() {
 
     private var filteredList: List<LibraryResponseItem> = list
 
     inner class MyViewHolder(val binding: SearchItemLayoutBinding) : ViewHolder(binding.root) {
         fun bindView(library: LibraryResponseItem, context: Context, position: Int) {
-            binding.tvDistance.text = calculateDistance(
-                library.address?.latitude?.toDouble(),
-                library.address?.longitude?.toDouble(),
-                currentLatitude,
-                currentLongitude
-            ).toString() + "km away"
+
+            if (locationPermission) {
+                binding.tvDistance.text = calculateDistance(
+                    library.address?.latitude?.toDouble(),
+                    library.address?.longitude?.toDouble(),
+                    currentLatitude,
+                    currentLongitude
+                ).toString() + "km away"
+            } else {
+                binding.tvDistance.text = "-- km away"
+            }
+
+
             binding.tvLibName.text = library.name
             if (library.photo?.isNotEmpty() == true) {
                 Glide.with(context).load(library.photo?.get(0)).placeholder(R.drawable.noimage)
@@ -43,7 +53,7 @@ class LibrarySearchAdapter(
                 val intent = Intent(context, LibraryDetailsActivity::class.java)
                 intent.putExtra("LibraryId", library.id)
                 intent.putExtra("wishList", wishList)
-                context.startActivity(intent)
+                libraryDetailsLauncher(intent)
             }
         }
 

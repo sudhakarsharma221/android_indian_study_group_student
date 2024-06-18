@@ -56,6 +56,7 @@ class LibraryFragment : Fragment() {
     private lateinit var userData: UserDetailsResponseModel
     private lateinit var libraryDetailsViewModel: LibraryViewModel
     private lateinit var adapter: LibraryAdapterDistrict
+    private var locationPermission = false
     private lateinit var searchAdapter: LibrarySearchAdapter
     private lateinit var libraryList: ArrayList<LibraryResponseItem>
     private var wishList: ArrayList<String>? = arrayListOf()
@@ -77,6 +78,7 @@ class LibraryFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
                 ToastUtil.makeToast(requireContext(), "Location Permission Granted")
+                locationPermission = true
             } else {
                 if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
                     showRationaleDialogLocation()
@@ -100,6 +102,9 @@ class LibraryFragment : Fragment() {
 
         if (!checkPermission()) {
             requestForPermissionLocation.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            locationPermission = false
+        } else {
+            locationPermission = true
         }
 
         if (!ApiCallsConstant.apiCallsOnceHome) {
@@ -401,6 +406,7 @@ class LibraryFragment : Fragment() {
 
 
                 adapter = LibraryAdapterDistrict(requireContext(),
+                    locationPermission,
                     currentLatitude,
                     currentLongitude,
                     libraryList,
@@ -423,6 +429,7 @@ class LibraryFragment : Fragment() {
                     })
                 binding.pincodeRecyclerView.adapter = adapter
                 binding.topPicksRecyclerView.adapter = LibraryAdapterDistrict(requireContext(),
+                    locationPermission,
                     currentLatitude,
                     currentLongitude,
                     topPicksList,
@@ -489,25 +496,35 @@ class LibraryFragment : Fragment() {
                 }
             }
 
-            searchAdapter = LibrarySearchAdapter(
-                requireContext(),
+            searchAdapter = LibrarySearchAdapter(requireContext(),
+                locationPermission,
                 currentLatitude,
                 currentLongitude,
                 AppConstant.wishList,
-                allLibraryList
-            ) { isEmpty ->
-                handleEmptyFilterResult(isEmpty)
-            }
+                allLibraryList,
+                { isEmpty ->
+                    handleEmptyFilterResult(isEmpty)
+                },
+                { intent ->
+                    startActivityForResult(
+                        intent, 1
+                    )
+                })
             binding.allLibRecyclerView.adapter = searchAdapter
-            binding.trySearchLibRecyclerView.adapter = LibrarySearchAdapter(
-                requireContext(),
+            binding.trySearchLibRecyclerView.adapter = LibrarySearchAdapter(requireContext(),
+                locationPermission,
                 currentLatitude,
                 currentLongitude,
                 AppConstant.wishList,
-                trySearchList
-            ) {
-
-            }
+                trySearchList,
+                { isEmpty ->
+                    handleEmptyFilterResult(isEmpty)
+                },
+                { intent ->
+                    startActivityForResult(
+                        intent, 1
+                    )
+                })
         })
     }
 
