@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:fontFamily="@font/poppins"
-            android:text="Library Owner"
+            android:text="Owner"
             android:textColor="@color/black_app"
             android:textSize="14sp"
             android:textStyle="bold"

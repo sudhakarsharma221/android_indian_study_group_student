@@ -37,19 +37,15 @@ class LibraryAdapterDistrict(
             )
 
             binding.favourite.setOnClickListener {
-                Log.d("WISHLISTAPPCONSTANT3", AppConstant.wishList.toString())
                 if (AppConstant.wishList.contains(library.id)) {
-                    // Remove from wishlist
                     AppConstant.wishList.remove(library.id)
                     binding.favImage.setImageResource(R.drawable.baseline_favorite_border_24)
                     onNotFavouriteClickListener(library)
                 } else {
-                    // Add to wishlist
                     AppConstant.wishList.add(library.id!!)
                     binding.favImage.setImageResource(R.drawable.baseline_favorite_24)
                     onFavouriteClickListener(library)
                 }
-                // Update the favorite state in the wishlist
             }
             var rating = 1f
             if (library.rating?.count == 0) {
@@ -102,17 +98,6 @@ class LibraryAdapterDistrict(
         }
     }
 
-//    private fun updateWishlist(libraryId: String?, add: Boolean) {
-//        libraryId?.let {
-//            if (add) {
-//                if (!wishList.contains(it)) {
-//                    wishList.add(it)
-//                } else {
-//                    wishList.remove(it)
-//                }
-//            }
-//        }
-//    }
 
     fun calculateDistance(lat1: Double?, lon1: Double?, lat2: Double?, lon2: Double?): String {
         val results = FloatArray(1)

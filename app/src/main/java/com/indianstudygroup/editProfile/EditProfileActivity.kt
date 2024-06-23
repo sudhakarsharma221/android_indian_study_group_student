@@ -499,6 +499,7 @@ class EditProfileActivity : AppCompatActivity() {
             setResult(RESULT_OK)
             finish()
             ApiCallsConstant.apiCallsOnceHome = false
+            ApiCallsConstant.apiCallsOnceHomeGym = false
         })
     }
 }

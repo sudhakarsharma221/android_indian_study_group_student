@@ -40,7 +40,7 @@
         android:id="@+id/fabScanner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="-25dp"
+        android:layout_marginBottom="-15dp"
         app:cardBackgroundColor="#384AED"
         app:cardCornerRadius="50dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomAppBar"

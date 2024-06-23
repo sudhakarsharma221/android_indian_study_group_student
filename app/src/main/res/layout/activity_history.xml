@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="15dp"
-    tools:context=".bottom_nav_bar.schedule.ui.HistoryActivity">
+    tools:context=".bottom_nav_bar.schedule.library.ui.HistoryActivity">
 
 
     <ImageView
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="History"
+        android:text="Library Schedule History"
         android:textColor="@color/black_app"
         android:textSize="20sp"
         android:textStyle="bold"

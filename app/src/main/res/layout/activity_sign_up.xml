@@ -61,6 +61,7 @@
                 android:fontFamily="@font/poppins"
                 android:text="SIGN UP"
                 android:textColor="@color/white"
+                android:textStyle="bold"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -171,7 +172,7 @@
                 android:fontFamily="@font/poppins"
                 android:text="Login"
                 android:textColor="#314FEF"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
                 app:layout_constraintTop_toTopOf="parent" />

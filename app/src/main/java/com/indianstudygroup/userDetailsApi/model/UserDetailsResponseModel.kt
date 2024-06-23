@@ -23,12 +23,14 @@ data class UserDetailsResponseModel(
     @SerializedName("bookings") val bookings: ArrayList<String> = arrayListOf(),
     @SerializedName("devices") val devices: ArrayList<String> = arrayListOf(),
     @SerializedName("sessions") val sessions: ArrayList<Sessions> = arrayListOf(),
+    @SerializedName("gymSessions") val gymSessions: ArrayList<GymSessions> = arrayListOf(),
     @SerializedName("notifications") val notifications: ArrayList<Notifications> = arrayListOf(),
     @SerializedName("createdAt") val createdAt: String? = null,
     @SerializedName("updatedAt") val updatedAt: String? = null,
     @SerializedName("__v") val v: Int? = null,
     @SerializedName("userName") val username: String? = null,
     @SerializedName("wishlist") val wishlist: ArrayList<String>? = arrayListOf(),
+    @SerializedName("gymWishlist") val gymWishlist: ArrayList<String>? = arrayListOf(),
     @SerializedName("sex") val sex: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -52,6 +54,9 @@ data class UserDetailsResponseModel(
         arrayListOf<Sessions>().apply {
             parcel.readArrayList(Sessions::class.java.classLoader)
         },
+        arrayListOf<GymSessions>().apply {
+            parcel.readArrayList(Sessions::class.java.classLoader)
+        },
         arrayListOf<Notifications>().apply {
             parcel.readArrayList(Notifications::class.java.classLoader)
         },
@@ -59,6 +64,7 @@ data class UserDetailsResponseModel(
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
+        parcel.createStringArrayList() ?: arrayListOf(),
         parcel.createStringArrayList() ?: arrayListOf(),
         parcel.readString()
     )
@@ -82,12 +88,14 @@ data class UserDetailsResponseModel(
         parcel.writeStringList(bookings)
         parcel.writeStringList(devices)
         parcel.writeList(sessions)
+        parcel.writeList(gymSessions)
         parcel.writeList(notifications)
         parcel.writeString(createdAt)
         parcel.writeString(updatedAt)
         parcel.writeValue(v)
         parcel.writeString(username)
         parcel.writeStringList(wishlist)
+        parcel.writeStringList(gymWishlist)
         parcel.writeString(sex)
     }
 
@@ -101,6 +109,45 @@ data class UserDetailsResponseModel(
         }
 
         override fun newArray(size: Int): Array<UserDetailsResponseModel?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+data class GymSessions(
+
+    @SerializedName("gymId") val gymId: String? = null,
+    @SerializedName("date") val date: String? = null,
+    @SerializedName("startTime") val startTime: String? = null,
+    @SerializedName("endTime") val endTime: String? = null,
+    @SerializedName("status") val status: String? = null
+):Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(gymId)
+        parcel.writeString(date)
+        parcel.writeString(startTime)
+        parcel.writeString(endTime)
+        parcel.writeString(status)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<GymSessions> {
+        override fun createFromParcel(parcel: Parcel): GymSessions {
+            return GymSessions(parcel)
+        }
+
+        override fun newArray(size: Int): Array<GymSessions?> {
             return arrayOfNulls(size)
         }
     }

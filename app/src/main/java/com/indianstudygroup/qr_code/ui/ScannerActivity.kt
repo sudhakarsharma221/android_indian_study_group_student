@@ -22,13 +22,15 @@ import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.zxing.BarcodeFormat
-import com.indianstudygroup.app_utils.AppConstant
 import com.indianstudygroup.app_utils.HideStatusBarUtil
 import com.indianstudygroup.app_utils.ToastUtil
+import com.indianstudygroup.bottom_nav_bar.gym.model.GymResponseItem
+import com.indianstudygroup.bottom_nav_bar.gym.viewModel.GymViewModel
 import com.indianstudygroup.databinding.ActivityScannerBinding
 import com.indianstudygroup.libraryDetailsApi.model.LibraryResponseItem
 import com.indianstudygroup.libraryDetailsApi.viewModel.LibraryViewModel
-import com.indianstudygroup.qr_code.model.MarkAttendanceRequestModel
+import com.indianstudygroup.qr_code.model.GymMarkAttendanceRequestModel
+import com.indianstudygroup.qr_code.model.LibraryMarkAttendanceRequestModel
 import com.indianstudygroup.qr_code.viewModel.MarkAttendanceViewModel
 import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
@@ -37,6 +39,7 @@ class ScannerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScannerBinding
     private lateinit var userDetailsViewModel: UserDetailsViewModel
     private lateinit var libraryViewModel: LibraryViewModel
+    private lateinit var gymViewModel: GymViewModel
     private lateinit var markAttendanceViewModel: MarkAttendanceViewModel
     private lateinit var scannedData: String
     private lateinit var userData: UserDetailsResponseModel
@@ -44,6 +47,7 @@ class ScannerActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var time: String
     private var library: LibraryResponseItem? = null
+    private var gym: GymResponseItem? = null
 
 
     private val requestForPermission =
@@ -77,6 +81,7 @@ class ScannerActivity : AppCompatActivity() {
         binding = ActivityScannerBinding.inflate(layoutInflater)
         userDetailsViewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
         libraryViewModel = ViewModelProvider(this)[LibraryViewModel::class.java]
+        gymViewModel = ViewModelProvider(this)[GymViewModel::class.java]
         markAttendanceViewModel = ViewModelProvider(this)[MarkAttendanceViewModel::class.java]
         window.statusBarColor = Color.WHITE
         auth = FirebaseAuth.getInstance()
@@ -106,7 +111,9 @@ class ScannerActivity : AppCompatActivity() {
         observerUserDetailsApiResponse()
         observeProgress()
         observeLibraryIdApiResponse()
+        observeGymIdApiResponse()
         observerMarkAttendanceApiResponse()
+        observerMarkAttendanceGymApiResponse()
         observerErrorMessageApiResponse()
     }
 
@@ -184,6 +191,7 @@ class ScannerActivity : AppCompatActivity() {
     ) {
         userData = userDetailsViewModel.getUserDetailsResponse()!!
         var libraryPresent = false
+        var gymPresent = false
 //        val libraryList = ArrayList<String>()
 //        libraryList.clear()
         for (lib in userData.sessions) {
@@ -204,6 +212,25 @@ class ScannerActivity : AppCompatActivity() {
                 libraryPresent = false
             }
         }
+
+        for (gym in userData.gymSessions) {
+            if (gym.gymId == scannedData) {
+
+                val timeStartHours = gym.startTime?.substring(9)?.toInt()?.div(60)
+                val timeStartMinutes = gym.startTime?.substring(9)?.toInt()?.rem(60)
+
+                val timeEndHours = gym.endTime?.substring(9)?.toInt()?.div(60)
+                val timeEndMinutes = gym.endTime?.substring(9)?.toInt()?.rem(60)
+
+                val timeStartFormatted = formatTime(timeStartHours, timeStartMinutes)
+                val timeEndFormatted = formatTime(timeEndHours, timeEndMinutes)
+                time = "$timeStartFormatted to $timeEndFormatted"
+                gymPresent = true
+                break
+            } else {
+                gymPresent = false
+            }
+        }
 //        for (library in libraryList) {
 //            if (library == scannedData) {
 //                libraryPresent = true
@@ -215,6 +242,8 @@ class ScannerActivity : AppCompatActivity() {
 
         if (libraryPresent) {
             callLibraryDetailsApi(scannedData)
+        } else if (gymPresent) {
+            callGymDetailsApi(scannedData)
         } else {
             setResult(RESULT_CANCELED, Intent().apply {
                 putExtra("NoSession", true)
@@ -224,15 +253,27 @@ class ScannerActivity : AppCompatActivity() {
     }
 
     private fun callMarkAttendancesApi(
-        userId: String?, markAttendanceRequestModel: MarkAttendanceRequestModel
+        userId: String?, markAttendanceRequestModel: LibraryMarkAttendanceRequestModel
     ) {
-        markAttendanceViewModel.callMarkAttendance(userId, markAttendanceRequestModel)
+        markAttendanceViewModel.callLibraryMarkAttendance(userId, markAttendanceRequestModel)
+    }
+
+    private fun callMarkAttendancesGymApi(
+        userId: String?, markAttendanceRequestModel: GymMarkAttendanceRequestModel
+    ) {
+        markAttendanceViewModel.callGymMarkAttendance(userId, markAttendanceRequestModel)
     }
 
     private fun callLibraryDetailsApi(
         libId: String?
     ) {
         libraryViewModel.callIdLibrary(libId)
+    }
+
+    private fun callGymDetailsApi(
+        gymId: String?
+    ) {
+        gymViewModel.callIdGym(gymId)
     }
 
 
@@ -256,6 +297,16 @@ class ScannerActivity : AppCompatActivity() {
                 binding.scannerView.visibility = View.VISIBLE
             }
         })
+        gymViewModel.showProgress.observe(this, Observer {
+            if (it) {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.scannerView.visibility = View.GONE
+            } else {
+                binding.progressBar.visibility = View.GONE
+                binding.scannerView.visibility = View.VISIBLE
+            }
+        })
+
     }
 
     private fun observerErrorMessageApiResponse() {
@@ -265,13 +316,27 @@ class ScannerActivity : AppCompatActivity() {
         libraryViewModel.errorMessage.observe(this, Observer {
             ToastUtil.makeToast(this, it)
         })
+        gymViewModel.errorMessage.observe(this, Observer {
+            ToastUtil.makeToast(this, it)
+        })
     }
 
     private fun observeLibraryIdApiResponse() {
         libraryViewModel.idLibraryResponse.observe(this, Observer {
             library = it.libData
             callMarkAttendancesApi(
-                auth.currentUser!!.uid, MarkAttendanceRequestModel(
+                auth.currentUser!!.uid, LibraryMarkAttendanceRequestModel(
+                    scannedData, auth.currentUser!!.uid
+                )
+            )
+        })
+    }
+
+    private fun observeGymIdApiResponse() {
+        gymViewModel.idGymResponse.observe(this, Observer {
+            gym = it.gymData
+            callMarkAttendancesGymApi(
+                auth.currentUser!!.uid, GymMarkAttendanceRequestModel(
                     scannedData, auth.currentUser!!.uid
                 )
             )
@@ -284,6 +349,40 @@ class ScannerActivity : AppCompatActivity() {
         })
     }
 
+    private fun observerMarkAttendanceGymApiResponse() {
+        markAttendanceViewModel.gymMarkAttendanceResponse.observe(this, Observer {
+
+            if (it.message == "success") {
+
+                userDetailsViewModel.callGetUserDetails(auth.currentUser!!.uid)
+                setResult(RESULT_OK, Intent().apply {
+
+                    putExtra(
+                        "DataPhoto", if (gym?.photo?.isNotEmpty() == true) {
+                            gym!!.photo?.get(0)
+                        } else {
+                            ""
+                        }
+                    )
+                    putExtra("DataTime", time)
+                    putExtra("Review", gym?.reviews?.size.toString())
+                    putExtra(
+                        "Rating", ratingFunction(gym?.rating?.count, gym?.rating?.totalRatings)
+                    )
+                    putExtra("DataName", gym?.name)
+                    putExtra("DataAddress", gym?.address?.street)
+                })
+                finish()
+            } else {
+                setResult(RESULT_CANCELED, Intent().apply {
+                    putExtra("NoSession", false)
+                })
+                finish()
+            }
+        })
+    }
+
+
     private fun observerMarkAttendanceApiResponse() {
         markAttendanceViewModel.markAttendanceResponse.observe(this, Observer {
             if (it.message == "success") {
@@ -291,20 +390,20 @@ class ScannerActivity : AppCompatActivity() {
                 setResult(RESULT_OK, Intent().apply {
 
                     putExtra(
-                        "libraryDataPhoto", if (library?.photo?.isNotEmpty() == true) {
+                        "DataPhoto", if (library?.photo?.isNotEmpty() == true) {
                             library!!.photo?.get(0)
                         } else {
                             ""
                         }
                     )
-                    putExtra("libraryDataTime", time)
-                    putExtra("libraryReview", library?.reviews?.size.toString())
+                    putExtra("DataTime", time)
+                    putExtra("Review", library?.reviews?.size.toString())
                     putExtra(
-                        "libraryRating",
+                        "Rating",
                         ratingFunction(library?.rating?.count, library?.rating?.totalRatings)
                     )
-                    putExtra("libraryDataName", library?.name)
-                    putExtra("libraryDataAddress", library?.address?.street)
+                    putExtra("DataName", library?.name)
+                    putExtra("DataAddress", library?.address?.street)
                 })
                 finish()
             } else {

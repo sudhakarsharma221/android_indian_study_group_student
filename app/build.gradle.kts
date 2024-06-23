@@ -13,8 +13,8 @@ android {
         applicationId = "com.indianstudygroup"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,8 +25,7 @@ android {
                 "String", "API_BASE_URL", "\"https://indian-study-group-pqyn.onrender.com/\""
             )
             buildConfigField("String", "PINCODE_BASE_URL", "\"https://api.postalpincode.in/\"")
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )

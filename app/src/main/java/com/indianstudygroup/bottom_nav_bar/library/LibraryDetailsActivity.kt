@@ -2,26 +2,14 @@ package com.indianstudygroup.bottom_nav_bar.library
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.ImageSpan
-import android.text.style.RelativeSizeSpan
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,12 +18,6 @@ import com.codebyashish.autoimageslider.Enums.ImageAnimationTypes
 import com.codebyashish.autoimageslider.Enums.ImageScaleType
 import com.codebyashish.autoimageslider.Interfaces.ItemsListener
 import com.codebyashish.autoimageslider.Models.ImageSlidesModel
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.indianstudygroup.R
@@ -43,7 +25,7 @@ import com.indianstudygroup.app_utils.ApiCallsConstant
 import com.indianstudygroup.app_utils.AppConstant
 import com.indianstudygroup.app_utils.HideStatusBarUtil
 import com.indianstudygroup.app_utils.ToastUtil
-import com.indianstudygroup.book_seat.SeatBookActivity
+import com.indianstudygroup.book_seat_library.SeatBookActivity
 import com.indianstudygroup.bottom_nav_bar.library.adapter.AmenitiesAdapter
 import com.indianstudygroup.bottom_nav_bar.library.adapter.DaysAdapter
 import com.indianstudygroup.bottom_nav_bar.library.adapter.ReviewAdapter
@@ -53,12 +35,12 @@ import com.indianstudygroup.databinding.ErrorBottomDialogLayoutBinding
 import com.indianstudygroup.databinding.ReviewBottomDialogBinding
 import com.indianstudygroup.libraryDetailsApi.model.AmenityItem
 import com.indianstudygroup.libraryDetailsApi.model.LibraryIdDetailsResponseModel
-import com.indianstudygroup.rating.model.RatingRequestModel
-import com.indianstudygroup.rating.model.ReviewRequestModel
+import com.indianstudygroup.rating.model.LibraryRatingRequestModel
+import com.indianstudygroup.rating.model.LibraryReviewRequestModel
 import com.indianstudygroup.rating.ui.ReviewActivity
 import com.indianstudygroup.rating.viewModel.RatingReviewViewModel
-import com.indianstudygroup.wishlist.model.WishlistAddRequestModel
-import com.indianstudygroup.wishlist.model.WishlistDeleteRequestModel
+import com.indianstudygroup.wishlist.model.LibraryWishlistAddRequestModel
+import com.indianstudygroup.wishlist.model.LibraryWishlistDeleteRequestModel
 import com.indianstudygroup.wishlist.viewModel.WishlistViewModel
 
 class LibraryDetailsActivity : AppCompatActivity() {
@@ -97,8 +79,8 @@ class LibraryDetailsActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        HideStatusBarUtil.hideStatusBar(this)
         binding = ActivityLibraryDetailsBinding.inflate(layoutInflater)
+        HideStatusBarUtil.hideStatusBar(this)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
         window.statusBarColor = Color.WHITE
@@ -142,15 +124,15 @@ class LibraryDetailsActivity : AppCompatActivity() {
             if (AppConstant.wishList.contains(libraryId)) {
                 // Remove from wishlist
                 AppConstant.wishList.remove(libraryId)
-                wishlistViewModel.deleteWishlist(
-                    WishlistDeleteRequestModel(libraryId, auth.currentUser!!.uid)
+                wishlistViewModel.deleteLibraryWishlist(
+                    LibraryWishlistDeleteRequestModel(libraryId, auth.currentUser!!.uid)
                 )
                 binding.favImage.setImageResource(R.drawable.baseline_favorite_border_24)
 
             } else {
                 AppConstant.wishList.add(libraryId)
-                wishlistViewModel.putWishlist(
-                    auth.currentUser!!.uid, WishlistAddRequestModel(AppConstant.wishList)
+                wishlistViewModel.putLibraryWishlist(
+                    auth.currentUser!!.uid, LibraryWishlistAddRequestModel(AppConstant.wishList)
                 )
                 binding.favImage.setImageResource(R.drawable.baseline_favorite_24)
             }
@@ -203,13 +185,12 @@ class LibraryDetailsActivity : AppCompatActivity() {
 
     }
 
+
     private fun shareLibraryFunction() {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         val message =
-            "Check out this amazing library!\n\n" + "Name: ${libraryDetails.libData?.name}\n" + "Address: ${libraryDetails.libData?.address?.street}, ${libraryDetails.libData?.address?.district}, ${libraryDetails.libData?.address?.state}, ${libraryDetails.libData?.address?.pincode}\n\n" + "Download our app Indian Study Group for more details and to explore our collection!\n\n" + "((Here the link of the app be displayed when uploaded))"
-//                    "https://play.google.com/store/apps/details?id=$appPackageName"
-
+            "Check out this amazing library!\n\n" + "Name: ${libraryDetails.libData?.name}\n" + "Address: ${libraryDetails.libData?.address?.street}, ${libraryDetails.libData?.address?.district}, ${libraryDetails.libData?.address?.state}, ${libraryDetails.libData?.address?.pincode}\n\n" + "Download our app Indian Study Group for more details and to explore our collection!\n\n" + "(Link of the app - \nhttps://play.google.com/store/apps/details?id=com.indianstudygroup\n)"
         intent.putExtra(Intent.EXTRA_TEXT, message)
         startActivity(intent)
     }
@@ -265,11 +246,11 @@ class LibraryDetailsActivity : AppCompatActivity() {
                 dialogBinding.error.visibility = View.VISIBLE
             } else {
                 bottomDialog.dismiss()
-                ratingReviewViewModel.postRating(
-                    auth.currentUser!!.uid, RatingRequestModel(libraryId, ratingValue.toInt())
+                ratingReviewViewModel.postRatingLibrary(
+                    auth.currentUser!!.uid, LibraryRatingRequestModel(libraryId, ratingValue.toInt())
                 )
-                ratingReviewViewModel.postReview(
-                    auth.currentUser!!.uid, ReviewRequestModel(libraryId, reviewText)
+                ratingReviewViewModel.postReviewLibrary(
+                    auth.currentUser!!.uid, LibraryReviewRequestModel(libraryId, reviewText)
                 )
             }
         }
@@ -575,7 +556,7 @@ class LibraryDetailsActivity : AppCompatActivity() {
     }
 
     private fun observerWishlistApiResponse() {
-        wishlistViewModel.wishlistResponse.observe(this, Observer {
+        wishlistViewModel.wishlistLibraryResponse.observe(this, Observer {
             ToastUtil.makeToast(this, "Item added to wishlist")
         })
         wishlistViewModel.wishlistDeleteResponse.observe(this, Observer {
@@ -584,10 +565,10 @@ class LibraryDetailsActivity : AppCompatActivity() {
     }
 
     private fun observeRatingReviewApiResponse() {
-        ratingReviewViewModel.ratingResponse.observe(this, Observer {
+        ratingReviewViewModel.ratingResponseLibrary.observe(this, Observer {
             ToastUtil.makeToast(this, "Review Posted")
         })
-        ratingReviewViewModel.reviewResponse.observe(this, Observer {
+        ratingReviewViewModel.reviewResponseLibrary.observe(this, Observer {
             ToastUtil.makeToast(this, "Rating Posted")
         })
     }

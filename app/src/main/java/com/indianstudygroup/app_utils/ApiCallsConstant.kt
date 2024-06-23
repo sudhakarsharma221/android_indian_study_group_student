@@ -2,10 +2,15 @@ package com.indianstudygroup.app_utils
 
 object ApiCallsConstant {
 
-    var apiCallsOnceProfile = false
+    var apiCallsOnceSetGymWishList = false
     var apiCallsOnceHome = false
-    var apiCallsOnceMore = false
-    var apiCallsOnceSchedule = false
-    var apiCallsOnceAllLibrary = false
+    var apiCallsOnceHomeGym = false
     var apiCallsOnceLibrary = false
+    var apiCallsOnceGym = false
+    var apiCallsOnceAllLibrary = false
+    var apiCallsOnceAllGym = false
+    var apiCallsOnceScheduleLibrary = false
+    var apiCallsOnceScheduleGym = false
+    var apiCallsOnceProfile = false
+    var apiCallsOnceMore = false
 }

@@ -109,21 +109,21 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                val libraryDataPhoto = data?.getStringExtra("libraryDataPhoto")
-                val libraryDataName = data?.getStringExtra("libraryDataName")
-                val libraryDataAddress = data?.getStringExtra("libraryDataAddress")
-                val libraryDataTime = data?.getStringExtra("libraryDataTime")
-                val libraryRating = data?.getStringExtra("libraryRating")
-                val libraryReview = data?.getStringExtra("libraryReview")
+                val dataPhoto = data?.getStringExtra("DataPhoto")
+                val dataName = data?.getStringExtra("DataName")
+                val dataAddress = data?.getStringExtra("DataAddress")
+                val dataTime = data?.getStringExtra("DataTime")
+                val rating = data?.getStringExtra("Rating")
+                val review = data?.getStringExtra("Review")
                 showStartDialog(
                     "Your session has started",
                     true,
-                    libraryRating ?: "",
-                    libraryReview ?: "",
-                    libraryDataAddress ?: "",
-                    libraryDataName ?: "",
-                    libraryDataPhoto ?: "",
-                    libraryDataTime ?: ""
+                    rating ?: "",
+                    review ?: "",
+                    dataAddress ?: "",
+                    dataName ?: "",
+                    dataPhoto ?: "",
+                    dataTime ?: ""
                 )
             } else if (resultCode == RESULT_CANCELED) {
                 val noSession = data?.getBooleanExtra("NoSession", false)
@@ -149,7 +149,10 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         finishAffinity()
         ApiCallsConstant.apiCallsOnceHome = false
+        ApiCallsConstant.apiCallsOnceHomeGym = false
         ApiCallsConstant.apiCallsOnceAllLibrary = false
+        ApiCallsConstant.apiCallsOnceAllGym = false
         ApiCallsConstant.apiCallsOnceLibrary = false
+        ApiCallsConstant.apiCallsOnceGym = false
     }
 }

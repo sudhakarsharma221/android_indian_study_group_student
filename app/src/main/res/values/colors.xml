@@ -15,6 +15,6 @@
     <color name="textViewColor">#DDDCDC</color>
     <color name="drawable_color">#747688</color>
     <color name="stroke_color">#86878D</color>
-    <color name="gray_text_color">#8F8F8F</color>
+    <color name="gray_text_color">#7A7A7A</color>
     <color name="black1">#000000</color>
 </resources>

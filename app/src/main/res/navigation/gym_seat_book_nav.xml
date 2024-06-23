@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gym_seat_book_nav"
+    app:startDestination="@id/gymBookingDateFragment">
+    <fragment
+        android:id="@+id/gymBookingDateFragment"
+        android:name="com.indianstudygroup.book_seat_gym.ui.screens.GymBookingDateFragment"
+        android:label="fragment_booking_date"
+        tools:layout="@layout/fragment_gym_booking_date">
+
+        <action
+            android:id="@+id/action_gymBookingDateFragment_to_gymBookingTimeSlotFragment2"
+            app:destination="@id/gymBookingTimeSlotFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gymBookingTimeSlotFragment"
+        android:name="com.indianstudygroup.book_seat_gym.ui.screens.GymBookingSlotFragment"
+        android:label="fragment_booking_time_slot"
+        tools:layout="@layout/fragment_gym_booking_slot">
+
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_gymBookingTimeSlotFragment_to_gymBookingSeatSelectionFragment"
+            app:destination="@id/gymBookingSeatSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gymBookingSeatSelectionFragment"
+        android:name="com.indianstudygroup.book_seat_gym.ui.screens.GymBookingSeatSelectionFragment"
+        android:label="fragment_booking_seat_selection"
+        tools:layout="@layout/fragment_gym_booking_seat_selection">
+
+        <argument
+            android:name="totalSeats"
+            app:argType="string" />
+        <argument
+            android:name="vacantSeats"
+            app:argType="string" />
+        <argument
+            android:name="priceSeats"
+            app:argType="string" />
+        <argument
+            android:name="gymId"
+            app:argType="string" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <argument
+            android:name="startTimeHour"
+            app:argType="string" />
+        <argument
+            android:name="startTimeMinute"
+            app:argType="string" />
+        <argument
+            android:name="endTimeHour"
+            app:argType="string" />
+        <argument
+            android:name="endTimeMinute"
+            app:argType="string" />
+        <argument
+            android:name="slot"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_gymBookingSeatSelectionFragment_to_gymBookingOrderSummaryFragment"
+            app:destination="@id/gymBookingOrderSummaryFragment" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/gymBookingOrderSummaryFragment"
+        android:name="com.indianstudygroup.book_seat_gym.ui.screens.GymBookingOrderSummaryFragment"
+        android:label="fragment_booking_order_summary"
+        tools:layout="@layout/fragment_gym_booking_order_summary">
+        <argument
+            android:name="priceSeats"
+            app:argType="string" />
+        <argument
+            android:name="gymId"
+            app:argType="string" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <argument
+            android:name="startTimeHour"
+            app:argType="string" />
+        <argument
+            android:name="startTimeMinute"
+            app:argType="string" />
+        <argument
+            android:name="endTimeHour"
+            app:argType="string" />
+        <argument
+            android:name="endTimeMinute"
+            app:argType="string" />
+        <argument
+            android:name="slot"
+            app:argType="integer" />
+    </fragment>
+</navigation>

@@ -11,9 +11,16 @@
         android:name="com.indianstudygroup.bottom_nav_bar.library.LibraryFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_gym"
+        android:name="com.indianstudygroup.bottom_nav_bar.gym.ui.GymFragment"
+        android:label="Gym"
+        tools:layout="@layout/fragment_gym" />
+
     <fragment
         android:id="@+id/navigation_schedule"
-        android:name="com.indianstudygroup.bottom_nav_bar.schedule.ui.ScheduleFragment"
+        android:name="com.indianstudygroup.bottom_nav_bar.schedule.ScheduleFragment"
         android:label="Schedule"
         tools:layout="@layout/fragment_schedule" />
 
@@ -28,5 +35,6 @@
         android:name="com.indianstudygroup.bottom_nav_bar.more.MoreFragment"
         android:label="More"
         tools:layout="@layout/fragment_more" />
+
 
 </navigation>

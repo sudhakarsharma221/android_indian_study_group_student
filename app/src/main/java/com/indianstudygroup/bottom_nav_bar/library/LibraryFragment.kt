@@ -40,8 +40,8 @@ import com.indianstudygroup.databinding.FragmentHomeBinding
 import com.indianstudygroup.notification.ui.NotificationActivity
 import com.indianstudygroup.userDetailsApi.model.UserDetailsResponseModel
 import com.indianstudygroup.userDetailsApi.viewModel.UserDetailsViewModel
-import com.indianstudygroup.wishlist.model.WishlistAddRequestModel
-import com.indianstudygroup.wishlist.model.WishlistDeleteRequestModel
+import com.indianstudygroup.wishlist.model.LibraryWishlistAddRequestModel
+import com.indianstudygroup.wishlist.model.LibraryWishlistDeleteRequestModel
 import com.indianstudygroup.wishlist.ui.WishListActivity
 import com.indianstudygroup.wishlist.viewModel.WishlistViewModel
 
@@ -63,17 +63,6 @@ class LibraryFragment : Fragment() {
     private lateinit var allLibraryList: ArrayList<LibraryResponseItem>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private val requestForPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                ToastUtil.makeToast(requireContext(), "Notification Permission Granted")
-            } else {
-                if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
-                    showRationaleDialog()
-                }
-            }
-        }
     private val requestForPermissionLocation =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
@@ -145,9 +134,6 @@ class LibraryFragment : Fragment() {
             startActivityForResult(intent, 1)
         }
         binding.notification.setOnClickListener {
-            if (!checkPermissionNotification()) {
-                requestForPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-            }
 
             val intent = Intent(requireContext(), NotificationActivity::class.java)
             startActivityForResult(
@@ -251,16 +237,6 @@ class LibraryFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun showRationaleDialog() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Notification Permission")
-            .setMessage("This app requires notification permission to keep you updated. If you deny this time you have to manually go to app setting to allow permission.")
-            .setPositiveButton("Ok") { _, _ ->
-                requestForPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-            }
-        builder.create().show()
-    }
 
     private fun showRationaleDialogLocation() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
@@ -270,14 +246,6 @@ class LibraryFragment : Fragment() {
                 requestForPermissionLocation.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
             }
         builder.create().show()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun checkPermissionNotification(): Boolean {
-        val permission = android.Manifest.permission.POST_NOTIFICATIONS
-        return ContextCompat.checkSelfPermission(
-            requireContext(), permission
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
 
@@ -335,6 +303,12 @@ class LibraryFragment : Fragment() {
 
             wishList = userData.wishlist!!
             AppConstant.wishList = wishList as ArrayList<String>
+
+            if (!ApiCallsConstant.apiCallsOnceSetGymWishList) {
+                AppConstant.wishListGym = userData.gymWishlist as ArrayList<String>
+                ApiCallsConstant.apiCallsOnceSetGymWishList = true
+            }
+
             binding.currentLocation.text = "${it.address?.district}, ${it.address?.state}"
             initListener()
             userDetailsViewModel.setUserDetailsResponse(it)
@@ -412,14 +386,15 @@ class LibraryFragment : Fragment() {
                     libraryList,
                     { library ->
 //                        AppConstant.wishList.remove(library.id!!)
-                        wishlistViewModel.deleteWishlist(
-                            WishlistDeleteRequestModel(library.id, auth.currentUser!!.uid)
+                        wishlistViewModel.deleteLibraryWishlist(
+                            LibraryWishlistDeleteRequestModel(library.id, auth.currentUser!!.uid)
                         )
                     },
                     { library ->
 //                        AppConstant.wishList.add(library.id!!)
-                        wishlistViewModel.putWishlist(
-                            auth.currentUser!!.uid, WishlistAddRequestModel(AppConstant.wishList)
+                        wishlistViewModel.putLibraryWishlist(
+                            auth.currentUser!!.uid,
+                            LibraryWishlistAddRequestModel(AppConstant.wishList)
                         )
                     },
                     { intent ->
@@ -435,14 +410,15 @@ class LibraryFragment : Fragment() {
                     topPicksList,
                     { library ->
 //                        AppConstant.wishList.remove(library.id!!)
-                        wishlistViewModel.deleteWishlist(
-                            WishlistDeleteRequestModel(library.id, auth.currentUser!!.uid)
+                        wishlistViewModel.deleteLibraryWishlist(
+                            LibraryWishlistDeleteRequestModel(library.id, auth.currentUser!!.uid)
                         )
                     },
                     { library ->
 //                        AppConstant.wishList.add(library.id!!)
-                        wishlistViewModel.putWishlist(
-                            auth.currentUser!!.uid, WishlistAddRequestModel(AppConstant.wishList)
+                        wishlistViewModel.putLibraryWishlist(
+                            auth.currentUser!!.uid,
+                            LibraryWishlistAddRequestModel(AppConstant.wishList)
                         )
                     },
                     { intent ->
@@ -538,7 +514,7 @@ class LibraryFragment : Fragment() {
 
     private fun observerWishlistApiResponse() {
 
-        wishlistViewModel.wishlistResponse.observe(viewLifecycleOwner, Observer {
+        wishlistViewModel.wishlistLibraryResponse.observe(viewLifecycleOwner, Observer {
 //            ToastUtil.makeToast(requireContext(), "Item added to wishlist")
         })
         wishlistViewModel.wishlistDeleteResponse.observe(viewLifecycleOwner, Observer {

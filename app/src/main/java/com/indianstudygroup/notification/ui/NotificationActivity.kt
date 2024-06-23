@@ -1,9 +1,15 @@
 package com.indianstudygroup.notification.ui
 
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +29,20 @@ class NotificationActivity : AppCompatActivity() {
     private lateinit var userDetailsViewModel: UserDetailsViewModel
     private lateinit var notificationViewModel: NotificationViewModel
     private lateinit var notificationList: ArrayList<Notifications>
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private val requestForPermissionNotification =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                ToastUtil.makeToast(this, "Notification Permission Granted")
+            } else {
+                if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
+                    showRationaleDialogNotification()
+                }
+            }
+        }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNotificationBinding.inflate(layoutInflater)
@@ -32,6 +52,9 @@ class NotificationActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         window.statusBarColor = Color.WHITE
         setResult(RESULT_OK)
+        if (!checkPermissionNotification()) {
+            requestForPermissionNotification.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
         userDetailsViewModel.callGetUserDetails(auth.currentUser!!.uid)
         initListener()
         observeUserDetails()
@@ -41,12 +64,53 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     private fun initListener() {
+
+//        binding.apply {
+//            markAsRead.setOnClickListener {
+//                for (notification in notificationList) {
+//                    if (notification.status == "unread") notificationViewModel.callPostChangeNotificationStatus(
+//                        auth.currentUser!!.uid,
+//                        NotificationStatusChangeRequestModel(notification.id)
+//                    )
+//                }
+//
+//            }
+//            markAsReadIcon.setOnClickListener {
+//                for (notification in notificationList) {
+//                    if (notification.status == "unread") notificationViewModel.callPostChangeNotificationStatus(
+//                        auth.currentUser!!.uid,
+//                        NotificationStatusChangeRequestModel(notification.id)
+//                    )
+//                }
+//            }
+//        }
+
+
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         notificationList = arrayListOf()
 
         binding.backButton.setOnClickListener {
             finish()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun showRationaleDialogNotification() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Notification Permission")
+            .setMessage("This app requires notification permission to keep you updated. If you deny this time you have to manually go to app setting to allow permission.")
+            .setPositiveButton("Ok") { _, _ ->
+                requestForPermissionNotification.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        builder.create().show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkPermissionNotification(): Boolean {
+        val permission = android.Manifest.permission.POST_NOTIFICATIONS
+        return ContextCompat.checkSelfPermission(
+            this, permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun observeUserDetails() {

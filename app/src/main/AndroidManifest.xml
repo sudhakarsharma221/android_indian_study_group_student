@@ -29,11 +29,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IndianStudyGroup"
         tools:targetApi="31">
+
+        <activity
+            android:name=".bottom_nav_bar.gym.ui.CoachDetailsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".qr_code.ui.GymScannerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.schedule.gym.ui.GymScheduleDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.schedule.gym.ui.GymHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".book_seat_gym.SeatBookGymActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bottom_nav_bar.gym.ui.GymDetailsActivity"
+            android:exported="false"
+            android:theme="@style/FullScreenTheme" />
+
         <activity
             android:name=".rating.ui.ReviewActivity"
             android:exported="false" />
         <activity
-            android:name=".bottom_nav_bar.schedule.ui.HistoryActivity"
+            android:name=".bottom_nav_bar.schedule.library.ui.HistoryActivity"
             android:exported="false" />
         <activity
             android:name=".bottom_nav_bar.more.setting.screens.TermsOfServiceActivity"
@@ -48,7 +70,7 @@
             android:name=".bottom_nav_bar.more.setting.screens.AboutUsActivity"
             android:exported="false" />
         <activity
-            android:name=".book_seat.SeatBookActivity"
+            android:name=".book_seat_library.SeatBookActivity"
             android:exported="false" />
         <activity
             android:name=".bottom_nav_bar.more.wallet.PaymentStatusActivity"
@@ -60,7 +82,7 @@
             android:name=".bottom_nav_bar.more.setting.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".bottom_nav_bar.schedule.ui.ScheduleDetailsActivity"
+            android:name=".bottom_nav_bar.schedule.library.ui.ScheduleDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".notification.ui.NotificationActivity"

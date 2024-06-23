@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/bookingDateFragment"
-        android:name="com.indianstudygroup.book_seat.ui.screens.BookingDateFragment"
+        android:name="com.indianstudygroup.book_seat_library.ui.screens.BookingDateFragment"
         android:label="fragment_booking_date"
         tools:layout="@layout/fragment_booking_date">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/bookingTimeSlotFragment"
-        android:name="com.indianstudygroup.book_seat.ui.screens.BookingTimeSlotFragment"
+        android:name="com.indianstudygroup.book_seat_library.ui.screens.BookingTimeSlotFragment"
         android:label="fragment_booking_time_slot"
         tools:layout="@layout/fragment_booking_time_slot">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/bookingSeatSelectionFragment"
-        android:name="com.indianstudygroup.book_seat.ui.screens.BookingSeatSelectionFragment"
+        android:name="com.indianstudygroup.book_seat_library.ui.screens.BookingSeatSelectionFragment"
         android:label="fragment_booking_seat_selection"
         tools:layout="@layout/fragment_booking_seat_selection">
         <action
@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/bookingOrderSummaryFragment"
-        android:name="com.indianstudygroup.book_seat.ui.screens.BookingOrderSummaryFragment"
+        android:name="com.indianstudygroup.book_seat_library.ui.screens.BookingOrderSummaryFragment"
         android:label="fragment_booking_order_summary"
         tools:layout="@layout/fragment_booking_order_summary">
         <argument
