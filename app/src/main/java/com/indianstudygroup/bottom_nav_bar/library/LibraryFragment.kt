@@ -68,6 +68,7 @@ class LibraryFragment : Fragment() {
             if (granted) {
                 ToastUtil.makeToast(requireContext(), "Location Permission Granted")
                 locationPermission = true
+                getLastKnownLocation() // Fetch location when permission is granted
             } else {
                 if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
                     showRationaleDialogLocation()
@@ -89,11 +90,11 @@ class LibraryFragment : Fragment() {
 
 //        inflater.inflate(R.layout.fragment_home, container, false)
 
-        if (!checkPermission()) {
+        locationPermission = if (!checkPermission()) {
             requestForPermissionLocation.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
-            locationPermission = false
+            false
         } else {
-            locationPermission = true
+            true
         }
 
         if (!ApiCallsConstant.apiCallsOnceHome) {

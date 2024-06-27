@@ -50,8 +50,6 @@ class GymFragment : Fragment() {
     private lateinit var userDetailsViewModel: UserDetailsViewModel
     private lateinit var wishlistViewModel: WishlistViewModel
     private lateinit var auth: FirebaseAuth
-    private var currentLatitude: Double = 0.0
-    private var currentLongitude: Double = 0.0
     private lateinit var userData: UserDetailsResponseModel
     private lateinit var gymDetailsViewModel: GymViewModel
     private lateinit var adapter: GymAdapterDistrict
@@ -112,12 +110,6 @@ class GymFragment : Fragment() {
         observerErrorMessageApiResponse()
         observerUserDetailsApiResponse()
         return binding.root
-    }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        getLastKnownLocation()
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -254,29 +246,7 @@ class GymFragment : Fragment() {
 
         ) == PackageManager.PERMISSION_GRANTED)
     }
-
-    private fun getLastKnownLocation() {
-        if (checkPermission()) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                location?.let {
-                    // Use location coordinates
-                    AppConstant.userLatitude = it.latitude
-                    AppConstant.userLongitude = it.longitude
-
-                    currentLatitude = it.latitude
-                    currentLongitude = it.longitude
-                }
-            }
-        } else {
-            ToastUtil.makeToast(
-                requireContext(),
-                "Error getting the location: Either location is not on or permission is not granted"
-            )
-        }
-
-    }
-
-    private fun callDistrictGymDetailsApi(
+        private fun callDistrictGymDetailsApi(
         district: String?
     ) {
         gymDetailsViewModel.callDistrictGym(district)
@@ -365,8 +335,8 @@ class GymFragment : Fragment() {
 
                 adapter = GymAdapterDistrict(requireContext(),
                     locationPermission,
-                    currentLatitude,
-                    currentLongitude,
+                    AppConstant.userLatitude,
+                    AppConstant.userLongitude,
                     gymList,
                     { gym ->
                         wishlistViewModel.deleteGymWishlist(
@@ -387,8 +357,8 @@ class GymFragment : Fragment() {
                 binding.pincodeRecyclerView.adapter = adapter
                 binding.topPicksRecyclerView.adapter = GymAdapterDistrict(requireContext(),
                     locationPermission,
-                    currentLatitude,
-                    currentLongitude,
+                    AppConstant.userLatitude,
+                    AppConstant.userLongitude,
                     topPicksList,
                     { gym ->
                         wishlistViewModel.deleteGymWishlist(
@@ -451,8 +421,8 @@ class GymFragment : Fragment() {
 
             searchAdapter = GymSearchAdapter(requireContext(),
                 locationPermission,
-                currentLatitude,
-                currentLongitude,
+                AppConstant.userLatitude,
+                AppConstant.userLongitude,
                 AppConstant.wishListGym,
                 allGymList,
                 { isEmpty ->
@@ -466,8 +436,8 @@ class GymFragment : Fragment() {
             binding.allLibRecyclerView.adapter = searchAdapter
             binding.trySearchGymRecyclerView.adapter = GymSearchAdapter(requireContext(),
                 locationPermission,
-                currentLatitude,
-                currentLongitude,
+                AppConstant.userLatitude,
+                AppConstant.userLongitude,
                 AppConstant.wishListGym,
                 trySearchList,
                 { isEmpty ->

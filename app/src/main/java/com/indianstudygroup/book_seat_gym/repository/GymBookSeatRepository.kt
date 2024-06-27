@@ -27,17 +27,21 @@ class GymBookSeatRepository {
                 showProgress.postValue(false)
                 val body = response.body()
                 Log.d("gymSeatResponse", "body : ${body.toString()}")
-
-                if (response.isSuccessful) {
-                    gymSeatResponse.postValue(body!!)
+                if (body == null) {
+                    errorMessage.postValue("You Already Have A Booking In this Gym")
                 } else {
-                    val errorResponse = response.errorBody()?.string()
-                    Log.d("gymSeatResponse", "response fail :$errorResponse")
-                    when (response.code()) {
-                        AppConstant.USER_NOT_FOUND -> errorMessage.postValue("User not exist, please sign up")
-                        else -> errorMessage.postValue("Error: $errorResponse")
+                    if (response.isSuccessful) {
+                        gymSeatResponse.postValue(body!!)
+                    } else {
+                        val errorResponse = response.errorBody()?.string()
+                        Log.d("gymSeatResponse", "response fail :$errorResponse")
+                        when (response.code()) {
+                            AppConstant.USER_NOT_FOUND -> errorMessage.postValue("User not exist, please sign up")
+                            else -> errorMessage.postValue("Error: $errorResponse")
+                        }
                     }
                 }
+
             }
 
             override fun onFailure(call: Call<GymBookingResponseModel?>, t: Throwable) {
